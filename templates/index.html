@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+</head>
+
+<body>
+    <div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+        <div class="row justify-content-center">
+            <ion-card color="tertiary">
+                <ion-card-header>
+                    <ion-card-title>Ingreso al sistema</ion-card-title>
+                    <ion-card-subtitle></ion-card-subtitle>
+                </ion-card-header>
+
+                <ion-card-content>
+                    <form action="/index" method="post">
+                        <ion-list>
+                            <ion-item>
+                                <ion-input label="Usuario" name="user" label-placement="floating" fill="solid"
+                                    placeholder="Enter text"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-input label="Password" name="contraseña" label-placement="floating" fill="solid"
+                                    placeholder="Enter text"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-button type="submit">Ingresar</ion-button>
+                            </ion-item>
+                        </ion-list>
+                    </form>
+                </ion-card-content>
+            </ion-card>
+
+        </div>
+    </div>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+</body>
+
+</html>

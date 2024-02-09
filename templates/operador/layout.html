@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+</head>
+
+<body>
+    <ion-app>
+        <ion-menu content-id="main-content">
+            <ion-header>
+                <ion-toolbar color="tertiary">
+                    <ion-title>Menu de Contenido</ion-title>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content class="ion-padding">
+                <ion-item href="">
+                    <ion-icon name="accessibility-outline" slot="start"></ion-icon>
+                    <ion-label><a href="./registro">
+                        Vista
+                    </a></ion-label>
+                </ion-item>
+            </ion-content>
+        </ion-menu>
+        <div class="ion-page" id="main-content">
+            <ion-header>
+                <ion-toolbar>
+                    <ion-buttons slot="start">
+                        <ion-menu-button></ion-menu-button>
+                    </ion-buttons>
+                    <ion-title>Menu</ion-title>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content class="ion-padding">
+                {% block content %}
+                {% endblock %} 
+            </ion-content>
+        </div>
+    </ion-app>
+
+    <style>
+        ion-menu::part(backdrop) {
+            background-color: rgba(255, 0, 255, 0.5);
+        }
+
+        ion-menu::part(container) {
+            border-radius: 0 20px 20px 0;
+
+            box-shadow: 4px 0px 16px rgba(255, 0, 255, 0.18);
+        }
+    </style>
+
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+</body>
+
+</html>
