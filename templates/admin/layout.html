@@ -22,12 +22,41 @@
                 </ion-toolbar>
             </ion-header>
             <ion-content class="ion-padding">
-                <ion-item href="">
-                    <ion-icon name="accessibility-outline" slot="start"></ion-icon>
-                    <ion-label><a href="./registro">
-                        Vista
-                    </a></ion-label>
-                </ion-item>
+                <ion-breadcrumbs max-items="2">
+                    <ion-breadcrumb href="./admin">Admin</ion-breadcrumb>
+                    <ion-breadcrumb href="./in_admin">Ingreso Admin</ion-breadcrumb>
+                    <ion-breadcrumb readonly><ion-icon name="chevron-back-outline"></ion-icon></ion-breadcrumb>
+                </ion-breadcrumbs>
+                <ion-breadcrumbs max-items="2">
+                    <ion-breadcrumb href="./cliente">Cliente</ion-breadcrumb>
+                    <ion-breadcrumb href="./in_cliente">Ingreso Cliente</ion-breadcrumb>
+                    <ion-breadcrumb readonly><ion-icon name="chevron-back-outline"></ion-icon></ion-breadcrumb>
+                </ion-breadcrumbs>
+                <ion-breadcrumbs max-items="2">
+                    <ion-breadcrumb href="./usuarios">Usuarios</ion-breadcrumb>
+                    <ion-breadcrumb href="./in_usuario">Ingreso Usuarios</ion-breadcrumb>
+                    <ion-breadcrumb readonly><ion-icon name="chevron-back-outline"></ion-icon></ion-breadcrumb>
+                </ion-breadcrumbs>
+                <ion-breadcrumbs max-items="2">
+                    <ion-breadcrumb href="./unidades">Unidades</ion-breadcrumb>
+                    <ion-breadcrumb href="./in_unidades">Ingreso Unidades</ion-breadcrumb>
+                    <ion-breadcrumb readonly><ion-icon name="chevron-back-outline"></ion-icon></ion-breadcrumb>
+                </ion-breadcrumbs>
+                <ion-breadcrumbs max-items="2">
+                    <ion-breadcrumb href="./carreras">Carreras</ion-breadcrumb>
+                    <ion-breadcrumb href="./in_carreras">Ingreso Carreras</ion-breadcrumb>
+                    <ion-breadcrumb readonly><ion-icon name="chevron-back-outline"></ion-icon></ion-breadcrumb>
+                </ion-breadcrumbs>
+                <ion-breadcrumbs max-items="2">
+                    <ion-breadcrumb href="./conductores">Conductores</ion-breadcrumb>
+                    <ion-breadcrumb href="./in_conductores">Ingreso Conductores</ion-breadcrumb>
+                    <ion-breadcrumb readonly><ion-icon name="chevron-back-outline"></ion-icon></ion-breadcrumb>
+                </ion-breadcrumbs>
+                <ion-popover>
+                    <ion-content>
+                        <ion-list></ion-list>
+                    </ion-content>
+                </ion-popover>
             </ion-content>
         </ion-menu>
         <div class="ion-page" id="main-content">
@@ -41,7 +70,7 @@
             </ion-header>
             <ion-content class="ion-padding">
                 {% block content %}
-                {% endblock %} 
+                {% endblock %}
             </ion-content>
         </div>
     </ion-app>
@@ -58,7 +87,34 @@
         }
     </style>
 
+    <script>
+       const breadcrumbs = document.querySelectorAll('ion-breadcrumbs');
+const popover = document.querySelector('ion-popover');
+const popoverList = document.querySelector('ion-popover ion-list');
 
+breadcrumbs.forEach((breadcrumb) => {
+    breadcrumb.addEventListener('ionCollapsedClick', (e) => {
+        let listHTML = ``;
+        e.detail.collapsedBreadcrumbs.forEach((breadcrumb, i) => {
+            listHTML += `
+            <ion-item
+                ${i === e.detail.collapsedBreadcrumbs.length - 1 ? `lines="none"` : ''}
+                href="${breadcrumb.href}"
+            >
+                <ion-label>${breadcrumb.textContent}</ion-label>
+            </ion-item>
+            `;
+        });
+
+        popoverList.innerHTML = listHTML;
+        popover.event = e;
+        popover.isOpen = true;
+    });
+});
+
+popover.addEventListener('didDismiss', () => (popover.isOpen = false));
+
+    </script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
 </body>

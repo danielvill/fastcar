@@ -1,4 +1,55 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-
+<ion-toolbar>
+    <ion-title style="text-align: center;"> Ingreso de Conductores</ion-title>
+</ion-toolbar>
+<br>
+<form action="/admin/in_conductores" method="post">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="">Cedula</label>
+            <input type="text" class="form-control" name="cedula">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="">Nombre</label>
+            <input type="text" class="form-control" name="nombre">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="inputAddress">Email</label>
+        <input type="email" class="form-control" name="email" >
+    </div>
+    <div class="form-group">
+        <label for="inputAddress2">Telefono</label>
+        <input type="number" class="form-control" name="telefono">
+    </div>
+    <div class="form-group">
+        <label for="">Direccion</label>
+        <input type="text" class="form-control" name="direccion">
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputCity">Emergencia nombre</label>
+            <input type="text" class="form-control" name="em_nombre">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputState">Emergencia telefono</label>
+            <input type="number" class="form-control" name="em_telefono">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputState">Emergencia relacion</label>
+            <input type="text" class="form-control" name="em_relacion">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputState">Clave</label>
+            <input type="number" class="form-control" name="clave">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputState">Licencia</label>
+            <input type="text" class="form-control" name="licencia">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+<script src="/static/js/ingreso.js"></script>
 {% endblock %}

@@ -1,102 +1,84 @@
 {
-    "USUARIOS": [
-      {
-        "cedula": "070000000",
-        "nombre": "Pepito",
-        "rol": "Administrador",
-        "email": "pepito@gmail.com",
-        "clave": "123"
-      },
-      {
-        "cedula": "077777777",
-        "nombre": "Juan",
-        "rol": "Operador",
-        "email": "juan@gmail.com",
-        "clave": "456"
-      }
-    ],
-    "CLIENTES": [
-      {
-        "nombre": "Darwin Pilaloa",
-        "telefono": "0969140482",
-        "direcciones":"",
-        "provincia": "El Oro",
-        "Canton": "Machala",
-        "referencia": "a 3 cuadras de urbano",
-        "comentario": "Persona con discapacidad - Cliente problemático"
-      }
-    ],
-    "CONDUCTORES": [
-      {
-        "cedula": "070000000",
-        "nombre": "Jose Aldaz",
-        "email": "jose@gmail.com",
-        "telefono": "09999999",
-        "direccion": "Paez y 25 de Junio",
-        "emergencia": [
-          {
-            "nombre": "Maria Aldaz",
-            "telefono": "09696999",
-            "relacion": "Hermana"
-          }
-        ],
-        "clave": "123",
-        "licencia": "C",
-        "estados": [
-          {
-            "tipo": "NO DISPONIBLE",
-            "fecha": "12/11/2023 13:30:00",
-            "comentario": "Se enfermó"
-          }
-        ],
-        "guardias": [
-          {
-            "fecha": "12/11/2023 22:30:00",
-            "comentario": "Guardia no idónea"
-          }
-        ],
-        "unidades": [
-          {
-            "codigo": "123456",
-            "fecha": "13/11/2023 21:30:00"
-          }
-        ],
-        "carreras": [
-          {
-            "cliente": "Darwin Pilaloa",
-            "Provincia": "El Oro",
-            "Canton": "Machala",
-            "lugar": "Paez y 25 de Junio",
-            "referencia": "a 3 cuadras de urbano",
-            "tipo": "Especial o Contrato",
-            "latitud": "-13.02578",
-            "longitud": "-07.3589",
-            "precio": 0.00,
-            "fecha_inicio": "12/11/2023 22:31:00",
-            "comentario": "Cliente no pagó lo debido",
-            "fecha_fin": "12/11/2023 22:41:00",
-            "estado": "Finalizado",
-            "operador": "077777777"
-          }
-        ]
-      }
-    ],
-    "UNIDADES": [
-      {
-        "placa": "OBA1234",
-        "modelo": "Aveo Family",
-        "marca": "Chevrolet",
-        "codigo": "123456",
-        "kilometraje": 1700000,
-        "observacion": "Falta cambiar aceite",
-        "orden": 0,
-        "estado": [
-          {
-            "cod": "T5",
-            "tipo": "Disponible",
-            "fecha": "13/11/2023 21:30:00"
-          }
-        ]
-      }
-    ]
-  }
+  "USUARIOS": [
+    {
+      "cedula": "070000000",
+      "nombre": "Pepito",
+      "rol": "Administrador",
+      "email": "pepito@gmail.com",
+      "clave": "123"
+    },
+
+    
+    {
+      "cedula": "077777777",
+      "nombre": "Juan",
+      "rol": "Operador",
+      "email": "juan@gmail.com",
+      "clave": "456"
+    }
+  ],
+  "CLIENTES": [
+    {
+      "nombre": "Darwin Pilaloa",
+      "telefono": "0969140482",
+      "direcciones":"",
+      "provincia": "El Oro",
+      "Canton": "Machala",
+      "referencia": "a 3 cuadras de urbano",
+      "comentario": "Persona con discapacidad - Cliente problemático"
+    }
+  ],
+  "CONDUCTORES": [
+    {
+      "cedula": "070000000",
+      "nombre": "Jose Aldaz",
+      "email": "jose@gmail.com",
+      "telefono": "09999999",
+      "direccion": "Paez y 25 de Junio",
+      "emergencia": [
+        {
+          "nombre": "Maria Aldaz",
+          "telefono": "09696999",
+          "relacion": "Hermana"
+        }
+      ],
+      "clave": "123",
+      "licencia": "C",
+      
+      
+  "CARRERAS": [
+        {
+          "cliente": "Darwin Pilaloa",
+          "Provincia": "El Oro",
+          "Canton": "Machala",
+          "lugar": "Paez y 25 de Junio",
+          "referencia": "a 3 cuadras de urbano",
+          "tipo": "Especial o Contrato",
+          "fecha_inicio": "12/11/2023 22:31:00",
+          "comentario": "Cliente no pagó lo debido",
+          "fecha_fin": "12/11/2023 22:41:00",
+          "estado": "Finalizado",
+          "operador": "077777777"
+        }
+      ]
+    }
+  ],
+  "UNIDADES": [
+    {
+      "placa": "OBA1234",
+      "modelo": "Aveo Family",
+      "marca": "Chevrolet",
+      "codigo": "123456",
+      "kilometraje": 1700000,
+      "observacion": "Falta cambiar aceite",
+      "orden": 0,
+      "estado": [
+        {
+          "cod": "T5",
+          "tipo": "Disponible",
+          "fecha": "13/11/2023 21:30:00"
+        }
+      ]
+    }
+  ]
+}
