@@ -1,4 +1,82 @@
 {% extends "admin/layout.html" %}
 {% block content %}
+<div class="input-group flex-nowrap">
+    <span class="input-group-text" id="addon-wrapping">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+            viewBox="0 0 16 16">
+            <path
+                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+        </svg>
+    </span>
+    <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
+        aria-describedby="addon-wrapping">
+</div>
+{% for cliente in clientes %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Direccion</th>
+            <th scope="col" class="extra">Provincia</th>
+            <th scope="col" class="extra">Canton</th>
+            <th scope="col" class="extra">Referencia</th>
+            <th scope="col" class="extra">Comentario</th>
+            <th scope="col" class="extra">Acciones</th>
+            <th scope="col">
+                <button class="btn btn-primary mostrar-mas">Mostrar más</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody data-nombre="{{ cliente.nombre }}">
+        <form action="/edit_cli/{{cliente.nombre}}" method="post">
+            <tr>
+                <th scope="row">
+                    <input type="text" class="form-control" name="nombre" value="{{cliente.nombre}}">
+                </th>
+                <td><input type="text" class="form-control" name="telefono" value="{{cliente.telefono}}"></td>
+                <td><input type="text" class="form-control" name="direccion" value="{{cliente.direccion}}"></td>
+                <td class="extra"><input type="text" class="form-control" name="provincia" value="{{cliente.provincia}}"></td>
+                <td class="extra"><input type="text" class="form-control" name="canton" value="{{cliente.canton}}"></td>
+                <td class="extra"><input type="text" class="form-control" name="referencia" value="{{cliente.referencia}}"></td>
+                <td class="extra"><input type="text" class="form-control" name="comentario" value="{{cliente.comentario}}"></td>
+                <td class="extra">
+                    <button type="submit" class="btn btn-primary">Editar</button>
+                    <a href="{{url_for('elitcli',cli_name=cliente.nombre)}}" class="btn btn-danger">Eliminar</a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary mostrar-mas">Mostrar más</button>
+                </td>
+            </tr>
+        </form>
+    </tbody>
+</table>
+{% endfor %}
+<script>
+    // Filtrado para carreras
+    $(document).ready(function () {
+        $("#filtro").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("tbody[data-nombre]").filter(function () {
+                $(this).parent().toggle($(this).data("nombre").toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+    // Ocultar los campos extra al cargar la página
+    document.querySelectorAll('.extra').forEach(function (el) {
+        el.style.display = 'none';
+    });
+
+    // Mostrar los campos extra cuando se hace clic en "Mostrar más"
+    document.querySelectorAll('.mostrar-mas').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            this.closest('tr').querySelectorAll('.extra').forEach(function (el) {
+                el.style.display = '';
+            });
+            this.style.display = 'none';  // Ocultar el botón "Mostrar más"
+        });
+    });
+</script>
+
 
 {% endblock %}

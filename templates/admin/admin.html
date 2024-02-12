@@ -1,4 +1,36 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-
+{% for admin in admin %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Cedula</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Email</th>
+            <th scope="col">Clave</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <form action="/edit_ad/{{admin.nombre}}" method="post">
+            <tr>
+                <th scope="row">
+                    <input type="text" class="form-control" name="cedula"  value="{{admin.cedula}}">
+                </th> 
+                <td><input type="text" class="form-control" name="nombre" value="{{admin.nombre}}"></td>
+                <td><input type="text" class="form-control" name="rol" value="{{admin.rol}}"></td>
+                <td><input type="text" class="form-control" name="email" value="{{admin.email}}"></td>
+                <td><input type="text" class="form-control" name="clave" value="{{admin.clave}}"></td>
+                <td>
+                    <button type="submit" class="btn btn-primary" >Editar</button>
+                    <a href="{{url_for('elitad',ad_name=admin.nombre)}}" class="btn btn-danger">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+        </form>
+    </tbody>
+</table>
+{% endfor %}
 {% endblock %}

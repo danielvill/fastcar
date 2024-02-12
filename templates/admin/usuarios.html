@@ -1,4 +1,36 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 
+{% for usuario in usuarios %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Cedula</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Email</th>
+            <th scope="col">Clave</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <form action="/edit_usu/{{usuario.nombre}}" method="post">
+            <tr>
+                <th scope="row"> 
+                    <input type="text" class="form-control" name="cedula"  value="{{usuario.cedula}}">
+                </th> 
+                <td><input type="text" class="form-control" name="nombre"  value="{{usuario.nombre}}"></td>
+                <td><input type="text" class="form-control" name="rol" value="{{usuario.rol}}"></td>
+                <td><input type="text" class="form-control" name="email" value="{{usuario.email}}"></td>
+                <td><input type="text" class="form-control" name="clave" value="{{usuario.clave}}"></td>
+                <td>
+                    <button class="btn btn-primary">Editar</button>
+                    <a href="{{url_for('elitusu',usu_name=usuario.nombre)}}" class="btn btn-danger">Eliminar</a>
+                </td>
+
+            </tr>
+        </form>
+    </tbody>
+</table>
+{% endfor %}
 {% endblock %}
