@@ -7,54 +7,32 @@
 <form action="/admin/in_carreras" method="post">
     <div class="form-row">
         <div class="form-group col-md-6">
-            <label for="">Cliente</label>
-            <input type="text" class="form-control" name="cliente">
+            <select name="cliente" id="">
+                {% for cliente in clientes %}
+                <option value="{{ cliente }}">{{ cliente }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div class="form-group col-md-6">
-            <label for="">Provincia</label>
-            <input type="number" class="form-control" name="provincia">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="inputAddress">Canton</label>
-        <input type="text" class="form-control" name="canton" >
-    </div>
-    <div class="form-group">
-        <label for="inputAddress2">Lugar</label>
-        <input type="text" class="form-control" name="lugar">
-    </div>
-    <div class="form-group">
-        <label for="">Referencia</label>
-        <input type="text" class="form-control" name="referencia">
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputCity">Tipo</label>
-            <input type="text" class="form-control" name="tipo">
-        </div>
-        <div class="form-group col-md-4">
-            <label for="inputState">Fecha de inicio</label>
-            <input type="text" class="form-control" name="fecha_inicio">
-        </div>
-    
-        <div class="form-group col-md-6">
-            <label for="inputCity">Comentario</label>
-            <input type="text" class="form-control" name="comentario">
+            <select name="unidad" id="">
+                {% for unidad in unidades %}
+                <option value="{{ unidad }}">{{ unidad }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div class="form-group col-md-6">
-            <label for="inputCity">Fecha de Finalizacion</label>
-            <input type="text" class="form-control" name="fecha_fin">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="inputCity">Estado</label>
-            <input type="text" class="form-control" name="estado">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="inputCity">Operador</label>
-            <input type="text" class="form-control" name="operador">
+            <select name="estado" id="">
+                <option value="Activo">Activo </option>
+                <option value="Denegado">Denegado</option>
+            </select>
         </div>
     </div>
     <button type="submit" class="btn btn-primary">Enviar</button>
 </form>
 <script src="/static/js/ingreso.js"></script>
+<script>
+    $(document).ready(function() {
+    $('select').select2();
+});
+</script>
 {% endblock %}

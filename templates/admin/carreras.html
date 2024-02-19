@@ -16,19 +16,9 @@
     <thead>
         <tr>
             <th scope="col">Cliente</th>
-            <th scope="col">Provincia</th>
-            <th scope="col">Canton</th>
-            <th scope="col" class="extra">Lugar</th>
-            <th scope="col" class="extra">Referencia</th>
-            <th scope="col" class="extra">Tipo</th>
-            <th scope="col" class="extra">Fecha de Inicio</th>
-            <th scope="col" class="extra">Comentario</th>
-            <th scope="col" class="extra">Fecha de finalizacion</th>
-            <th scope="col" class="extra">Estado</th>
-            <th scope="col" class="extra">Operador</th>
-            <th scope="col">
-                <button class="btn btn-primary mostrar-mas">Mostrar más</button>
-            </th>
+            <th scope="col">Unidad</th>
+            <th scope="col">Estado</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody data-cliente="{{ carreras.cliente }}">
@@ -37,22 +27,11 @@
                 <th scope="row">
                     <input type="text" class="form-control" name="cliente" value="{{carreras.cliente}}">
                 </th>
-                <td><input type="text" class="form-control" name="provincia" value="{{carreras.provincia}}"></td>
-                <td><input type="text" class="form-control" name="canton" value="{{carreras.canton}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="lugar" value="{{carreras.lugar}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="referencia" value="{{carreras.referencia}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="tipo" value="{{carreras.tipo}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="fecha_inicio" value="{{carreras.fecha_inicio}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="comentario" value="{{carreras.comentario}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="fecha_fin" value="{{carreras.fecha_fin}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="estado" value="{{carreras.estado}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="operador" value="{{carreras.operador}}"></td>
-                <td class="extra">
+                <td><input type="text" class="form-control" name="unidad" value="{{carreras.unidad}}"></td>
+                <td><input type="text" class="form-control" name="estado" value="{{carreras.estado}}"></td>
+                <td class="">
                     <button type="submit" class="btn btn-primary">Editar</button>
                     <a href="{{url_for('elitcarre',car_name=carreras.cliente)}}" class="btn btn-danger">Eliminar</a>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-primary mostrar-mas">Mostrar más</button>
                 </td>
             </tr>
         </form>

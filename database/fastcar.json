@@ -1,13 +1,16 @@
 {
-  "USUARIOS": [
+
+  "Admin": [
     {
       "cedula": "070000000",
       "nombre": "Pepito",
       "rol": "Administrador",
       "email": "pepito@gmail.com",
       "clave": "123"
-    },
-
+    }
+  ],
+  
+  "USUARIOS": [
     
     {
       "cedula": "077777777",
@@ -17,6 +20,7 @@
       "clave": "456"
     }
   ],
+  
   "CLIENTES": [
     {
       "nombre": "Darwin Pilaloa",
@@ -42,23 +46,15 @@
           "relacion": "Hermana"
         }
       ],
-      "clave": "123",
+      "n_unidad": "123",
       "licencia": "C",
       
       
   "CARRERAS": [
         {
           "cliente": "Darwin Pilaloa",
-          "Provincia": "El Oro",
-          "Canton": "Machala",
-          "lugar": "Paez y 25 de Junio",
-          "referencia": "a 3 cuadras de urbano",
-          "tipo": "Especial o Contrato",
-          "fecha_inicio": "12/11/2023 22:31:00",
-          "comentario": "Cliente no pagó lo debido",
-          "fecha_fin": "12/11/2023 22:41:00",
-          "estado": "Finalizado",
-          "operador": "077777777"
+          "Unidad":"OBA1234",
+          "estado":"Disponible"
         }
       ]
     }
@@ -80,5 +76,20 @@
         }
       ]
     }
+  ],
+  "Guardias": [
+    {
+      "Nombre del conductor":"Jose Aldaz", 
+      "Unidad": "OBA1234",
+      "Código": "123456",
+      "Estado": "Disponible"
+      
+    }
+  ],
+  "Reportes": [
+    {
+      
+    }
   ]
+
 }

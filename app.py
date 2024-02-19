@@ -25,11 +25,11 @@ def run():
 @app.route('/index',methods=['GET','POST'])
 def index():
     if request.method == 'POST':
-        usuario = request.form['user']
-        password = request.form['contraseña']
-        usuario_fo = db.admin.find_one({'user':usuario,'contraseña':password})
+        usuario = request.form['nombre']
+        password = request.form['clave']
+        usuario_fo = db.admin.find_one({'nombre':usuario,'clave':password})
         if usuario_fo:
-            return redirect(url_for('registro'))
+            return redirect(url_for('inadmin'))
     else:
         return render_template('index.html')
 
@@ -300,28 +300,21 @@ def edituni(uni_name):
         return render_template("admin/unidades.html")
 
 
-#* Carreras
+#*  ingresar Carreras
 @app.route('/admin/in_carreras',methods=['GET','POST'])
 def incarreras():
     if request.method == 'POST':
         carrera = db ['carreras']
         cliente = request.form['cliente']
-        provincia =request.form['provincia']
-        canton = request.form['canton']
-        lugar = request.form['lugar']
-        referencia = request.form['referencia']
-        tipo = request.form['tipo']
-        fecha_inicio = request.form['fecha_inicio']
-        comentario = request.form['comentario']
-        fecha_fin = request.form['fecha_fin']
+        unidad =request.form['unidad']
         estado = request.form['estado']
-        operador = request.form['operador']
-        if cliente and provincia and canton and lugar and referencia and tipo and fecha_inicio and comentario and fecha_fin and estado and operador:
-            regis = Carreras(cliente, provincia, canton, lugar, referencia, tipo, fecha_inicio, comentario, fecha_fin, estado, operador)
+
+        if cliente and unidad and estado :
+            regis = Carreras(cliente, unidad ,estado, )
             carrera.insert_one(regis.CareDBCollection())
             return redirect(url_for('incarreras')) # Direccionamiento para la pagina que es /admin/in_carreras
     else: #
-        return render_template('/admin/in_carreras.html') #* Cargado de la pagina
+        return render_template('/admin/in_carreras.html',clientes=cliu(),unidades=uni()) #* Cargado de la pagina
         
 
 #*Vista de carreras
@@ -342,24 +335,27 @@ def elitcarre(car_name):
 def editcarre(car_name):
     carre = db['carreras']
     cliente = request.form['cliente']
-    provincia =request.form['provincia']
-    canton = request.form['canton']
-    lugar = request.form['lugar']
-    referencia = request.form['referencia']
-    tipo = request.form['tipo']
-    fecha_inicio = request.form['fecha_inicio']
-    comentario = request.form['comentario']
-    fecha_fin = request.form['fecha_fin']
+    unidad = request.form['unidad']
     estado = request.form['estado']
-    operador = request.form['operador']
     
-    if cliente and provincia and canton and lugar and referencia and tipo and fecha_inicio and comentario and fecha_fin and estado and operador:
-        carre.update_one({'cliente':car_name},{'$set':{'cliente':cliente,'provincia':provincia,'canton':canton,'lugar':lugar,'referencia':referencia,'tipo':tipo,'fecha_inicio':fecha_inicio,'comentario':comentario,'fecha_fin':fecha_fin,'estado':estado,'operador':operador}})
+    
+    if cliente and unidad and estado:
+        carre.update_one({'cliente':car_name},{'$set':{'cliente':cliente,"unidad":unidad,"estado":estado}})
         return redirect(url_for('carreras'))
     else:
         return render_template("admin/carreras.html")
 
 
+# * Select para carreras
+def cliu():
+    clientes = db.clientes.find({},{"nombre":1})
+    return [clientes["nombre"]for clientes in clientes]
+
+def uni():
+    unidades = db.unidades.find({},{"placa":1})
+    return [unidades["placa"]for unidades in unidades]
+
+    
 
 
 
