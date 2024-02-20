@@ -24,8 +24,8 @@
                 <td><input type="text" class="form-control" name="email" value="{{usuario.email}}"></td>
                 <td><input type="text" class="form-control" name="clave" value="{{usuario.clave}}"></td>
                 <td>
-                    <button class="btn btn-primary">Editar</button>
-                    <a href="{{url_for('elitusu',usu_name=usuario.nombre)}}" class="btn btn-danger">Eliminar</a>
+                    <button class="editar btn btn-primary">Editar</button>
+                    <a href="{{url_for('elitusu',usu_name=usuario.nombre)}}" class="eliminar btn btn-danger">Eliminar</a>
                 </td>
 
             </tr>
@@ -33,4 +33,5 @@
     </tbody>
 </table>
 {% endfor %}
+<script src="/static/js/edi_eli.js"></script>
 {% endblock %}

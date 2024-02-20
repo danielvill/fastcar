@@ -80,8 +80,7 @@
   "Guardias": [
     {
       "Nombre del conductor":"Jose Aldaz", 
-      "Unidad": "OBA1234",
-      "Código": "123456",
+      "Unidad": "123456",
       "Estado": "Disponible"
       
     }

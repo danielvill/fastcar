@@ -6,6 +6,10 @@ from modules.clientes import Clientes
 from modules.conductores import Conductores
 from modules.unidades import Unidades
 from modules.usuarios import Usuario
+from modules.guardias import Guardias
+
+#* Este codigo lo reemplazas con la ip de la pc y el puerto que deseas que se abra pero en la linea de comando
+#*Correr el servidor flask run --host=0.0.0.0 --port=4848 
 
 
 db = dbase()
@@ -49,7 +53,7 @@ def inadmin():
             admin.insert_one(regis.AdmDBCollection())
             return redirect(url_for('inadmin')) # Direccionamiento para la pagina que es /admin/in_admin
     else:
-        return render_template('/admin/in_admin.html') #* Cargado de la pagina 
+        return render_template('admin/in_admin.html') #* Cargado de la pagina 
 
 #*Vista Administradores
 @app.route('/admin/admin',methods=['GET','POST'])
@@ -354,8 +358,32 @@ def cliu():
 def uni():
     unidades = db.unidades.find({},{"placa":1})
     return [unidades["placa"]for unidades in unidades]
+def con():
+    conductores = db.conductores.find({},{"nombre":1})
+    return [conductores["nombre"]for conductores in conductores]
 
     
+#* Ingreso de guardias
+@app.route('/admin/in_guardias',methods=['GET','POST'])
+def inguardia():
+    if request.method == 'POST':
+        carrera = db ['guardias']
+        n_conductor= request.form['n_conductor']
+        unidad =request.form['unidad']
+        
+
+        if n_conductor and unidad  :
+            regis = Guardias(n_conductor, unidad  )
+            carrera.insert_one(regis.GuardDBCollection())
+            return redirect(url_for('inguardia')) 
+    else: #
+        return render_template('/admin/in_guardias.html',unidades=uni(),conductores=con()) #* Cargado de la pagina
+    
+    
+@app.route('/admin/guardias',methods=['GET','POST'])
+def guardia():
+    guardia = db['guardias'].find()
+    return render_template('/admin/guardias.html',guardias=guardia)
 
 
 

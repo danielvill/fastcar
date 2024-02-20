@@ -1,38 +1,44 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-<ion-toolbar>
-    <ion-title style="text-align: center;"> Ingreso de Carreras</ion-title>
-</ion-toolbar>
+<link rel="stylesheet" href="/static/css/select.css">
+
 <br>
 <form action="/admin/in_carreras" method="post">
     <div class="form-row">
-        <div class="form-group col-md-6">
+        <ion-toolbar>
+            <ion-title style="text-align: center;"> Ingreso de Carreras</ion-title>
+        </ion-toolbar>
+        <div class="form-group col-md-3">
+            <label for="">Ingreso de Clientes</label>
             <select name="cliente" id="">
                 {% for cliente in clientes %}
-                <option value="{{ cliente }}">{{ cliente }}</option>
+                <option  value="{{ cliente }}">{{ cliente }}</option>
                 {% endfor %}
             </select>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
+            <label for="">Ingreso de Unidad</label>
             <select name="unidad" id="">
                 {% for unidad in unidades %}
                 <option value="{{ unidad }}">{{ unidad }}</option>
                 {% endfor %}
             </select>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
+            <label for="">Estado de unidad</label>
             <select name="estado" id="">
                 <option value="Activo">Activo </option>
                 <option value="Denegado">Denegado</option>
             </select>
+            
         </div>
+        <ion-button type="submit">Enviar</ion-button>
     </div>
-    <button type="submit" class="btn btn-primary">Enviar</button>
 </form>
 <script src="/static/js/ingreso.js"></script>
 <script>
-    $(document).ready(function() {
-    $('select').select2();
-});
+    $(document).ready(function () {
+        $('select').select2();
+    });
 </script>
 {% endblock %}

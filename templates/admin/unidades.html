@@ -49,8 +49,8 @@
                 <td class="extra"><input type="text" class="form-control" name="es_tipo" value="{{ unidades.es_tipo }}"></td>
                 <td class="extra"><input type="text" class="form-control" name="es_fecha" value="{{ unidades.es_fecha }}"></td>
                 <td class="extra">
-                    <button type="submit" class="btn btn-primary">Editar</button>
-                    <a href="{{url_for('elituni',uni_name=unidades.placa)}}" class="btn btn-danger">Eliminar</a>
+                    <button type="submit" class="editar btn btn-primary">Editar</button>
+                    <a href="{{url_for('elituni',uni_name=unidades.placa)}}" class="eliminar btn btn-danger">Eliminar</a>
                 </td>
                 <td>
                     <button type="button" class="btn btn-primary mostrar-mas">Mostrar más</button>
@@ -85,4 +85,5 @@
         });
     });
 </script>
+<script src="/static/js/edi_eli.js"></script>
 {% endblock %}

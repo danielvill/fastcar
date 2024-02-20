@@ -1,0 +1,33 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<ion-list>
+    
+   
+    <!-- The reorder gesture is disabled by default, enable it to drag and drop items -->
+    <ion-reorder-group disabled="false">
+        {% for guardia in guardias %}
+      <ion-item>
+        <ion-label> {{guardia.n_conductor}}</ion-label>
+        <ion-label> {{guardia.unidad}}</ion-label>
+        <ion-label> {{guardia.estado}}</ion-label>
+        <button class="btn btn-primary">Enviar</button>
+        <ion-reorder slot="end"></ion-reorder>
+      </ion-item>
+      {% endfor %}
+  </ion-list>
+ 
+  <script>
+    const reorderGroup = document.querySelector('ion-reorder-group');
+  
+    reorderGroup.addEventListener('ionItemReorder', ({ detail }) => {
+      // The `from` and `to` properties contain the index of the item
+      // when the drag started and ended, respectively
+      console.log('Dragged from index', detail.from, 'to', detail.to);
+  
+      // Finish the reorder and position the item in the DOM based on
+      // where the gesture ended. This method can also be called directly
+      // by the reorder group
+      detail.complete();
+    });
+  </script>
+{% endblock %}

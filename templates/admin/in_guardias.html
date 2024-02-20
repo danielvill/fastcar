@@ -1,0 +1,38 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/select.css">
+
+<form action="/admin/in_guardias" method="post">
+    <div class="container">
+        <ion-toolbar>
+            <ion-title style="text-align: center;"> Ingreso de Guardias</ion-title>
+        </ion-toolbar>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="">Nombre de Conductor</label>
+                <select name="n_conductor" id="">
+                    {% for conductor in conductores %}
+                    <option value="{{ conductor }}">{{ conductor }}</option>
+                    {% endfor %}
+                </select>
+                
+            </div>
+            <div class="form-group col-md-3">
+                <label for="">Ingreso de Unidad</label>
+                <select name="unidad" id="">
+                    {% for unidad in unidades %}
+                    <option value="{{ unidad }}">{{ unidad }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <ion-button type="submit">Enviar</ion-button>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $('select').select2();
+    });
+</script>
+{% endblock %}

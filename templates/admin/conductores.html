@@ -49,8 +49,8 @@
                 <td class="extra"><input type="text" class="form-control" name="clave" value="{{ conductores.clave }}"></td>
                 <td class="extra"><input type="text" class="form-control" name="licencia" value="{{ conductores.licencia }}"></td>
                 <td class="extra">
-                    <button type="submit" class="btn btn-primary">Editar</button>
-                    <a href="{{url_for('elitcondu',cond_name=conductores.nombre)}}" class="btn btn-danger">Eliminar</a>
+                    <button type="submit" class="editar btn btn-primary">Editar</button>
+                    <a href="{{url_for('elitcondu',cond_name=conductores.nombre)}}" class="eliminar btn btn-danger">Eliminar</a>
                 </td>
                 <td>
                     <button type="button" class="btn btn-primary mostrar-mas">Mostrar más</button>
@@ -85,4 +85,5 @@
         });
     });
 </script>
+<script src="/static/js/edi_eli.js"></script>
 {% endblock %}

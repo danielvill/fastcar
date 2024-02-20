@@ -30,8 +30,8 @@
                 <td><input type="text" class="form-control" name="unidad" value="{{carreras.unidad}}"></td>
                 <td><input type="text" class="form-control" name="estado" value="{{carreras.estado}}"></td>
                 <td class="">
-                    <button type="submit" class="btn btn-primary">Editar</button>
-                    <a href="{{url_for('elitcarre',car_name=carreras.cliente)}}" class="btn btn-danger">Eliminar</a>
+                    <button type="submit" class="editar btn btn-primary">Editar</button>
+                    <a href="{{url_for('elitcarre',car_name=carreras.cliente)}}" class="eliminar btn btn-danger">Eliminar</a>
                 </td>
             </tr>
         </form>
@@ -63,4 +63,5 @@
         });
     });
 </script>
+<script src="/static/js/edi_eli.js"></script>
 {% endblock %}
