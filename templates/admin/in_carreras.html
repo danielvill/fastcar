@@ -1,10 +1,9 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 <link rel="stylesheet" href="/static/css/select.css">
-
 <br>
 <form action="/admin/in_carreras" method="post">
-    <div class="form-row">
+    <div class="container">
         <ion-toolbar>
             <ion-title style="text-align: center;"> Ingreso de Carreras</ion-title>
         </ion-toolbar>
@@ -25,16 +24,28 @@
             </select>
         </div>
         <div class="form-group col-md-3">
-            <label for="">Estado de unidad</label>
-            <select name="estado" id="">
-                <option value="Activo">Activo </option>
-                <option value="Denegado">Denegado</option>
-            </select>
-            
+            <label for="">Observacion</label>
+            <input type="text" name="comentario" class="form-control">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="">Fecha</label>
+            <input type="date" id="fecha" name="fecha" class="form-control" readonly>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="">Hora</label>
+            <input type="text" id="hora" name="hora" class="form-control" readonly>
         </div>
         <ion-button type="submit">Enviar</ion-button>
     </div>
 </form>
+<script>
+    document.querySelector('input[name="comentario"]').addEventListener('change', function() {
+    var fecha = new Date();
+    document.querySelector('input[name="fecha"]').value = fecha.toISOString().substring(0,10);
+    document.querySelector('input[name="hora"]').value = fecha.getHours() + ":" + fecha.getMinutes();
+});
+
+</script>
 <script src="/static/js/ingreso.js"></script>
 <script>
     $(document).ready(function () {

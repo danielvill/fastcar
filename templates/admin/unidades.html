@@ -11,29 +11,29 @@
     <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
         aria-describedby="addon-wrapping">
 </div>
-{% for unidades in unidades %}
 <table class="table table-hover">
     <thead>
         <tr>
+            <th scope="col">Unidad</th>
             <th scope="col">Placa</th>
             <th scope="col">Modelo</th>
             <th scope="col">Marca</th>
-            <th scope="col">Codigo</th>
-            <th scope="col" class="extra">Kilometraje</th>
-            <th scope="col" class="extra">Observacion</th>
-            <th scope="col" class="extra">Orden</th>
-            <th scope="col" class="extra">Estado de Codigo</th>
-            <th scope="col" class="extra">Estado de Tipo</th>
-            <th scope="col" class="extra">Estado de Fecha</th>
-            <th scope="col" class="extra">Acciones</th>
-            <th scope="col">
-                <button class="btn btn-primary mostrar-mas">Mostrar más</button>
-            </th>
+            <th scope="col">Color</th>
+            <th scope="col" >Observacion</th>
+            <th scope="col" >Orden</th>
+            <th scope="col" >Estado de Codigo</th>
+            <th scope="col" >Estado de Tipo</th>
+            <th scope="col" >Estado de Fecha</th>
+            <th scope="col" >Acciones</th>
         </tr>
     </thead>
+    {% for unidades in unidades %}
     <tbody data-placa="{{ unidades.placa }}">
         <form action="/edit_uni/{{unidades.placa}}" method="post">
             <tr>
+                <th scope="row">
+                    <input type="text" class="form-control" name="unidad" value="{{ unidades.unidad }}">
+                </th>
                 <th scope="row">
                     <input type="text" class="form-control" name="placa" value="{{ unidades.placa }}">
                 </th>
@@ -41,25 +41,21 @@
                     <input type="text" class="form-control" name="modelo" value="{{ unidades.modelo }}">
                 </th>
                 <td><input type="text" class="form-control" name="marca" value="{{ unidades.marca }}"></td>
-                <td><input type="text" class="form-control" name="codigo" value="{{ unidades.codigo }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="kilometraje" value="{{ unidades.kilometraje }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="observacion" value="{{ unidades.observacion }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="orden" value="{{ unidades.orden }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="es_codigo" value="{{ unidades.es_codigo }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="es_tipo" value="{{ unidades.es_tipo }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="es_fecha" value="{{ unidades.es_fecha }}"></td>
-                <td class="extra">
+                <td><input type="text" class="form-control" name="codigo" value="{{ unidades.color }}"></td>
+                <td><input type="text" class="form-control" name="observacion" value="{{ unidades.observacion }}"></td>
+                <td><input type="text" class="form-control" name="orden" value="{{ unidades.orden }}"></td>
+                <td><input type="text" class="form-control" name="es_codigo" value="{{ unidades.es_codigo }}"></td>
+                <td><input type="text" class="form-control" name="es_tipo" value="{{ unidades.es_tipo }}"></td>
+                <td><input type="text" class="form-control" name="es_fecha" value="{{ unidades.es_fecha }}"></td>
+                <td>
                     <button type="submit" class="editar btn btn-primary">Editar</button>
                     <a href="{{url_for('elituni',uni_name=unidades.placa)}}" class="eliminar btn btn-danger">Eliminar</a>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-primary mostrar-mas">Mostrar más</button>
                 </td>
             </tr>
         </form>
     </tbody>
+    {% endfor %}
 </table>
-{% endfor %}
 <script>
     // Filtrado para carreras
     $(document).ready(function () {
@@ -68,20 +64,6 @@
             $("tbody[data-placa]").filter(function () {
                 $(this).parent().toggle($(this).data("placa").toLowerCase().indexOf(value) > -1)
             });
-        });
-    });
-    // Ocultar los campos extra al cargar la página
-    document.querySelectorAll('.extra').forEach(function (el) {
-        el.style.display = 'none';
-    });
-
-    // Mostrar los campos extra cuando se hace clic en "Mostrar más"
-    document.querySelectorAll('.mostrar-mas').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            this.closest('tr').querySelectorAll('.extra').forEach(function (el) {
-                el.style.display = '';
-            });
-            this.style.display = 'none';  // Ocultar el botón "Mostrar más"
         });
     });
 </script>

@@ -1,4 +1,4 @@
-from flask import flash, Flask, render_template, request,Response ,jsonify, redirect, url_for
+from flask import flash, Flask, render_template, request,Response ,jsonify, redirect, url_for,send_file
 from controllers.basedatos import Conexion as dbase
 from modules.admin import Admin
 from modules.carreras import Carreras
@@ -7,9 +7,12 @@ from modules.conductores import Conductores
 from modules.unidades import Unidades
 from modules.usuarios import Usuario
 from modules.guardias import Guardias
+from reportlab.pdfgen import canvas # *pip install reportlab
+from reportlab.lib.pagesizes import letter #* pip install reportlab 
+
 
 #* Este codigo lo reemplazas con la ip de la pc y el puerto que deseas que se abra pero en la linea de comando
-#*Correr el servidor flask run --host=0.0.0.0 --port=4848 
+#* Correr el servidor flask run --host=0.0.0.0 --port=4848 
 
 
 db = dbase()
@@ -93,24 +96,52 @@ def incliente():
         nombre = request.form['nombre']
         telefono = request.form['telefono']
         direccion = request.form['direccion']
-        provincia = request.form['provincia']
-        canton = request.form['canton']
+        coordenadas = request.form['coordenadas']
+        cedula = request.form['cedula']
         referencia = request.form['referencia']
         comentario = request.form['comentario']
         
-        if nombre and telefono and direccion and provincia and canton and referencia and comentario:
-            regis = Clientes(nombre, telefono, direccion, provincia, canton, referencia, comentario)
+        if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario:
+            regis = Clientes(nombre, telefono, direccion, coordenadas, cedula, referencia, comentario)
             cliente.insert_one(regis.CliDBCollection())
             return redirect(url_for('incliente')) # Direccionamiento para la pagina que es /admin/in_cliente
     else: 
         return render_template('/admin/in_cliente.html') #* Cargado de la pagina 
     
 
-#*Vista de cliente
+def generar_pdf_clientes(datos):
+    c = canvas.Canvas("clientes.pdf", pagesize=letter)
+    width, height = letter
+
+    for i, dato in enumerate(datos):
+        texto = f"""
+        Nombre: {dato['nombre']},
+        Telefono: {dato['telefono']},
+        Direccion: {dato['direccion']},
+        Coordenadas: {dato['coordenadas']},
+        Cedula: {dato['cedula']},
+        Referencia: {dato['referencia']},
+        Comentario: {dato['comentario']}
+        """
+        
+        lineas = texto.split('\n')
+
+        for j, linea in enumerate(lineas):
+            c.drawString(30, height - 30*(i*len(lineas) + j + 1), linea)  
+
+    c.save()
+
+
 @app.route('/admin/cliente',methods=['GET','POST'])
 def cliente():
     clie = db['clientes'].find()
-    return render_template('/admin/cliente.html',clientes=clie)# Vista para cliente 
+    return render_template('/admin/cliente.html', clientes=clie)
+
+@app.route('/admin/reporte/r_clientes', methods=['GET'])
+def r_cliente():
+    clie = db['clientes'].find()
+    generar_pdf_clientes(clie)
+    return send_file('clientes.pdf', as_attachment=True)
     
 
 
@@ -119,7 +150,7 @@ def cliente():
 def elitcli(cli_name):
     cli = db['clientes']
     cli.delete_one({'nombre':cli_name})
-    return redirect(url_for('admin'))
+    return redirect(url_for('cliente'))
 
 @app.route('/edit_cli/<string:cli_name>', methods=['GET', 'POST'])
 def editcli(cli_name):
@@ -127,16 +158,17 @@ def editcli(cli_name):
     nombre = request.form['nombre']
     telefono = request.form['telefono']
     direccion = request.form['direccion']
-    provincia = request.form['provincia']
-    canton = request.form['canton']
+    coordenadas = request.form['coordenadas']
+    cedula = request.form['cedula']
     referencia = request.form['referencia']
     comentario = request.form['comentario']
     
-    if nombre and telefono and direccion and provincia and canton and referencia and comentario:
-        cli.update_one({'nombre':cli_name},{'$set':{'nombre':nombre,'telefono':telefono,'direccion':direccion,'provincia':provincia,'canton':canton,'referencia':referencia,'comentario':comentario}})
+    if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario:
+        cli.update_one({'nombre':cli_name},{'$set':{'nombre':nombre,'telefono':telefono,'direccion':direccion,'coordenadas':coordenadas,'cedula':cedula,'referencia':referencia,'comentario':comentario}})
         return redirect(url_for('cliente'))
     else:
         return render_template("admin/cliente.html")
+
 
 
 #*Ingreso de usuarios
@@ -251,21 +283,21 @@ def editcondu(cond_name):
 @app.route('/admin/in_unidades',methods=['GET','POST'])
 def inunidades():
     if request.method == 'POST':
-        unidad = db['unidades']
+        uni = db['unidades']
+        unidad =request.form['unidad']
         placa = request.form['placa']
         modelo = request.form['modelo']
         marca = request.form['marca']
-        codigo = request.form['codigo']
-        kilometraje = request.form['kilometraje']
+        color = request.form['color']
         observacion = request.form['observacion']
         orden = request.form['orden']
         es_codigo = request.form['es_codigo']
         es_tipo = request.form['es_tipo']
         es_fecha = request.form['es_fecha']
 
-        if placa and modelo and marca and codigo and kilometraje and observacion and orden and es_codigo and es_tipo and es_fecha:
-            regis = Unidades(placa, modelo, marca, codigo, kilometraje, observacion, orden, es_codigo, es_tipo, es_fecha)
-            unidad.insert_one(regis.UniDBCollection())
+        if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
+            regis = Unidades( unidad,placa, modelo, marca, color, observacion, orden, es_codigo, es_tipo, es_fecha)
+            uni.insert_one(regis.UniDBCollection())
             return redirect(url_for('inunidades')) # Direccionamiento para la pagina que es /admin/in_unidades
     else: #
         return render_template('/admin/in_unidades.html') #* Cargado de la pagina
@@ -286,35 +318,37 @@ def elituni(uni_name):
 @app.route('/edit_uni/<string:uni_name>', methods=['GET', 'POST'])
 def edituni(uni_name):
     uni = db['unidades']
+    unidad = request.form['unidad']
     placa = request.form['placa']
     modelo = request.form['modelo']
     marca = request.form['marca']
-    codigo = request.form['codigo']
-    kilometraje = request.form['kilometraje']
+    color = request.form['color']
     observacion = request.form['observacion']
     orden = request.form['orden']
     es_codigo = request.form['es_codigo']
     es_tipo = request.form['es_tipo']
     es_fecha = request.form['es_fecha']
     
-    if placa and modelo and marca and codigo and kilometraje and observacion and orden and es_codigo and es_tipo and es_fecha:
-        uni.update_one({'placa':uni_name},{'$set':{'placa':placa,'modelo':modelo,'marca':marca,'codigo':codigo,'kilometraje':kilometraje,'observacion':observacion,'orden':orden,'es_codigo':es_codigo,'es_tipo':es_tipo,'es_fecha':es_fecha}})
+    if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
+        uni.update_one({'placa':uni_name},{'$set':{'unidad':unidad,'placa':placa,'modelo':modelo,'marca':marca,'color':color,'observacion':observacion,'orden':orden,'es_codigo':es_codigo,'es_tipo':es_tipo,'es_fecha':es_fecha}})
         return redirect(url_for('unidades'))
     else:
         return render_template("admin/unidades.html")
 
 
-#*  ingresar Carreras
+#*  ingresar de Carreras
 @app.route('/admin/in_carreras',methods=['GET','POST'])
 def incarreras():
     if request.method == 'POST':
         carrera = db ['carreras']
         cliente = request.form['cliente']
         unidad =request.form['unidad']
-        estado = request.form['estado']
+        comentario = request.form['comentario']
+        fecha = request.form['fecha']
+        hora = request.form['hora']
 
-        if cliente and unidad and estado :
-            regis = Carreras(cliente, unidad ,estado, )
+        if cliente and unidad and comentario and fecha and hora:
+            regis = Carreras(cliente, unidad ,comentario,fecha, hora) 
             carrera.insert_one(regis.CareDBCollection())
             return redirect(url_for('incarreras')) # Direccionamiento para la pagina que es /admin/in_carreras
     else: #
@@ -339,16 +373,44 @@ def elitcarre(car_name):
 def editcarre(car_name):
     carre = db['carreras']
     cliente = request.form['cliente']
-    unidad = request.form['unidad']
-    estado = request.form['estado']
-    
-    
-    if cliente and unidad and estado:
-        carre.update_one({'cliente':car_name},{'$set':{'cliente':cliente,"unidad":unidad,"estado":estado}})
+    unidad =request.form['unidad']
+    comentario = request.form['comentario']
+    fecha = request.form['fecha']
+    hora = request.form['hora']
+
+    if cliente and unidad and comentario and fecha and hora:
+        carre.update_one({'cliente':car_name},{'$set':{'cliente':cliente,"unidad":unidad,"comentario":comentario,"fecha":fecha,"hora":hora}})
         return redirect(url_for('carreras'))
     else:
         return render_template("admin/carreras.html")
 
+
+#* Reportes de Carreras
+def generar_pdf_carreras(datos):
+    c = canvas.Canvas("carreras.pdf", pagesize=letter)
+    width, height = letter
+
+    for i, dato in enumerate(datos):
+        texto = f"""
+        Cliente: {dato['cliente']},
+        Unidad: {dato['unidad']},
+        Comentario: {dato['comentario']},
+        Fecha: {dato['fecha']},
+        Hora: {dato['hora']},
+        """
+        
+        lineas = texto.split('\n')
+
+        for j, linea in enumerate(lineas):
+            c.drawString(30, height - 30*(i*len(lineas) + j + 1), linea)  
+
+    c.save()    
+
+@app.route('/admin/reporte/r_carreras', methods=['GET'])
+def r_carreras():
+    carre = db['carreras'].find()
+    generar_pdf_carreras(carre)
+    return send_file('carreras.pdf', as_attachment=True)
 
 # * Select para carreras
 def cliu():

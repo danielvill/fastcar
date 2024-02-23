@@ -1,5 +1,7 @@
 {% extends "admin/layout.html" %}
 {% block content %}
+<h1 style="text-align: center;">Vista de Carreras</h1>
+<br>
 <div class="input-group flex-nowrap">
     <span class="input-group-text" id="addon-wrapping">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
@@ -11,16 +13,23 @@
     <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
         aria-describedby="addon-wrapping">
 </div>
-{% for carreras in carreras %}
+<br>
+<div>
+    <a href="{{ url_for('r_carreras') }}" class="btn btn-primary">Reporte Completo </a>
+</div>
+<br>
 <table class="table table-hover">
     <thead>
         <tr>
             <th scope="col">Cliente</th>
             <th scope="col">Unidad</th>
-            <th scope="col">Estado</th>
+            <th scope="col">Observacion</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Hora</th>
             <th>Acciones</th>
         </tr>
     </thead>
+    {% for carreras in carreras %}
     <tbody data-cliente="{{ carreras.cliente }}">
         <form action="/edit_car/{{carreras.cliente}}" method="post">
             <tr>
@@ -28,7 +37,9 @@
                     <input type="text" class="form-control" name="cliente" value="{{carreras.cliente}}">
                 </th>
                 <td><input type="text" class="form-control" name="unidad" value="{{carreras.unidad}}"></td>
-                <td><input type="text" class="form-control" name="estado" value="{{carreras.estado}}"></td>
+                <td><input type="text" class="form-control" name="comentario" value="{{carreras.comentario}}"></td>
+                <td><input type="date" class="form-control" name="fecha" value="{{carreras.fecha}}"></td>
+                <td><input type="text" class="form-control" name="hora" value="{{carreras.hora}}"></td>
                 <td class="">
                     <button type="submit" class="editar btn btn-primary">Editar</button>
                     <a href="{{url_for('elitcarre',car_name=carreras.cliente)}}" class="eliminar btn btn-danger">Eliminar</a>
@@ -36,8 +47,8 @@
             </tr>
         </form>
     </tbody>
+    {% endfor %}
 </table>
-{% endfor %}
 <script>
     // Filtrado para carreras
     $(document).ready(function () {
@@ -46,20 +57,6 @@
             $("tbody[data-cliente]").filter(function () {
                 $(this).parent().toggle($(this).data("cliente").toLowerCase().indexOf(value) > -1)
             });
-        });
-    });
-    // Ocultar los campos extra al cargar la página
-    document.querySelectorAll('.extra').forEach(function (el) {
-        el.style.display = 'none';
-    });
-
-    // Mostrar los campos extra cuando se hace clic en "Mostrar más"
-    document.querySelectorAll('.mostrar-mas').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            this.closest('tr').querySelectorAll('.extra').forEach(function (el) {
-                el.style.display = '';
-            });
-            this.style.display = 'none';  // Ocultar el botón "Mostrar más"
         });
     });
 </script>

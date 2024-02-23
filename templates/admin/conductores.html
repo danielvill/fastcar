@@ -11,10 +11,8 @@
     <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
         aria-describedby="addon-wrapping">
 </div>
-{% for conductores in conductores %}
 <table class="table table-hover">
     <thead>
-
         <tr>
             <th scope="col">Cedula</th>
             <th scope="col">Nombre</th>
@@ -27,12 +25,9 @@
             <th scope="col" class="extra">Clave</th>
             <th scope="col" class="extra">Licencia</th>
             <th scope="col" class="extra">Acciones</th>
-            <th scope="col">
-                <button class="btn btn-primary mostrar-mas">Mostrar más</button>
-            </th>
         </tr>
-
     </thead>
+    {% for conductores in conductores %}
     <tbody data-conductores="{{ conductores.nombre }}">
         <form action="/edit_cond/{{ conductores.nombre }}" method="post">
             <tr>
@@ -41,25 +36,22 @@
                 </th>
                 <td><input type="text" class="form-control" name="nombre" value="{{ conductores.nombre }}"></td>
                 <td><input type="text" class="form-control" name="email" value="{{ conductores.email }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="telefono" value="{{ conductores.telefono }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="direccion" value="{{ conductores.direccion }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="em_nombre" value="{{ conductores.em_nombre }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="em_telefono" value="{{ conductores.em_telefono }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="em_relacion" value="{{ conductores.em_relacion }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="clave" value="{{ conductores.clave }}"></td>
-                <td class="extra"><input type="text" class="form-control" name="licencia" value="{{ conductores.licencia }}"></td>
-                <td class="extra">
+                <td><input type="text" class="form-control" name="telefono" value="{{ conductores.telefono }}"></td>
+                <td><input type="text" class="form-control" name="direccion" value="{{ conductores.direccion }}"></td>
+                <td><input type="text" class="form-control" name="em_nombre" value="{{ conductores.em_nombre }}"></td>
+                <td><input type="text" class="form-control" name="em_telefono" value="{{ conductores.em_telefono }}"></td>
+                <td><input type="text" class="form-control" name="em_relacion" value="{{ conductores.em_relacion }}"></td>
+                <td><input type="text" class="form-control" name="clave" value="{{ conductores.clave }}"></td>
+                <td><input type="text" class="form-control" name="licencia" value="{{ conductores.licencia }}"></td>
+                <td>
                     <button type="submit" class="editar btn btn-primary">Editar</button>
                     <a href="{{url_for('elitcondu',cond_name=conductores.nombre)}}" class="eliminar btn btn-danger">Eliminar</a>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-primary mostrar-mas">Mostrar más</button>
                 </td>
             </tr>
         </form>
     </tbody>
+    {% endfor %}
 </table>
-{% endfor %}
 <script>
     // Filtrado para carreras
     $(document).ready(function () {
@@ -68,20 +60,6 @@
             $("tbody[data-conductores]").filter(function () {
                 $(this).parent().toggle($(this).data("conductores").toLowerCase().indexOf(value) > -1)
             });
-        });
-    });
-    // Ocultar los campos extra al cargar la página
-    document.querySelectorAll('.extra').forEach(function (el) {
-        el.style.display = 'none';
-    });
-
-    // Mostrar los campos extra cuando se hace clic en "Mostrar más"
-    document.querySelectorAll('.mostrar-mas').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            this.closest('tr').querySelectorAll('.extra').forEach(function (el) {
-                el.style.display = '';
-            });
-            this.style.display = 'none';  // Ocultar el botón "Mostrar más"
         });
     });
 </script>

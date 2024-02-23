@@ -1,7 +1,5 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-
-{% for usuario in usuarios %}
 <table class="table table-hover">
     <thead>
         <tr>
@@ -14,6 +12,7 @@
         </tr>
     </thead>
     <tbody>
+        {% for usuario in usuarios %}
         <form action="/edit_usu/{{usuario.nombre}}" method="post">
             <tr>
                 <th scope="row"> 
@@ -30,8 +29,8 @@
 
             </tr>
         </form>
+        {% endfor %}
     </tbody>
 </table>
-{% endfor %}
 <script src="/static/js/edi_eli.js"></script>
 {% endblock %}

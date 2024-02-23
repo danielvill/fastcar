@@ -1,10 +1,10 @@
 class Clientes:
-    def __init__(self, nombre,telefono,direccion,provincia,canton,referencia,comentario):
+    def __init__(self, nombre,telefono,direccion,coordenadas,cedula,referencia,comentario):
         self.nombre = nombre
         self.telefono = telefono
         self.direccion = direccion
-        self.provincia = provincia
-        self.canton = canton
+        self.coordenadas = coordenadas
+        self.cedula = cedula
         self.referencia = referencia
         self.comentario = comentario
         
@@ -15,8 +15,8 @@ class Clientes:
             "nombre":self.nombre,
             "telefono":self.telefono,
             "direccion":self.direccion,
-            "provincia":self.provincia,
-            "canton":self.canton,
+            "coordenadas":self.coordenadas,
+            "cedula":self.cedula,
             "referencia":self.referencia,
             "comentario":self.comentario,
             

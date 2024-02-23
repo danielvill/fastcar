@@ -12,25 +12,105 @@
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 </head>
-
 <body>
     <ion-app>
-        <ion-menu content-id="main-content">
+        <ion-menu side="start" content-id="main-content">
             <ion-header>
                 <ion-toolbar color="tertiary">
                     <ion-title>Menu de Contenido</ion-title>
                 </ion-toolbar>
             </ion-header>
             <ion-content class="ion-padding">
-                <ion-item href="">
-                    <ion-icon name="accessibility-outline" slot="start"></ion-icon>
-                    <ion-label><a href="./registro">
-                        Vista
-                    </a></ion-label>
-                </ion-item>
+                <ion-list>
+                    <ion-item-group>
+                        <ion-item-divider>
+                            <ion-icon name="accessibility-outline" slot="start"></ion-icon>
+                            <ion-label>Admin</ion-label>
+                            <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+                        </ion-item-divider>
+                        <ion-item hidden>
+                            <a href="./admin">Vista Administrador</a>
+                        </ion-item>
+                        <ion-item hidden>
+                            <a href="./in_admin">Ingreso Administrador</a></ion-item>
+                        <ion-item-divider>
+                            <ion-icon name="people-outline" slot="start"></ion-icon>
+                            <ion-label>Operadores</ion-label>
+                            <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+                        </ion-item-divider>
+                        <ion-item hidden>
+                            <a href="./usuarios">Vista Operadores</a>
+                        </ion-item>
+                        <ion-item hidden>
+                            <a href="./in_usuario">Ingreso de Operadores</a>
+                        </ion-item>
+                        <ion-item-divider>
+                            <ion-icon name="person-add-outline" slot="start"></ion-icon>
+                            <ion-label>Clientes</ion-label>
+                            <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+                        </ion-item-divider>
+                        <ion-item hidden>
+                            <a href="./cliente">Vista de Clientes</a>
+                        </ion-item>
+                        <ion-item hidden>
+                            <a href="./in_cliente">Ingreso de Clientes</a>
+                        </ion-item>
+
+                        <ion-item-divider>
+                            <ion-icon name="speedometer-outline" slot="start"></ion-icon>
+                            <ion-label>Conductores</ion-label>
+                            <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+                        </ion-item-divider>
+                        <ion-item hidden>
+                            <a href="./conductores">Vista de Conductores</a>
+                        </ion-item>
+                        <ion-item hidden>
+                            <a href="./in_conductores">Ingreso de Conductores</a>
+                        </ion-item>
+
+                        <ion-item-divider>
+                            <ion-icon name="flag-outline" slot="start"></ion-icon>
+                            <ion-label>Carreras</ion-label>
+                            <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+                        </ion-item-divider>
+                        <ion-item hidden>
+                            <a href="./carreras">Vista de Carreras</a>
+                        </ion-item>
+                        <ion-item hidden>
+                            <a href="./in_carreras">Ingreso de Carreras</a>
+                        </ion-item>
+
+                        <ion-item-divider>
+                            <ion-icon name="car-outline" slot="start"></ion-icon>
+                            <ion-label>Unidades</ion-label>
+                            <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+                        </ion-item-divider>
+                        <ion-item hidden>
+                            <a href="./unidades">Vista de Unidades</a>
+                        </ion-item>
+                        <ion-item hidden>
+                            <a href="./in_unidades">Ingreso de Unidades</a>
+                        </ion-item>
+
+                        <ion-item-divider>
+                            <ion-icon name="eye-outline" slot="start"></ion-icon>
+                            <ion-label>Guardias</ion-label>
+                            <ion-icon name="chevron-down-outline" slot="end"></ion-icon>
+                        </ion-item-divider>
+                        <ion-item hidden>
+                            <a href="./guardias">Vista de Guardias</a>
+                        </ion-item>
+                        <ion-item hidden>
+                            <a href="./in_guardias">Ingreso de Guardias</a>
+                        </ion-item>
+
+                    </ion-item-group>
+                    <!-- Repite para cada categoría -->
+                </ion-list>
+                <ion-router-outlet id="main-content"></ion-router-outlet>
             </ion-content>
         </ion-menu>
-        <div class="ion-page" id="main-content">
+        <div class="ion-page">
             <ion-header>
                 <ion-toolbar>
                     <ion-buttons slot="start">
@@ -41,14 +121,14 @@
             </ion-header>
             <ion-content class="ion-padding">
                 {% block content %}
-                {% endblock %} 
+                {% endblock %}
             </ion-content>
         </div>
     </ion-app>
 
     <style>
         ion-menu::part(backdrop) {
-            background-color: rgba(255, 0, 255, 0.5);
+            background-color: rgba(243, 227, 7, 0.5);
         }
 
         ion-menu::part(container) {
@@ -58,7 +138,21 @@
         }
     </style>
 
-
+    <script>
+        // Codigo de Menu
+        document.addEventListener('DOMContentLoaded', function () {
+            var dividers = document.querySelectorAll('ion-item-divider');
+            dividers.forEach(function (divider) {
+                divider.addEventListener('click', function () {
+                    var nextElement = divider.nextElementSibling;
+                    while (nextElement && nextElement.tagName === 'ION-ITEM') {
+                        nextElement.hidden = !nextElement.hidden;
+                        nextElement = nextElement.nextElementSibling;
+                    }
+                });
+            });
+        });
+    </script>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
 </body>

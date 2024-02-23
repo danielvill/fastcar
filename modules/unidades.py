@@ -1,10 +1,10 @@
 class Unidades:
-    def __init__(self, placa,modelo,marca,codigo,kilometraje,observacion,orden,es_codigo,es_tipo,es_fecha):
+    def __init__(self, unidad,placa,modelo,marca,color,observacion,orden,es_codigo,es_tipo,es_fecha):
+        self.unidad = unidad
         self.placa = placa
         self.modelo = modelo
         self.marca = marca
-        self.codigo = codigo
-        self.kilometraje = kilometraje
+        self.color = color
         self.observacion = observacion
         self.orden = orden
         self.es_codigo = es_codigo
@@ -13,11 +13,11 @@ class Unidades:
         
     def UniDBCollection(self):
         return{
+            "unidad":self.unidad,
             "placa":self.placa,
             "modelo":self.modelo,
             "marca":self.marca,
-            "codigo":self.codigo,
-            "kilometraje":self.kilometraje,
+            "color":self.color,
             "observacion":self.observacion,
             "orden":self.orden,
             "es_codigo":self.es_codigo,

@@ -11,47 +11,46 @@
     <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
         aria-describedby="addon-wrapping">
 </div>
-{% for cliente in clientes %}
+<br>
+<div>
+    <a href="{{ url_for('r_cliente') }}" class="btn btn-primary">Reporte Completo </a>
+</div>
+<br>
 <table class="table table-hover">
     <thead>
         <tr>
             <th scope="col">Nombre</th>
             <th scope="col">Telefono</th>
             <th scope="col">Direccion</th>
-            <th scope="col" class="extra">Provincia</th>
-            <th scope="col" class="extra">Canton</th>
+            <th scope="col" class="extra">Coordenandas </th>
+            <th scope="col" class="extra">Cedula</th>
             <th scope="col" class="extra">Referencia</th>
             <th scope="col" class="extra">Comentario</th>
             <th scope="col" class="extra">Acciones</th>
-            <th scope="col">
-                <button class="btn btn-primary mostrar-mas">Mostrar más</button>
-            </th>
         </tr>
     </thead>
+    {% for cliente in clientes %}
     <tbody data-nombre="{{ cliente.nombre }}">
         <form action="/edit_cli/{{cliente.nombre}}" method="post">
             <tr>
                 <th scope="row">
                     <input type="text" class="form-control" name="nombre" value="{{cliente.nombre}}">
                 </th>
-                <td><input type="text" class="form-control" name="telefono" value="{{cliente.telefono}}"></td>
+                <td><input type="number" class="form-control" name="telefono" value="{{cliente.telefono}}"></td>
                 <td><input type="text" class="form-control" name="direccion" value="{{cliente.direccion}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="provincia" value="{{cliente.provincia}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="canton" value="{{cliente.canton}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="referencia" value="{{cliente.referencia}}"></td>
-                <td class="extra"><input type="text" class="form-control" name="comentario" value="{{cliente.comentario}}"></td>
-                <td class="extra">
+                <td ><input type="url" class="form-control" name="coordenadas" value="{{cliente.coordenadas}}"></td>
+                <td ><input type="number" class="form-control" name="cedula" value="{{cliente.cedula}}"></td>
+                <td ><input type="text" class="form-control" name="referencia" value="{{cliente.referencia}}"></td>
+                <td ><input type="text" class="form-control" name="comentario" value="{{cliente.comentario}}"></td>
+                <td >
                     <button type="submit" class="editar btn btn-primary">Editar</button>
                     <a href="{{url_for('elitcli',cli_name=cliente.nombre)}}" class="eliminar btn btn-danger">Eliminar</a>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-primary mostrar-mas">Mostrar más</button>
                 </td>
             </tr>
         </form>
     </tbody>
+    {% endfor %}
 </table>
-{% endfor %}
 <script>
     // Filtrado para carreras
     $(document).ready(function () {
@@ -62,21 +61,6 @@
             });
         });
     });
-    // Ocultar los campos extra al cargar la página
-    document.querySelectorAll('.extra').forEach(function (el) {
-        el.style.display = 'none';
-    });
-
-    // Mostrar los campos extra cuando se hace clic en "Mostrar más"
-    document.querySelectorAll('.mostrar-mas').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            this.closest('tr').querySelectorAll('.extra').forEach(function (el) {
-                el.style.display = '';
-            });
-            this.style.display = 'none';  // Ocultar el botón "Mostrar más"
-        });
-    });
 </script>
-
 <script src="/static/js/edi_eli.js"></script>
 {% endblock %}
