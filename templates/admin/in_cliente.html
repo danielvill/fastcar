@@ -1,44 +1,54 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-<ion-toolbar>
-    <ion-title style="text-align: center;"> Ingreso de Cliente</ion-title>
-</ion-toolbar>
-<br>
-<form action="/admin/in_cliente" method="post">
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="">Nombre</label>
-            <input type="text" class="form-control" name="nombre">
-        </div>
-        <div class="form-group">
-            <label for="inputAddress">Celular</label>
-            <input type="number" class="form-control" name="telefono" >
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="inputAddress2">Direccion</label>
-        <input type="text" class="form-control" name="direccion">
-    </div>
-    <div class="form-group">
-        <label for="">Coordenandas</label>
-        <input type="url" name="coordenadas" class="form-control">
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputCity">Cedula</label>
-            <input type="number" name="cedula" class="form-control">
-        </div>
-        <div class="form-group col-md-4">
-            <label for="inputState">Referencia</label>
-            <input type="text" class="form-control" name="referencia">
-        </div>
+<div class="formbold-main-wrapper">
     
-        <div class="form-group col-md-6">
-            <label for="inputCity">Comentario</label>
-            <input type="text" class="form-control" name="comentario">
-        </div>
+    <div class="formbold-form-wrapper">
+        
+        <form action="/admin/in_cliente" method="POST">
+            <div class="formbold-form-title">
+                <h2 class="">Registro de Clientes</h2>
+                <p>
+                    Registrar todos los campos son obligatorios
+                </p>
+            </div>
+            <div class="formbold-input-flex">
+                <div>
+                    <label for="firstname" class="formbold-form-label">
+                        Nombre
+                    </label>
+                    <input type="text" class="form-control" name="nombre" required>
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Telefono</label>
+                    <input type="number" class="form-control" name="telefono" required>
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Coordenandas</label>
+                    <input type="text" name="coordenadas" class="form-control">
+                </div>
+            </div>
+            <div class="formbold-input-flex">
+                <div>
+                    <label for="email" class="formbold-form-label">Cedula</label>
+                    <input type="number" name="cedula" class="form-control">
+                </div>
+                
+            </div>
+            <div class="formbold-mb-3">
+                <label for="lastname" class="formbold-form-label"> Direccion</label>
+                <input type="text" class="form-control" name="direccion" required>
+            </div>
+            <div class="formbold-mb-3">
+                <label for="phone" class="formbold-form-label">Referencia</label>
+                <input type="text" class="form-control" name="referencia">
+            </div>
+            <div class="formbold-mb-3">
+                <label for="phone" class="formbold-form-label">Comentario</label>
+                <input type="text" class="form-control" name="comentario">
+            </div>
+            <button class="formbold-btn">Guardar</button>
+        </form>
     </div>
-    <button type="submit" class="btn btn-primary">Enviar</button>
-</form>
+</div>
 <script src="/static/js/validacion/clientes.js"></script>
 {% endblock %}

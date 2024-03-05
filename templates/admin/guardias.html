@@ -1,33 +1,79 @@
 {% extends "admin/layout.html" %}
 {% block content %}
+<h2>
+  Vista de Turnos
+</h2>
 <ion-list>
-    
-   
-    <!-- The reorder gesture is disabled by default, enable it to drag and drop items -->
+  <!-- The reorder gesture is disabled by default, enable it to drag and drop items -->
+  <form action="/admin/guardias" method="post">
     <ion-reorder-group disabled="false">
-        {% for guardia in guardias %}
+
+      {% for guardia in guardias %}
       <ion-item>
-        <ion-label> {{guardia.n_conductor}}</ion-label>
-        <ion-label> {{guardia.unidad}}</ion-label>
-        <ion-label> {{guardia.estado}}</ion-label>
-        <button class="btn btn-primary">Enviar</button>
+        <label class="form-control form-control-lg">
+          <input type="text" name="unidad" value="{{guardia.unidad}}" hidden>
+          {{guardia.unidad}}
+        </label>
         <ion-reorder slot="end"></ion-reorder>
+        <button type="button" onclick="selectItem('{{guardia.unidad}}')">Seleccionar</button>
+        <button type="submit" onclick="submitForm('{{guardia.unidad}}')">Enviar</button>
+        <a href="{{url_for('elitguardia',gua_name=guardia.unidad)}}" class="btn btn-danger">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+            viewBox="0 0 16 16">
+            <path
+              d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+            <path
+              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+          </svg>
+        </a>
       </ion-item>
       {% endfor %}
-  </ion-list>
- 
-  <script>
-    const reorderGroup = document.querySelector('ion-reorder-group');
-  
-    reorderGroup.addEventListener('ionItemReorder', ({ detail }) => {
-      // The `from` and `to` properties contain the index of the item
-      // when the drag started and ended, respectively
-      console.log('Dragged from index', detail.from, 'to', detail.to);
-  
-      // Finish the reorder and position the item in the DOM based on
-      // where the gesture ended. This method can also be called directly
-      // by the reorder group
-      detail.complete();
+
+  </form>
+</ion-list>
+
+<script>
+ let selectedItem = null;
+
+const reorderGroup = document.querySelector('ion-reorder-group');
+
+reorderGroup.addEventListener('ionItemReorder', ({ detail }) => {
+  // El resto de tu código...
+  detail.complete();
+});
+
+function selectItem(id) {
+  // Guarda el ID del elemento seleccionado
+  selectedItem = id;
+  console.log('Elemento seleccionado:', selectedItem);
+}
+
+function submitForm(id) {
+  console.log('Elemento a enviar:', id);
+  // Solo envía el formulario si el elemento seleccionado es el que se va a enviar
+  if (id !== selectedItem) {
+    event.preventDefault();
+    alert('Por favor, selecciona el elemento que deseas enviar.');
+    return;
+  }
+
+  // Aquí es donde debes hacer la llamada al servidor para enviar los datos
+  fetch('/admin/guardias/reorder', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: id,
+    }),
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+      console.error('Error:', error);
     });
-  </script>
+}
+</script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+<script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
 {% endblock %}

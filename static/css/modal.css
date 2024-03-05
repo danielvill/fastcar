@@ -1,0 +1,13 @@
+/* Cambiar el color del botón Guardar a verde */
+.ui-dialog .guardar.ui-button {
+    background: #0be73b;
+    color: rgb(8, 8, 8);
+    /* Cambiar el color del texto a blanco */
+  }
+
+  /* Cambiar el color del botón Cancelar a rojo */
+  .ui-dialog .cancelar.ui-button {
+    background: #f01405;
+    color: rgb(8, 8, 8);
+    /* Cambiar el color del texto a blanco */
+  }

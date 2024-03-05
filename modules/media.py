@@ -1,10 +1,10 @@
-class Guardias:
+class Media:
     def __init__(self,unidad):
         
         self.unidad = unidad
         
 
-    def GuardDBCollection(self):
+    def MediaDBCollection(self):
         return{
             
             "unidad":self.unidad,

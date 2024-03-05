@@ -55,6 +55,15 @@ function validarcorreo() {
         return false;
     }
 }
+// Validar Correo
+function validarcorreo() {
+    let correo = document.getElementById('email').value;
+    let regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+    if (!regex.test(correo)) {
+        alert('Por favor, ingresa un correo válido');
+        return false;
+    }
+}
 
 function limitarEntrada() {
     let x = document.getElementById("miInput");

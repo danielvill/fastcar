@@ -1,17 +1,7 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-<div class="input-group flex-nowrap">
-    <span class="input-group-text" id="addon-wrapping">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-            viewBox="0 0 16 16">
-            <path
-                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-        </svg>
-    </span>
-    <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
-        aria-describedby="addon-wrapping">
-</div>
-<table class="table table-hover">
+
+<table id="myTable" class="table">
     <thead>
         <tr>
             <th scope="col">Unidad</th>
@@ -27,43 +17,136 @@
             <th scope="col" >Acciones</th>
         </tr>
     </thead>
-    {% for unidades in unidades %}
-    <tbody data-placa="{{ unidades.placa }}">
-        <form action="/edit_uni/{{unidades.placa}}" method="post">
+    <tbody>
+            {% for unidades in unidades %}
             <tr>
-                <th scope="row">
-                    <input type="text" class="form-control" name="unidad" value="{{ unidades.unidad }}">
-                </th>
-                <th scope="row">
-                    <input type="text" class="form-control" name="placa" value="{{ unidades.placa }}">
-                </th>
-                <th scope="row">
-                    <input type="text" class="form-control" name="modelo" value="{{ unidades.modelo }}">
-                </th>
-                <td><input type="text" class="form-control" name="marca" value="{{ unidades.marca }}"></td>
-                <td><input type="text" class="form-control" name="codigo" value="{{ unidades.color }}"></td>
-                <td><input type="text" class="form-control" name="observacion" value="{{ unidades.observacion }}"></td>
-                <td><input type="text" class="form-control" name="orden" value="{{ unidades.orden }}"></td>
-                <td><input type="text" class="form-control" name="es_codigo" value="{{ unidades.es_codigo }}"></td>
-                <td><input type="text" class="form-control" name="es_tipo" value="{{ unidades.es_tipo }}"></td>
-                <td><input type="text" class="form-control" name="es_fecha" value="{{ unidades.es_fecha }}"></td>
+                <td >
+                    {{ unidades.unidad }}
+                </td>
                 <td>
-                    <button type="submit" class="editar btn btn-primary">Editar</button>
-                    <a href="{{url_for('elituni',uni_name=unidades.placa)}}" class="eliminar btn btn-danger">Eliminar</a>
+                    {{ unidades.placa }}
+                </td>
+                <td>
+                    {{ unidades.modelo }}
+                </td>
+                <td>{{ unidades.marca }}</td>
+                <td>{{ unidades.color }}</td>
+                <td>{{ unidades.observacion }}</td>
+                <td>{{ unidades.orden }}</td>
+                <td>{{ unidades.es_codigo }}</td>
+                <td>{{ unidades.es_tipo }}</td>
+                <td>{{ unidades.es_fecha }}</td>
+                <td>
+                    <button type="submit" class="editar btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                          </svg>
+                    </button>
+                    <a href="{{url_for('elituni',uni_name=unidades.placa)}}" class="eliminar btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708"/>
+                      </svg></a>
                 </td>
             </tr>
-        </form>
+            {% endfor %}
     </tbody>
-    {% endfor %}
 </table>
+<div id="editModal" title="Editar Admin">
+    <form id="editForm" action="" method="post">
+        <div class="container">
+            <div class="col">
+                <label for="unidad">Unidad</label>
+                <input type="text" id="unidad" name="unidad" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Placa</label>
+                <input type="text" id="placa" name="placa" class="form-control">
+            </div>
+            <div class="col">
+                <label for="rol">Modelo</label>
+                <input type="text" id="modelo" name="modelo" class="form-control">
+            </div>
+            <div class="col">
+                <label for="rol">Marca</label>
+                <input type="text" id="marca" name="marca" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Color</label>
+                <input type="text" id="color" name="color" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Observacion</label>
+                <input type="text" id="observacion" name="observacion" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Orden</label>
+                <input type="text" id="orden" name="orden" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Estado de Codigo</label>
+                <input type="text" id="es_codigo" name="es_codigo" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Estado de Tipo</label>
+                <input type="text" id="es_tipo" name="es_tipo" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Estado de Fecha</label>
+                <input type="text" id="es_fecha" name="es_fecha" class="form-control">
+            </div>
+        </div>
+    </form>
+</div>
 <script>
-    // Filtrado para carreras
     $(document).ready(function () {
-        $("#filtro").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("tbody[data-placa]").filter(function () {
-                $(this).parent().toggle($(this).data("placa").toLowerCase().indexOf(value) > -1)
-            });
+        $('#myTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+        var table = $('#myTable').DataTable();
+        //Cambio de english a spanish
+        // Funcionalidad de edición
+        table.on('click', '.editar', function () {
+            var row = $(this).closest('tr');
+            var data = table.row(row).data();
+            // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
+            // Por ejemplo:
+            $('#unidad').val(data[0]);
+            $('#placa').val(data[1]);
+            $('#modelo').val(data[2]);  
+            $('#marca').val(data[3]);
+            $('#color').val(data[4]);
+            $('#observacion').val(data[5]);
+            $('#orden').val(data[6]);
+            $('#es_codigo').val(data[7]);
+            $('#es_tipo').val(data[8]);
+            $('#es_fecha').val(data[9]);
+            $('#editForm').attr('action','/edit_uni/'+ data[0]);
+            $('#editModal').dialog('open');
+        });
+        // Inicializar el modal
+        $('#editModal').dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: [
+                {
+                    text: 'Guardar',
+                    click: function () {
+                        $('#editForm').submit();
+                    },
+                    // Agregar una clase al botón
+                    class: 'guardar'
+                },
+                {
+                    text: 'Cancelar',
+                    click: function () {
+                        $(this).dialog('close');
+                    },
+                    // Agregar una clase al botón
+                    class: 'cancelar'
+                }
+            ]
         });
     });
 </script>

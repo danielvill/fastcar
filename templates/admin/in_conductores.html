@@ -1,65 +1,80 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-<ion-toolbar>
-    <ion-title style="text-align: center;"> Ingreso de Conductores</ion-title>
-</ion-toolbar>
-<br>
-<form action="/admin/in_conductores" method="post">
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="">Cedula</label>
-            <input type="number" id="miInput" oninput="limitarEntrada()" class="form-control" name="cedula">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="">Nombre</label>
-            <input type="text" class="form-control" name="nombre">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="inputAddress">Email</label>
-        <input type="email" id="correo" class="form-control" name="email" >
-    </div>
-    <div class="form-group">
-        <label for="inputAddress2">Celular</label>
-        <input type="number"  id="micelu" oninput="limitarEntrada()" class="form-control" name="telefono">
-    </div>
-    <div class="form-group">
-        <label for="">Direccion</label>
-        <input type="text" class="form-control" name="direccion">
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label for="inputCity">Emergencia nombre</label>
-            <input type="text" class="form-control" name="em_nombre">
-        </div>
-        <div class="form-group col-md-4">
-            <label for="inputState">Emergencia telefono</label>
-            <input type="number" id="emecelu" oninput="limitarEntrada()" class="form-control" name="em_telefono">
-        </div>
-        <div class="form-group col-md-4">
-            <label for="inputState">Emergencia relacion</label>
-            <input type="text" class="form-control" name="em_relacion">
-        </div>
-        <div class="form-group col-md-4">
-            <label for="inputState">Numero de Unidad</label>
-            <input type="number" class="form-control" name="clave">
-        </div>
-        <div class="form-group col-md-4">
-            <label for="inputState">Licencia</label>
-            <select name="licencia" id="" class="form-control">
-                <option value="A1">A1</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-                <option value="D">D</option>
-                <option value="E">E</option>
-                <option value="E1">E1</option>
-                <option value="F">F</option>
-                <option value="G">G</option>
-            </select>
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Enviar</button>
-</form>
+<div class="formbold-main-wrapper">
+    <!-- Author: FormBold Team -->
+    <!-- Learn More: https://formbold.com -->
+    <div class="formbold-form-wrapper">
+        <img src="/static/img/fastcar.jpeg">
+        <form action="/admin/in_conductores" method="POST">
+            <div class="formbold-form-title">
+                <h2 class="">Registro de Conductores</h2>
+                <p>
+                    Registrar todos los campos son obligatorios
+                </p>
+            </div>
 
+            <div class="formbold-input-flex">
+                <div>
+                    <label for="firstname" class="formbold-form-label">
+                        Cedula
+                    </label>
+                    <input type="number" id="miInput" class="form-control" oninput="limitarEntrada()" name="cedula"
+                        required>
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Nombre</label>
+                    <input type="text" class="form-control" name="nombre" required>
+                </div>
+
+            </div>
+            <div>
+                <label for="lastname" class="formbold-form-label">Email</label>
+                <input type="email" id="correo" class="form-control" name="email" required>
+            </div>
+            <div>
+                <label for="lastname" class="formbold-form-label">Celular</label>
+                <input type="number" id="micelu" oninput="limitarEntrada()" class="form-control" name="telefono"
+                    required>
+            </div>
+            <div>
+                <label for="email" class="formbold-form-label">Direccion</label>
+                <input type="text" class="form-control" name="direccion">
+            </div>
+            <div>
+                <label for="phone" class="formbold-form-label">Emergencia nombre</label>
+                <input type="text" class="form-control" name="em_nombre">
+            </div>
+            <div class="formbold-input-flex">
+
+            </div>
+            <div class="formbold-mb-3">
+                <label for="phone" class="formbold-form-label">Emergencia telefono</label>
+                <input type="number" id="emecelu" oninput="limitarEntrada()" class="form-control" name="em_telefono">
+            </div>
+            <div class="formbold-mb-3">
+                <label for="phone" class="formbold-form-label">Emergencia relacion</label>
+                <input type="text" class="form-control" name="em_relacion">
+            </div>
+            <div class="formbold-mb-3">
+                <label for="phone" class="formbold-form-label">Numero de Unidad</label>
+                <input type="number" class="form-control" name="clave" required>
+            </div>
+            <div class="formbold-mb-3">
+                <label for="phone" class="formbold-form-label">Licencia</label>
+                <select type="number" class="form-control" name="clave">
+                    <option value="A1">A1</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="E1">E1</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                </select>
+            </div>
+            <button class="formbold-btn">Guardar</button>
+        </form>
+    </div>
+</div>
 <script src="/static/js/validacion/conductores.js"></script>
 {% endblock %}

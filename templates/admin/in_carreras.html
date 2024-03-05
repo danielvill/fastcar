@@ -1,49 +1,59 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-<link rel="stylesheet" href="/static/css/select.css">
-<br>
-<form action="/admin/in_carreras" method="post">
-    <div class="container">
-        <ion-toolbar>
-            <ion-title style="text-align: center;"> Ingreso de Carreras</ion-title>
-        </ion-toolbar>
-        <div class="form-group col-md-3">
-            <label for="">Ingreso de Clientes</label>
-            <select name="cliente" id="">
-                {% for cliente in clientes %}
-                <option  value="{{ cliente }}">{{ cliente }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group col-md-3">
-            <label for="">Ingreso de Unidad</label>
-            <select name="unidad" id="">
-                {% for unidad in unidades %}
-                <option value="{{ unidad }}">{{ unidad }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group col-md-3">
-            <label for="">Observacion</label>
-            <input type="text" name="comentario" class="form-control">
-        </div>
-        <div class="form-group col-md-3">
-            <label for="">Fecha</label>
-            <input type="date" id="fecha" name="fecha" class="form-control" readonly>
-        </div>
-        <div class="form-group col-md-3">
-            <label for="">Hora</label>
-            <input type="text" id="hora" name="hora" class="form-control" readonly>
-        </div>
-        <ion-button type="submit">Enviar</ion-button>
+<div class="formbold-main-wrapper">
+    <!-- Author: FormBold Team -->
+    <!-- Learn More: https://formbold.com -->
+    <div class="formbold-form-wrapper">
+
+        <form action="/admin/in_carreras" method="POST">
+            <div class="formbold-form-title">
+                <h2 class="">Registro de Carreras</h2>
+                <p>
+                    Registrar todos los campos son obligatorios
+                </p>
+            </div>
+            <div class="formbold-input-flex">
+                <div>
+                    <label for="firstname" class="formbold-form-label">
+                        Ingreso de Clientes
+                    </label>
+                    <select name="cliente" class="form-control" id="">
+                        {% for cliente in clientes %}
+                        <option value="{{ cliente }}">{{ cliente }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Ingreso de Unidad</label>
+                    <select name="unidad" class="form-control" id="" >
+                        {% for medias in media %}
+                        <option  value="{{ medias }}">{{ medias }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Observacion</label>
+                    <input type="text" name="comentario" class="form-control">
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Fecha</label>
+                    <input type="date" id="fecha" name="fecha" class="form-control" readonly>
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Hora</label>
+                    <input type="text" id="hora" name="hora" class="form-control" readonly>
+                </div>
+            </div>
+            <button class="formbold-btn">Guardar</button>
+        </form>
     </div>
-</form>
+</div>
 <script>
-    document.querySelector('input[name="comentario"]').addEventListener('change', function() {
-    var fecha = new Date();
-    document.querySelector('input[name="fecha"]').value = fecha.toISOString().substring(0,10);
-    document.querySelector('input[name="hora"]').value = fecha.getHours() + ":" + fecha.getMinutes();
-});
+    document.querySelector('input[name="comentario"]').addEventListener('change', function () {
+        var fecha = new Date();
+        document.querySelector('input[name="fecha"]').value = fecha.toISOString().substring(0, 10);
+        document.querySelector('input[name="hora"]').value = fecha.getHours() + ":" + fecha.getMinutes();
+    });
 
 </script>
 <script src="/static/js/ingreso.js"></script>

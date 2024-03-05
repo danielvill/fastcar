@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,35 +11,27 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 </head>
 <body>
-    <div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
-        <div class="row justify-content-center">
-            <ion-card color="tertiary">
-                <ion-card-header>
-                    <ion-card-title style="text-align: center;">Ingreso al sistema</ion-card-title>
-                    <ion-card-subtitle></ion-card-subtitle>
-                </ion-card-header>
-
-                <ion-card-content>
+    <div class=" d-flex align-items-center" style="height: 100vh; background-image: url('/static/img/Taxi.jpeg'); background-size: cover; background-position: center;">
+        <div class="row justify-content-end mr-5 ml-auto">
+            <div class="card bg-secondary text-white" style="width: 18rem;">
+                <div class="card-header text-center">Ingreso al sistema</div>
+                <div class="card-body">
                     <form action="/index" method="post">
-                        <img src="/static/img/fastcar.jpeg" alt="Fast Car" width="200">
-                        <ion-list>
-                            <ion-item>
-                                <ion-input label="Usuario" name="nombre" label-placement="floating" fill="solid"
-                                    placeholder="Enter text"></ion-input>
-                            </ion-item>
-                            <ion-item>
-                                <ion-input label="Password" type="password" name="clave" label-placement="floating" fill="solid"
-                                    placeholder="Enter text"></ion-input>
-                            </ion-item>
-                            <ion-item>
-                                <ion-button type="submit">Ingresar</ion-button>
-                            </ion-item>
-                        </ion-list>
+                        <div class="form-group">
+                            <label for="nombre">Usuario</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Enter text">
+                        </div>
+                        <div class="form-group">
+                            <label for="clave">Password</label>
+                            <input type="password" class="form-control" id="clave" name="clave" placeholder="Enter text">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Ingresar</button>
                     </form>
-                </ion-card-content>
-            </ion-card>
+                </div>
+            </div>
         </div>
     </div>
+    
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
 </body>

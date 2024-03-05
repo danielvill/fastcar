@@ -1,67 +1,152 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-<div class="input-group flex-nowrap">
-    <span class="input-group-text" id="addon-wrapping">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-            viewBox="0 0 16 16">
-            <path
-                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-        </svg>
-    </span>
-    <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
-        aria-describedby="addon-wrapping">
-</div>
-<table class="table table-hover">
+<table id="myTable" class="table">
     <thead>
         <tr>
-            <th scope="col">Cedula</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Email</th>
-            <th scope="col" class="extra">Telefono</th>
-            <th scope="col" class="extra">Direccion</th>
-            <th scope="col" class="extra">Nombre de Emergencia</th>
-            <th scope="col" class="extra">Telefono de Emergencia</th>
-            <th scope="col" class="extra">Relacion de Emergencia</th>
-            <th scope="col" class="extra">Clave</th>
-            <th scope="col" class="extra">Licencia</th>
-            <th scope="col" class="extra">Acciones</th>
+            <th>Cedula</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Telefono</th>
+            <th>Direccion</th>
+            <th>Nombre de Emergencia</th>
+            <th>Telefono de Emergencia</th>
+            <th>Relacion de Emergencia</th>
+            <th>Clave</th>
+            <th>Licencia</th>
+            <th>Acciones</th>
         </tr>
     </thead>
-    {% for conductores in conductores %}
-    <tbody data-conductores="{{ conductores.nombre }}">
-        <form action="/edit_cond/{{ conductores.nombre }}" method="post">
+    <tbody>
+            {% for conductores in conductores %}
             <tr>
-                <th scope="row">
-                    <input type="text" class="form-control" name="cedula" value="{{ conductores.cedula }}">
-                </th>
-                <td><input type="text" class="form-control" name="nombre" value="{{ conductores.nombre }}"></td>
-                <td><input type="text" class="form-control" name="email" value="{{ conductores.email }}"></td>
-                <td><input type="text" class="form-control" name="telefono" value="{{ conductores.telefono }}"></td>
-                <td><input type="text" class="form-control" name="direccion" value="{{ conductores.direccion }}"></td>
-                <td><input type="text" class="form-control" name="em_nombre" value="{{ conductores.em_nombre }}"></td>
-                <td><input type="text" class="form-control" name="em_telefono" value="{{ conductores.em_telefono }}"></td>
-                <td><input type="text" class="form-control" name="em_relacion" value="{{ conductores.em_relacion }}"></td>
-                <td><input type="text" class="form-control" name="clave" value="{{ conductores.clave }}"></td>
-                <td><input type="text" class="form-control" name="licencia" value="{{ conductores.licencia }}"></td>
                 <td>
-                    <button type="submit" class="editar btn btn-primary">Editar</button>
-                    <a href="{{url_for('elitcondu',cond_name=conductores.nombre)}}" class="eliminar btn btn-danger">Eliminar</a>
+                    {{ conductores.cedula }}
+                </td>
+                <td>{{ conductores.nombre }}</td>
+                <td>{{ conductores.email }}</td>
+                <td>{{ conductores.telefono }}</td>
+                <td>{{ conductores.direccion }}</td>
+                <td>{{ conductores.em_nombre }}</td>
+                <td>{{ conductores.em_telefono }}</td>
+                <td>{{ conductores.em_relacion }}</td>
+                <td>{{ conductores.clave }}</td>
+                <td>{{ conductores.licencia }}</td>
+                <td>
+                    <button type="submit" class="editar btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg>
+                    </button>
+                    <a href="{{url_for('elitcondu',cond_name=conductores.nombre)}}" class="eliminar btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708"/>
+                        </svg>
+                    </a>
                 </td>
             </tr>
-        </form>
+            {% endfor %}
     </tbody>
-    {% endfor %}
 </table>
+<div id="editModal" title="Editar Admin">
+    <form id="editForm" action="" method="post">
+        <div class="container">
+            <div class="col">
+                <label for="usuario">Cedula</label>
+                <input type="text" id="cedula" name="cedula" class="form-control">
+            </div>
+            <div class="col">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" class="form-control">
+            </div>
+            <div class="col">
+                <label for="rol">Email</label>
+                <input type="text" id="email" name="email" class="form-control">
+            </div>
+            <div class="col">
+                <label for="rol">Telefono</label>
+                <input type="text" id="telefono" name="telefono" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Direccion</label>
+                <input type="text" id="direccion" name="direccion" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Nombre de Emergencia</label>
+                <input type="text" id="em_nombre" name="em_nombre" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Telefono de Emergencia</label>
+                <input type="text" id="em_telefono" name="em_telefono" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Relacion de Emergencia</label>
+                <input type="text" id="em_relacion" name="em_relacion" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Clave</label>
+                <input type="text" id="clave" name="clave" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Licencia</label>
+                <input type="text" id="licencia" name="licencia" class="form-control">
+            </div>
+        </div>
+    </form>
+</div>
 <script>
-    // Filtrado para carreras
     $(document).ready(function () {
-        $("#filtro").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("tbody[data-conductores]").filter(function () {
-                $(this).parent().toggle($(this).data("conductores").toLowerCase().indexOf(value) > -1)
-            });
+        $('#myTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+        var table = $('#myTable').DataTable();
+        //Cambio de english a spanish
+        // Funcionalidad de edición
+        table.on('click', '.editar', function () {
+            var row = $(this).closest('tr');
+            var data = table.row(row).data();
+            // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
+            // Por ejemplo:
+            $('#cedula').val(data[0]);
+            $('#nombre').val(data[1]);
+            $('#email').val(data[2]);
+            $('#telefono').val(data[3]);
+            $('#direccion').val(data[4]);
+            $('#em_nombre').val(data[5]);
+            $('#em_telefono').val(data[6]);
+            $('#em_relacion').val(data[7]);
+            $('#clave').val(data[8]);
+            $('#licencia').val(data[9]);
+            $('#editForm').attr('action','/edit_cond/'+ data[0]);
+            $('#editModal').dialog('open');
+        });
+        // Inicializar el modal
+        $('#editModal').dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: [
+                {
+                    text: 'Guardar',
+                    click: function () {
+                        $('#editForm').submit();
+                    },
+                    // Agregar una clase al botón
+                    class: 'guardar'
+                },
+                {
+                    text: 'Cancelar',
+                    click: function () {
+                        $(this).dialog('close');
+                    },
+                    // Agregar una clase al botón
+                    class: 'cancelar'
+                }
+            ]
         });
     });
+
 </script>
 <script src="/static/js/edi_eli.js"></script>
 {% endblock %}

@@ -7,10 +7,11 @@ from modules.conductores import Conductores
 from modules.unidades import Unidades
 from modules.usuarios import Usuario
 from modules.guardias import Guardias
+from modules.media import Media
 from reportlab.pdfgen import canvas # *pip install reportlab
 from reportlab.lib.pagesizes import letter #* pip install reportlab 
 
-
+ 
 #* Este codigo lo reemplazas con la ip de la pc y el puerto que deseas que se abra pero en la linea de comando
 #* Correr el servidor flask run --host=0.0.0.0 --port=4848 
 
@@ -26,6 +27,10 @@ def run():
     return redirect(url_for('index'))
 
 
+@app.route('/admin/home',methods=['GET','POST'])
+def home():
+    return render_template('/admin/home.html')
+
 
 #* Ingreso al sistema
 
@@ -36,7 +41,7 @@ def index():
         password = request.form['clave']
         usuario_fo = db.admin.find_one({'nombre':usuario,'clave':password})
         if usuario_fo:
-            return redirect(url_for('inadmin'))
+            return redirect(url_for('home'))
     else:
         return render_template('index.html')
 
@@ -66,7 +71,7 @@ def admin():
     
         
 
-#* Editar y eliminar  administradores
+#* Editar y eliminar administradores
 @app.route('/delete_adm/<string:ad_name>')
 def elitad(ad_name):
     ad = db['admin']
@@ -83,8 +88,10 @@ def editad(ad_name):
     clave = request.form['clave']
 
     if cedula and nombre and rol and email and clave:
-        ad.update_one({'nombre':ad_name},{'$set':{'cedula':cedula,'nombre':nombre,'rol':rol,'email':email,'clave':clave}})
+        ad.update_one({'cedula':ad_name},{'$set':{'cedula':cedula,'nombre':nombre,'rol':rol,'email':email,'clave':clave}})
+        print("nada")
         return redirect(url_for('admin'))
+
     else:
         return render_template("admin/admin.html")
 
@@ -101,7 +108,7 @@ def incliente():
         referencia = request.form['referencia']
         comentario = request.form['comentario']
         
-        if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario:
+        if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario :
             regis = Clientes(nombre, telefono, direccion, coordenadas, cedula, referencia, comentario)
             cliente.insert_one(regis.CliDBCollection())
             return redirect(url_for('incliente')) # Direccionamiento para la pagina que es /admin/in_cliente
@@ -214,7 +221,7 @@ def editusu(usu_name):
     clave = request.form['clave']
     
     if cedula and nombre and rol and email and clave:
-        usu.update_one({'nombre':usu_name},{'$set':{'cedula':cedula,'nombre':nombre,'rol':rol,'email':email,'clave':clave}})
+        usu.update_one({'cedula':usu_name},{'$set':{'cedula':cedula,'nombre':nombre,'rol':rol,'email':email,'clave':clave}})
         return redirect(url_for('usuario'))
     else:
         return render_template("admin/usuarios.html")
@@ -237,7 +244,7 @@ def inconductores():
         clave = request.form['clave']
         licencia = request.form['licencia']
 
-        if cedula and nombre and email and telefono and direccion and em_nombre and em_telefono and em_relacion and clave and licencia:
+        if cedula and nombre and email and telefono and direccion and em_nombre and em_relacion and clave and licencia:
             regis = Conductores(cedula, nombre, email, telefono, direccion, em_nombre, em_telefono, em_relacion, clave, licencia)
             conductor.insert_one(regis.CondDBCollection())
             return redirect(url_for('inconductores')) # Direccionamiento para la pagina que es /admin/in_conductores
@@ -272,8 +279,8 @@ def editcondu(cond_name):
     clave = request.form['clave']
     licencia = request.form['licencia']
     
-    if cedula and nombre and email and telefono and direccion and em_nombre and em_telefono and em_relacion and clave and licencia:
-        cond.update_one({'nombre':cond_name},{'$set':{'cedula':cedula,'nombre':nombre,'email':email,'telefono':telefono,'direccion':direccion,'em_nombre':em_nombre,'em_telefono':em_telefono,'em_relacion':em_relacion,'clave':clave,'licencia':licencia}})
+    if cedula and nombre  and email and telefono and direccion and em_nombre and em_relacion and clave and licencia:
+        cond.update_one({'cedula':cond_name},{'$set':{'cedula':cedula,'nombre':nombre,'email':email,'telefono':telefono,'direccion':direccion,'em_nombre':em_nombre,'em_telefono':em_telefono,'em_relacion':em_relacion,'clave':clave,'licencia':licencia}})
         return redirect(url_for('conductores'))
     else:
         return render_template("admin/conductores.html")
@@ -330,7 +337,7 @@ def edituni(uni_name):
     es_fecha = request.form['es_fecha']
     
     if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
-        uni.update_one({'placa':uni_name},{'$set':{'unidad':unidad,'placa':placa,'modelo':modelo,'marca':marca,'color':color,'observacion':observacion,'orden':orden,'es_codigo':es_codigo,'es_tipo':es_tipo,'es_fecha':es_fecha}})
+        uni.update_one({'unidad':uni_name},{'$set':{'unidad':unidad,'placa':placa,'modelo':modelo,'marca':marca,'color':color,'observacion':observacion,'orden':orden,'es_codigo':es_codigo,'es_tipo':es_tipo,'es_fecha':es_fecha}})
         return redirect(url_for('unidades'))
     else:
         return render_template("admin/unidades.html")
@@ -341,6 +348,7 @@ def edituni(uni_name):
 def incarreras():
     if request.method == 'POST':
         carrera = db ['carreras']
+        media = db['media']
         cliente = request.form['cliente']
         unidad =request.form['unidad']
         comentario = request.form['comentario']
@@ -350,9 +358,10 @@ def incarreras():
         if cliente and unidad and comentario and fecha and hora:
             regis = Carreras(cliente, unidad ,comentario,fecha, hora) 
             carrera.insert_one(regis.CareDBCollection())
+            media.delete_one({'unidad':unidad})
             return redirect(url_for('incarreras')) # Direccionamiento para la pagina que es /admin/in_carreras
     else: #
-        return render_template('/admin/in_carreras.html',clientes=cliu(),unidades=uni()) #* Cargado de la pagina
+        return render_template('/admin/in_carreras.html',clientes=cliu(),unidades=uni(),media=med()) #* Cargado de la pagina
         
 
 #*Vista de carreras
@@ -424,39 +433,132 @@ def con():
     conductores = db.conductores.find({},{"nombre":1})
     return [conductores["nombre"]for conductores in conductores]
 
+def med():
+    medias = db.media.find({},{"unidad":1})
+    return [medias["unidad"]for medias in medias]
     
 #* Ingreso de guardias
 @app.route('/admin/in_guardias',methods=['GET','POST'])
 def inguardia():
     if request.method == 'POST':
         carrera = db ['guardias']
-        n_conductor= request.form['n_conductor']
         unidad =request.form['unidad']
-        
 
-        if n_conductor and unidad  :
-            regis = Guardias(n_conductor, unidad  )
+        if  unidad  :
+            regis = Guardias( unidad  )
             carrera.insert_one(regis.GuardDBCollection())
             return redirect(url_for('inguardia')) 
-    else: #
+    else: 
         return render_template('/admin/in_guardias.html',unidades=uni(),conductores=con()) #* Cargado de la pagina
     
     
 @app.route('/admin/guardias',methods=['GET','POST'])
 def guardia():
-    guardia = db['guardias'].find()
-    return render_template('/admin/guardias.html',guardias=guardia)
+    if request.method == 'POST':
+        media = db['media']
+        guar= db['guardias']
+        unidad =request.form['unidad']
+        if unidad :
+            registro = Media( unidad )
+            media.insert_one(registro.MediaDBCollection())
+            
+            guar.delete_one({'unidad':unidad})
+            return redirect(url_for('incarreras'))
+    else: 
+        guardia = db['guardias'].find()
+        return render_template('/admin/guardias.html',guardias=guardia)
+
+
+# * Reordenamiento 
+@app.route('/admin/guardias/reorder', methods=['POST'])
+def handle_reorder():
+    data = request.get_json()
+    from_index = data['from']
+    to_index = data['to']
+
+    # Aquí es donde debes actualizar tus datos en la base de datos.
+    # Por ejemplo, podrías reordenar tus datos y luego guardarlos.
+    # Este es solo un ejemplo, necesitarás adaptarlo a tus necesidades específicas.
+
+    guardias = list(db['guardias'].find())
+    guardia_to_move = guardias[from_index]
+    guardias.remove(guardia_to_move)
+    guardias.insert(to_index, guardia_to_move)
+
+    for i, guardia in enumerate(guardias):
+        db['guardias'].update_one({'_id': guardia['_id']}, {'$set': {'order': i}})
+
+    return 'Reorder successful!', 200
+
+# * Delete de Guardias
+
+@app.route('/delete_gua/<string:gua_name>')
+def elitguardia(gua_name):
+    guardia = db['guardias']
+    guardia.delete_one({'unidad':gua_name})
+    return redirect(url_for('guardia'))
+
 
 
 
 #*********** Ingreso de Operadores ****************************
 
+#* Operadores Carreras
+@app.route('/operador/in_carreras',methods=['GET','POST'])
+def opercarrera():
+    if request.method == 'POST':
+        carrera = db ['carreras']
+        cliente = request.form['cliente']
+        unidad =request.form['unidad']
+        comentario = request.form['comentario']
+        fecha = request.form['fecha']
+        hora = request.form['hora']
+
+        if cliente and unidad and comentario and fecha and hora:
+            regis = Carreras(cliente, unidad ,comentario,fecha, hora) 
+            carrera.insert_one(regis.CareDBCollection())
+            return redirect(url_for('opercarrera')) #
+    else: #
+        return render_template('/operador/in_carreras.html',clientes=cliu(),unidades=uni()) #* Cargado de la pagina
 
 
-
-
+#* Clientes
+@app.route('/operador/in_clientes',methods=['GET','POST'])
+def opcliente():
+    if request.method == 'POST':
+        cliente = db['clientes']
+        nombre = request.form['nombre']
+        telefono = request.form['telefono']
+        direccion = request.form['direccion']
+        coordenadas = request.form['coordenadas']
+        cedula = request.form['cedula']
+        referencia = request.form['referencia']
+        comentario = request.form['comentario']
         
-        
+        if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario :
+            regis = Clientes(nombre, telefono, direccion, coordenadas, cedula, referencia, comentario)
+            cliente.insert_one(regis.CliDBCollection())
+            return redirect(url_for('opcliente')) # Direccionamiento para la pagina que es /admin/in_cliente
+    else: 
+        return render_template('/operador/in_clientes.html') #* Cargado de la pagina    
+
+
+#* Guardias
+@app.route('/operador/in_guardias',methods=['GET','POST'])
+def opguardia():
+    if request.method == 'POST':
+        carrera = db ['guardias']
+        n_conductor= request.form['n_conductor']
+        unidad =request.form['unidad']
+        if n_conductor and unidad  :
+            regis = Guardias(n_conductor, unidad  )
+            carrera.insert_one(regis.GuardDBCollection())
+            return redirect(url_for('opguardia')) 
+    else: #
+        return render_template('/operador/in_guardias.html',unidades=uni(),conductores=con()) #* Cargado de la pagina
+#* 
+
+
 
 
 if __name__ == '__main__':

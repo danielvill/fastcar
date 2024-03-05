@@ -1,24 +1,13 @@
 {% extends "admin/layout.html" %}
 {% block content %}
-<h1 style="text-align: center;">Vista de Carreras</h1>
-<br>
-<div class="input-group flex-nowrap">
-    <span class="input-group-text" id="addon-wrapping">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
-            viewBox="0 0 16 16">
-            <path
-                d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-        </svg>
-    </span>
-    <input type="search" id="filtro" class="form-control" placeholder="Busqueda" aria-label="Username"
-        aria-describedby="addon-wrapping">
-</div>
+<h2>Vista de Carreras</h2>
+
 <br>
 <div>
     <a href="{{ url_for('r_carreras') }}" class="btn btn-primary">Reporte Completo </a>
 </div>
 <br>
-<table class="table table-hover">
+<table id="myTable" class="table">
     <thead>
         <tr>
             <th scope="col">Cliente</th>
@@ -29,34 +18,105 @@
             <th>Acciones</th>
         </tr>
     </thead>
-    {% for carreras in carreras %}
-    <tbody data-cliente="{{ carreras.cliente }}">
-        <form action="/edit_car/{{carreras.cliente}}" method="post">
+    <tbody>
+            {% for carreras in carreras %}
             <tr>
-                <th scope="row">
-                    <input type="text" class="form-control" name="cliente" value="{{carreras.cliente}}">
-                </th>
-                <td><input type="text" class="form-control" name="unidad" value="{{carreras.unidad}}"></td>
-                <td><input type="text" class="form-control" name="comentario" value="{{carreras.comentario}}"></td>
-                <td><input type="date" class="form-control" name="fecha" value="{{carreras.fecha}}"></td>
-                <td><input type="text" class="form-control" name="hora" value="{{carreras.hora}}"></td>
+                <td>
+                    {{carreras.cliente}}
+                </td>
+                <td>{{carreras.unidad}}</td>
+                <td>{{carreras.comentario}}</td>
+                <td>{{carreras.fecha}}</td>
+                <td>{{carreras.hora}}</td>
                 <td class="">
-                    <button type="submit" class="editar btn btn-primary">Editar</button>
-                    <a href="{{url_for('elitcarre',car_name=carreras.cliente)}}" class="eliminar btn btn-danger">Eliminar</a>
+                    <button type="submit" class="editar btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg>
+                    </button>
+                    <a href="{{url_for('elitcarre',car_name=carreras.cliente)}}" class="eliminar btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708"/>
+                        </svg>
+                    </a>
                 </td>
             </tr>
+            {% endfor %}
         </form>
     </tbody>
-    {% endfor %}
 </table>
+<div id="editModal" title="Editar Admin">
+    <form id="editForm" action="" method="post">
+        <div class="container">
+            <div class="col">
+                <label for="usuario">Cliente</label>
+                <input type="text" id="cliente" name="cliente" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Unidad</label>
+                <input type="text" id="unidad" name="unidad" class="form-control">
+            </div>
+            <div class="col">
+                <label for="rol">Observacion</label>
+                <input type="text" id="comentario" name="comentario" class="form-control">
+            </div>
+            <div class="col">
+                <label for="rol">Fecha</label>
+                <input type="date" id="fecha" name="fecha" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Hora</label>
+                <input type="time" id="hora" name="hora" class="form-control">
+            </div>
+        </div>
+    </form>
+</div>
 <script>
-    // Filtrado para carreras
     $(document).ready(function () {
-        $("#filtro").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("tbody[data-cliente]").filter(function () {
-                $(this).parent().toggle($(this).data("cliente").toLowerCase().indexOf(value) > -1)
-            });
+        $('#myTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+        var table = $('#myTable').DataTable();
+        //Cambio de english a spanish
+        // Funcionalidad de edición
+        table.on('click', '.editar', function () {
+            var row = $(this).closest('tr');
+            var data = table.row(row).data();
+            // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
+            // Por ejemplo:
+            $('#cliente').val(data[0]);
+            $('#unidad').val(data[1]);
+            $('#comentario').val(data[2]);
+            $('#fecha').val(data[3]);
+            $('#hora').val(data[4]);
+            $('#editForm').attr('action','/edit_car/'+ data[0]);
+            $('#editModal').dialog('open');
+        });
+        // Inicializar el modal
+        $('#editModal').dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: [
+                {
+                    text: 'Guardar',
+                    click: function () {
+                        $('#editForm').submit();
+                    },
+                    // Agregar una clase al botón
+                    class: 'guardar'
+                },
+                {
+                    text: 'Cancelar',
+                    click: function () {
+                        $(this).dialog('close');
+                    },
+                    // Agregar una clase al botón
+                    class: 'cancelar'
+                }
+            ]
         });
     });
 </script>
