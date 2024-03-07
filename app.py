@@ -11,7 +11,7 @@ from modules.media import Media
 from reportlab.pdfgen import canvas # *pip install reportlab
 from reportlab.lib.pagesizes import letter #* pip install reportlab 
 from markupsafe import escape
-
+from modules.comentario import Comentario
 
 #* Este codigo lo reemplazas con la ip de la pc y el puerto que deseas que se abra pero en la linea de comando
 #* Correr el servidor flask run --host=0.0.0.0 --port=4848 
@@ -68,7 +68,6 @@ def index():
 #*Ingreso Administradores
 @app.route('/admin/in_admin',methods=['GET','POST'])
 def inadmin():
-
     # Verifica si el usuario está en la sesión
     if 'username' not in session:
         flash("Inicia sesion con tu usuario y contraseña")
@@ -586,6 +585,62 @@ def elitguardia(gua_name):
     guardia = db['guardias']
     guardia.delete_one({'unidad':gua_name})
     return redirect(url_for('guardia'))
+
+
+#* Comentario
+@app.route('/admin/comentario',methods=['GET','POST'])
+def comentario():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
+    if request.method == 'POST':
+        guar= db['comentario']
+        unidad =request.form['unidad']
+        comentario = request.form['comentario']
+        fecha = request.form['fecha']
+        hora = request.form['hora']
+
+
+        if unidad and comentario and fecha and hora:
+            registro = Comentario( unidad , comentario , fecha , hora)
+            guar.insert_one(registro.ComeDBCollection())
+            return redirect(url_for('comentario'))
+    else: 
+        return render_template('/admin/comentario.html',unidades=uni())
+
+#* Vista comentarios
+@app.route('/admin/vi_comentario',methods=['GET','POST'])
+def vi_comentario():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
+    
+    come = db['comentario'].find()
+    return render_template('/admin/vi_comentario.html',comentario=come)# Vista de carreras
+
+#* Editar y Eliminar Comentario
+@app.route('/delete_come/<string:come_name>')
+def elitcome(come_name):
+    come = db['comentario']
+    come.delete_one({'unidad':come_name})
+    return redirect(url_for('vi_comentario'))
+
+@app.route('/edit_come/<string:come_name>', methods=['GET', 'POST'])
+def editcome(come_name):
+    come = db['comentario']
+    unidad =request.form['unidad']
+    comentario = request.form['comentario']
+    fecha = request.form['fecha']
+    hora = request.form['hora']
+
+    if  unidad and comentario and fecha and hora:
+        come.update_one({'unidad':come_name},{'$set':{"unidad":unidad,"comentario":comentario,"fecha":fecha,"hora":hora}})
+        return redirect(url_for('comentario'))
+    else:
+        return render_template("admin/vi_comentario.html")
 
 
 

@@ -1,0 +1,113 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<h2>Vista de Comentarios</h2>
+<br>
+<table id="myTable" class="table">
+    <thead>
+        <tr>
+            <th scope="col">Unidad</th>
+            <th scope="col">Observacion</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Hora</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+            {% for comentario in comentario %}
+            <tr>
+                
+                <td>{{comentario.unidad}}</td>
+                <td>{{comentario.comentario}}</td>
+                <td>{{comentario.fecha}}</td>
+                <td>{{comentario.hora}}</td>
+                <td class="">
+                    <button type="submit" class="editar btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg>
+                    </button>
+                    <a href="{{url_for('elitcome',come_name=comentario.unidad)}}" class="eliminar btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+                            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708"/>
+                        </svg>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </form>
+    </tbody>
+</table>
+
+<div id="editModal" title="Editar Comentario">
+    <form id="editForm" action="" method="post">
+        <div class="container">
+            <div class="col">
+                <label for="">Unidad</label>
+                <input type="text" id="unidad" name="unidad" class="form-control">
+            </div>
+            <div class="col">
+                <label for="rol">Observacion</label>
+                <input type="text" id="comentario" name="comentario" class="form-control">
+            </div>
+            <div class="col">
+                <label for="rol">Fecha</label>
+                <input type="date" id="fecha" name="fecha" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Hora</label>
+                <input type="text" id="hora" name="hora" class="form-control">
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+        var table = $('#myTable').DataTable();
+        //Cambio de english a spanish
+        // Funcionalidad de edición
+        table.on('click', '.editar', function () {
+            var row = $(this).closest('tr');
+            var data = table.row(row).data();
+            // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
+            // Por ejemplo:
+            $('#unidad').val(data[0]);
+            $('#comentario').val(data[1]);
+            $('#fecha').val(data[2]);
+            $('#hora').val(data[3]);
+            $('#editForm').attr('action','/edit_come/'+ data[0]);
+            $('#editModal').dialog('open');
+        });
+        // Inicializar el modal
+        $('#editModal').dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: [
+                {
+                    text: 'Guardar',
+                    click: function () {
+                        $('#editForm').submit();
+                    },
+                    // Agregar una clase al botón
+                    class: 'guardar'
+                },
+                {
+                    text: 'Cancelar',
+                    click: function () {
+                        $(this).dialog('close');
+                    },
+                    // Agregar una clase al botón
+                    class: 'cancelar'
+                }
+            ]
+        });
+    });
+</script>
+<script src="/static/js/edi_eli.js"></script>
+{% endblock %}
