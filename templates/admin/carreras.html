@@ -1,7 +1,6 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 <h2>Vista de Carreras</h2>
-
 <br>
 <div>
     <a href="{{ url_for('r_carreras') }}" class="btn btn-primary">Reporte Completo </a>
@@ -67,7 +66,7 @@
             </div>
             <div class="col">
                 <label for="">Hora</label>
-                <input type="time" id="hora" name="hora" class="form-control">
+                <input type="text" id="hora" name="hora" class="form-control">
             </div>
         </div>
     </form>

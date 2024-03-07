@@ -1,5 +1,55 @@
 {% extends "operador/layout.html" %}
 {% block content %}
+<h2>Envio de Turnos</h2>
+<br>
+    <!-- Author: FormBold Team -->
+    <!-- Learn More: https://formbold.com -->
+    <div class="formbold-form-wrapper">
+        <table id="myTable" class="table">
+            <thead>
+                <tr>
+                    <th>Unidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for unidad in unidades %}
+                <tr>
+                    <form action="/operador/in_guardias" method="POST">
+                        <td >
+                            <input type="text" name="unidad" value="{{ unidad }}" hidden>
+                            {{ unidad }} 
+                        </td>
+                        <td>
+                            <button  class="editar btn btn-primary">Activar</button>
+                            
+                        </td>
+                    </form>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('select').select2();
+        $('#myTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+        var table = $('#myTable').DataTable();
+    });
+    $(document).ready(function () {
+    $(".editar").click(function (event) {
+        if (!confirm("¿Estás seguro de enviarlo?")) {
+            event.preventDefault();
+        }
+    });
+})
+
+</script>
 
 {% endblock %}

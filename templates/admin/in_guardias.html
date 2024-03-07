@@ -21,7 +21,7 @@
                             {{ unidad }} 
                         </td>
                         <td>
-                            <button  class="btn btn-primary">Activar</button>
+                            <button  class="editar btn btn-primary">Activar</button>
                             
                         </td>
                     </form>
@@ -42,6 +42,13 @@
         });
         var table = $('#myTable').DataTable();
     });
+    $(document).ready(function () {
+    $(".editar").click(function (event) {
+        if (!confirm("¿Estás seguro de enviarlo?")) {
+            event.preventDefault();
+        }
+    });
+})
 
 </script>
 {% endblock %}

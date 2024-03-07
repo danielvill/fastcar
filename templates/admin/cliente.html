@@ -24,9 +24,7 @@
     <tbody>
             {% for cliente in clientes %}
             <tr>
-                <td>
-                    {{cliente.nombre}}
-                </td>
+                <td>{{cliente.nombre}}</td>
                 <td>{{cliente.telefono}}</td>
                 <td>{{cliente.direccion}}</td>
                 <td>{{cliente.coordenadas}}</td>
@@ -104,9 +102,9 @@
             $('#direccion').val(data[2]);
             $('#coordenadas').val(data[3]);
             $('#cedula').val(data[4]);
-            $('#referencia').val(data[4]);
-            $('#comentario').val(data[4]);
-            $('#editForm').attr('action','/edit_cli/'+ data[0]);
+            $('#referencia').val(data[5]);
+            $('#comentario').val(data[6]);
+            $('#editForm').attr('action','/edit_cli/'+ data[4]);
             $('#editModal').dialog('open');
         });
         // Inicializar el modal

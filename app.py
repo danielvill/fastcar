@@ -1,4 +1,4 @@
-from flask import flash, Flask, render_template, request,Response ,jsonify, redirect, url_for,send_file
+from flask import flash, Flask,session, render_template, request,Response ,jsonify, redirect, url_for,send_file
 from controllers.basedatos import Conexion as dbase
 from modules.admin import Admin
 from modules.carreras import Carreras
@@ -10,8 +10,9 @@ from modules.guardias import Guardias
 from modules.media import Media
 from reportlab.pdfgen import canvas # *pip install reportlab
 from reportlab.lib.pagesizes import letter #* pip install reportlab 
+from markupsafe import escape
 
- 
+
 #* Este codigo lo reemplazas con la ip de la pc y el puerto que deseas que se abra pero en la linea de comando
 #* Correr el servidor flask run --host=0.0.0.0 --port=4848 
 
@@ -29,25 +30,50 @@ def run():
 
 @app.route('/admin/home',methods=['GET','POST'])
 def home():
-    return render_template('/admin/home.html')
+    # Verifica si el usuario está en la sesión
+    if 'username' in session:
+        return render_template('admin/home.html')
+    else:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))  # Redirige al usuario al inicio si no está en la sesión
 
+@app.route('/logout')
+def logout():
+    # Elimina el usuario de la sesión si está presente
+    session.pop('username', None)
+    return redirect(url_for('index'))
 
 #* Ingreso al sistema
 
 @app.route('/index',methods=['GET','POST'])
 def index():
+    
     if request.method == 'POST':
         usuario = request.form['nombre']
         password = request.form['clave']
         usuario_fo = db.admin.find_one({'nombre':usuario,'clave':password})
+        operador = db.usuarios.find_one({'nombre':usuario,'clave':password})
         if usuario_fo:
+            session["username"]= usuario
             return redirect(url_for('home'))
+        elif operador:
+            session["username"]= usuario
+            return redirect(url_for('opercarrera'))
+        else:
+            flash("Contraseña incorrecta")
+            return redirect(url_for('index'))
     else:
         return render_template('index.html')
 
 #*Ingreso Administradores
 @app.route('/admin/in_admin',methods=['GET','POST'])
 def inadmin():
+
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))  # Redirige al usuario al inicio si no está en la sesión
+
     if request.method == 'POST':
         admin = db['admin']
         cedula = request.form['cedula']
@@ -66,6 +92,11 @@ def inadmin():
 #*Vista Administradores
 @app.route('/admin/admin',methods=['GET','POST'])
 def admin():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+     # Redirige al usuario al inicio si no está en la sesión
     admin =db ['admin'].find()
     return render_template('/admin/admin.html',admin=admin)#* Vista para los administradores
     
@@ -98,6 +129,11 @@ def editad(ad_name):
 #*Ingreso de cliente
 @app.route('/admin/in_cliente',methods=['GET','POST'])
 def incliente():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))  # Redirige al usuario al inicio si no está en la sesión
+    
     if request.method == 'POST':
         cliente = db['clientes']
         nombre = request.form['nombre']
@@ -141,11 +177,16 @@ def generar_pdf_clientes(datos):
 
 @app.route('/admin/cliente',methods=['GET','POST'])
 def cliente():
+     # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
     clie = db['clientes'].find()
     return render_template('/admin/cliente.html', clientes=clie)
 
 @app.route('/admin/reporte/r_clientes', methods=['GET'])
 def r_cliente():
+
     clie = db['clientes'].find()
     generar_pdf_clientes(clie)
     return send_file('clientes.pdf', as_attachment=True)
@@ -162,6 +203,7 @@ def elitcli(cli_name):
 @app.route('/edit_cli/<string:cli_name>', methods=['GET', 'POST'])
 def editcli(cli_name):
     cli = db['clientes']
+
     nombre = request.form['nombre']
     telefono = request.form['telefono']
     direccion = request.form['direccion']
@@ -170,8 +212,8 @@ def editcli(cli_name):
     referencia = request.form['referencia']
     comentario = request.form['comentario']
     
-    if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario:
-        cli.update_one({'nombre':cli_name},{'$set':{'nombre':nombre,'telefono':telefono,'direccion':direccion,'coordenadas':coordenadas,'cedula':cedula,'referencia':referencia,'comentario':comentario}})
+    if  nombre and telefono and direccion and coordenadas and cedula and referencia and comentario:
+        cli.update_one({'cedula':cli_name},{'$set':{'nombre':nombre,'telefono':telefono,'direccion':direccion,'coordenadas':coordenadas,'cedula':cedula,'referencia':referencia,'comentario':comentario}})
         return redirect(url_for('cliente'))
     else:
         return render_template("admin/cliente.html")
@@ -181,6 +223,11 @@ def editcli(cli_name):
 #*Ingreso de usuarios
 @app.route('/admin/in_usuario',methods=['GET','POST'])
 def inusuario():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
     if request.method == 'POST':
         usuario = db['usuarios']
         cedula = request.form['cedula']
@@ -200,6 +247,10 @@ def inusuario():
 #*Vista de usuarios
 @app.route('/admin/usuarios',methods=['GET','POST'])
 def usuario():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
     usua = db['usuarios'].find()
     return render_template('/admin/usuarios.html',usuarios=usua)# Vista para usuarios
 
@@ -231,6 +282,11 @@ def editusu(usu_name):
 #*Ingreso de conductores
 @app.route('/admin/in_conductores',methods=['GET','POST'])
 def inconductores():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
     if request.method == 'POST':
         conductor = db['conductores']
         cedula = request.form['cedula']
@@ -255,6 +311,11 @@ def inconductores():
 #*Vista de Conductores
 @app.route('/admin/conductores',methods=['GET','POST'])
 def conductores():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
     condu = db['conductores'].find()
     return render_template('/admin/conductores.html',conductores=condu)# Vista para conductores
 
@@ -289,6 +350,11 @@ def editcondu(cond_name):
 #*Ingreso de unidades
 @app.route('/admin/in_unidades',methods=['GET','POST'])
 def inunidades():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
     if request.method == 'POST':
         uni = db['unidades']
         unidad =request.form['unidad']
@@ -312,6 +378,11 @@ def inunidades():
 #*Vista de unidades
 @app.route('/admin/unidades',methods=['GET','POST'])
 def unidades():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
     uni = db['unidades'].find()
     return render_template('/admin/unidades.html',unidades=uni)# Vista de unidades
 
@@ -343,9 +414,14 @@ def edituni(uni_name):
         return render_template("admin/unidades.html")
 
 
-#*  ingresar de Carreras
+#*  Ingresar de Carreras
 @app.route('/admin/in_carreras',methods=['GET','POST'])
 def incarreras():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
     if request.method == 'POST':
         carrera = db ['carreras']
         media = db['media']
@@ -367,11 +443,15 @@ def incarreras():
 #*Vista de carreras
 @app.route('/admin/carreras',methods=['GET','POST'])
 def carreras():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
+    
     carre = db['carreras'].find()
     return render_template('/admin/carreras.html',carreras=carre)# Vista de carreras
 
 #* Editar y Eliminar Carreras
-
 @app.route('/delete_car/<string:car_name>')
 def elitcarre(car_name):
     carre = db['carreras']
@@ -451,9 +531,14 @@ def inguardia():
     else: 
         return render_template('/admin/in_guardias.html',unidades=uni(),conductores=con()) #* Cargado de la pagina
     
-    
+
 @app.route('/admin/guardias',methods=['GET','POST'])
 def guardia():
+    # * Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
     if request.method == 'POST':
         media = db['media']
         guar= db['guardias']
@@ -494,6 +579,10 @@ def handle_reorder():
 
 @app.route('/delete_gua/<string:gua_name>')
 def elitguardia(gua_name):
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
     guardia = db['guardias']
     guardia.delete_one({'unidad':gua_name})
     return redirect(url_for('guardia'))
@@ -503,11 +592,28 @@ def elitguardia(gua_name):
 
 #*********** Ingreso de Operadores ****************************
 
+
+#* Bienvenida
+@app.route('/operador/home',methods=['GET','POST'])
+def casa():
+    # Verifica si el usuario está en la sesión
+    if 'username' in session:
+        return render_template('operador/home.html')
+    else:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
+
 #* Operadores Carreras
 @app.route('/operador/in_carreras',methods=['GET','POST'])
 def opercarrera():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
+    
     if request.method == 'POST':
         carrera = db ['carreras']
+        media = db['media']
         cliente = request.form['cliente']
         unidad =request.form['unidad']
         comentario = request.form['comentario']
@@ -517,14 +623,54 @@ def opercarrera():
         if cliente and unidad and comentario and fecha and hora:
             regis = Carreras(cliente, unidad ,comentario,fecha, hora) 
             carrera.insert_one(regis.CareDBCollection())
-            return redirect(url_for('opercarrera')) #
+            media.delete_one({'unidad':unidad})
+            return redirect(url_for('operacarrera')) # Direccionamiento para la pagina que es /admin/in_carreras
     else: #
-        return render_template('/operador/in_carreras.html',clientes=cliu(),unidades=uni()) #* Cargado de la pagina
+        return render_template('/operador/in_carreras.html',clientes=cliu(),unidades=uni(),media=med()) #* Cargado de la pagina
+
+#* Editar y Eliminar Carreras
+@app.route('/deleteop_car/<string:car_name>')
+def elitopcarre(car_name):
+    carre = db['carreras']
+    carre.delete_one({'cliente':car_name})
+    return redirect(url_for('operacarrera'))
+
+@app.route('/edit_opcar/<string:car_name>', methods=['GET', 'POST'])
+def editopcarre(car_name):
+    carre = db['carreras']
+    cliente = request.form['cliente']
+    unidad =request.form['unidad']
+    comentario = request.form['comentario']
+    fecha = request.form['fecha']
+    hora = request.form['hora']
+
+    if cliente and unidad and comentario and fecha and hora:
+        carre.update_one({'cliente':car_name},{'$set':{'cliente':cliente,"unidad":unidad,"comentario":comentario,"fecha":fecha,"hora":hora}})
+        return redirect(url_for('operacarrera'))
+    else:
+        return render_template("operador/carreras.html")
+
+
+#* Vista de Carreras Operadores
+@app.route('/operador/carreras',methods=['GET','POST'])
+def operacarrera():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
+    
+    carre = db['carreras'].find()
+    return render_template('/operador/carreras.html',carreras=carre)# Vista de carreras    
 
 
 #* Clientes
 @app.route('/operador/in_clientes',methods=['GET','POST'])
 def opcliente():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
+    
     if request.method == 'POST':
         cliente = db['clientes']
         nombre = request.form['nombre']
@@ -538,26 +684,92 @@ def opcliente():
         if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario :
             regis = Clientes(nombre, telefono, direccion, coordenadas, cedula, referencia, comentario)
             cliente.insert_one(regis.CliDBCollection())
-            return redirect(url_for('opcliente')) # Direccionamiento para la pagina que es /admin/in_cliente
+            return redirect(url_for('opcliente')) 
     else: 
         return render_template('/operador/in_clientes.html') #* Cargado de la pagina    
 
+#*Vista de clientes
+@app.route('/operador/clientes',methods=['GET','POST'])
+def opercliente():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    clie = db['clientes'].find()
+    return render_template('/operador/clientes.html', clientes=clie)    
+
+#*Editar y eliminar cliente
+@app.route('/delete_opcli/<string:cli_name>')
+def elitopcli(cli_name):
+    cli = db['clientes']
+    cli.delete_one({'nombre':cli_name})
+    return redirect(url_for('opercliente'))
+
+@app.route('/edit_opcli/<string:cli_name>', methods=['GET', 'POST'])
+def editopcli(cli_name):
+    cli = db['clientes']
+    nombre = request.form['nombre']
+    telefono = request.form['telefono']
+    direccion = request.form['direccion']
+    coordenadas = request.form['coordenadas']
+    cedula = request.form['cedula']
+    referencia = request.form['referencia']
+    comentario = request.form['comentario']
+    
+    if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario:
+        cli.update_one({'cedula':cli_name},{'$set':{'nombre':nombre,'telefono':telefono,'direccion':direccion,'coordenadas':coordenadas,'cedula':cedula,'referencia':referencia,'comentario':comentario}})
+        return redirect(url_for('opercliente'))
+    else:
+        return render_template("/operador/clientes.html")
 
 #* Guardias
 @app.route('/operador/in_guardias',methods=['GET','POST'])
 def opguardia():
     if request.method == 'POST':
         carrera = db ['guardias']
-        n_conductor= request.form['n_conductor']
         unidad =request.form['unidad']
-        if n_conductor and unidad  :
-            regis = Guardias(n_conductor, unidad  )
+        if  unidad  :
+            regis = Guardias( unidad  )
             carrera.insert_one(regis.GuardDBCollection())
             return redirect(url_for('opguardia')) 
     else: #
         return render_template('/operador/in_guardias.html',unidades=uni(),conductores=con()) #* Cargado de la pagina
-#* 
 
+
+#*Vista de Guardias
+@app.route('/operador/guardias',methods=['GET','POST'])
+def opeguardia():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
+    if request.method == 'POST':
+        media = db['media']
+        guar= db['guardias']
+        unidad =request.form['unidad']
+        if unidad :
+            registro = Media( unidad )
+            media.insert_one(registro.MediaDBCollection())
+            
+            guar.delete_one({'unidad':unidad})
+            return redirect(url_for('opercarrera'))
+    else: 
+        guardia = db['guardias'].find()
+        return render_template('/operador/guardias.html',guardias=guardia)
+
+
+# * Delete de Guardias de Operadores
+
+@app.route('/delete_opgua/<string:gua_name>')
+def elitopguardia(gua_name):
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    guardia = db['guardias']
+    guardia.delete_one({'unidad':gua_name})
+    return redirect(url_for('opeguardia'))
 
 
 

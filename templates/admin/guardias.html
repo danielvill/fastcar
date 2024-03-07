@@ -7,17 +7,19 @@
   <!-- The reorder gesture is disabled by default, enable it to drag and drop items -->
   <form action="/admin/guardias" method="post">
     <ion-reorder-group disabled="false">
-
       {% for guardia in guardias %}
       <ion-item>
         <label class="form-control form-control-lg">
           <input type="text" name="unidad" value="{{guardia.unidad}}" hidden>
           {{guardia.unidad}}
+          
         </label>
-        <ion-reorder slot="end"></ion-reorder>
-        <button type="button" onclick="selectItem('{{guardia.unidad}}')">Seleccionar</button>
-        <button type="submit" onclick="submitForm('{{guardia.unidad}}')">Enviar</button>
-        <a href="{{url_for('elitguardia',gua_name=guardia.unidad)}}" class="btn btn-danger">
+        <button type="submit" onclick="submitForm('{{guardia.unidad}}')" class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+            <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+          </svg>
+        </button>
+        <a href="{{url_for('elitguardia',gua_name=guardia.unidad)}}" class="eliminar btn btn-danger">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
             viewBox="0 0 16 16">
             <path
@@ -26,14 +28,16 @@
               d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
           </svg>
         </a>
+        
+        <ion-reorder slot="end"></ion-reorder>
+        
       </ion-item>
       {% endfor %}
 
   </form>
 </ion-list>
-
 <script>
- let selectedItem = null;
+
 
 const reorderGroup = document.querySelector('ion-reorder-group');
 
@@ -42,19 +46,19 @@ reorderGroup.addEventListener('ionItemReorder', ({ detail }) => {
   detail.complete();
 });
 
-function selectItem(id) {
-  // Guarda el ID del elemento seleccionado
-  selectedItem = id;
-  console.log('Elemento seleccionado:', selectedItem);
-}
-
+$(document).ready(function () {
+    $(".eliminar").click(function (event) {
+        if (!confirm("¿Estás seguro de que quieres eliminar?")) {
+            event.preventDefault();
+        }
+    });
+})
 function submitForm(id) {
   console.log('Elemento a enviar:', id);
-  // Solo envía el formulario si el elemento seleccionado es el que se va a enviar
-  if (id !== selectedItem) {
+  
+  const confirmation = confirm('¿Estás seguro de enviar?');
+  if (!confirmation) {
     event.preventDefault();
-    alert('Por favor, selecciona el elemento que deseas enviar.');
-    return;
   }
 
   // Aquí es donde debes hacer la llamada al servidor para enviar los datos
