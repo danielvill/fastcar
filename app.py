@@ -1,4 +1,4 @@
-from flask import flash, Flask,session, render_template, request,Response ,jsonify, redirect, url_for,send_file
+from flask import flash, Flask, session, render_template, request,Response ,jsonify, redirect, url_for,send_file
 from controllers.basedatos import Conexion as dbase
 from modules.admin import Admin
 from modules.carreras import Carreras
@@ -12,9 +12,9 @@ from reportlab.pdfgen import canvas # *pip install reportlab
 from reportlab.lib.pagesizes import letter #* pip install reportlab 
 from markupsafe import escape
 from modules.comentario import Comentario
-
 #* Este codigo lo reemplazas con la ip de la pc y el puerto que deseas que se abra pero en la linea de comando
 #* Correr el servidor flask run --host=0.0.0.0 --port=4848 
+
 
 
 db = dbase()
@@ -176,12 +176,17 @@ def generar_pdf_clientes(datos):
 
 @app.route('/admin/cliente',methods=['GET','POST'])
 def cliente():
+
      # Verifica si el usuario está en la sesión
     if 'username' not in session:
         flash("Inicia sesion con tu usuario y contraseña")
         return redirect(url_for('index')) 
+    
     clie = db['clientes'].find()
     return render_template('/admin/cliente.html', clientes=clie)
+
+
+
 
 @app.route('/admin/reporte/r_clientes', methods=['GET'])
 def r_cliente():
@@ -506,8 +511,8 @@ def cliu():
     return [clientes["nombre"]for clientes in clientes]
 
 def uni():
-    unidades = db.unidades.find({},{"placa":1})
-    return [unidades["placa"]for unidades in unidades]
+    unidades = db.unidades.find({},{"unidad":1})
+    return [unidades["unidad"]for unidades in unidades]
 def con():
     conductores = db.conductores.find({},{"nombre":1})
     return [conductores["nombre"]for conductores in conductores]
