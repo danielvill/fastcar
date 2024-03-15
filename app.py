@@ -12,6 +12,12 @@ from reportlab.pdfgen import canvas # *pip install reportlab
 from reportlab.lib.pagesizes import letter #* pip install reportlab 
 from markupsafe import escape
 from modules.comentario import Comentario
+from reportlab.lib.units import inch
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, TableStyle, Spacer
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet ,ParagraphStyle
 #* Este codigo lo reemplazas con la ip de la pc y el puerto que deseas que se abra pero en la linea de comando
 #* Correr el servidor flask run --host=0.0.0.0 --port=4848 
 
@@ -169,48 +175,90 @@ def incliente():
     
 
 def generar_pdf_clientes(datos):
-    c = canvas.Canvas("clientes.pdf", pagesize=letter)
-    width, height = letter
-    y = height - 300 
-    # Agrega la imagen al PDF
-    c.drawImage("static/img/fas.jpeg", x=width/3, y=height-200, width=200, height=200, anchor='c')
+    pagesize = (1000, 1000)  # Ancho y alto en puntos
 
+    doc = SimpleDocTemplate("clientes.pdf", pagesize=pagesize)
+    story = []
 
-    for i, dato in enumerate(datos):
-        texto = f"""
-        Nombre: {dato['nombre']},
-        Telefono: {dato['telefono']},
-        Direccion: {dato['direccion']},
-        Coordenadas: {dato['coordenadas']},
-        Cedula: {dato['cedula']},
-        Referencia: {dato['referencia']},
-        Comentario: {dato['comentario']}
-        """
-        
-        lineas = texto.split('\n')
+    # Define un estilo con texto centrado
+    styles = getSampleStyleSheet()
+    centered_style = styles['Heading1']
+    centered_style.alignment = 1  # 1 = TA_CENTER
 
-        for j, linea in enumerate(lineas):
-            # Si y es demasiado pequeño, agrega una nueva página y reinicia y
-            if y < 50:
-                c.showPage()  # Agrega una nueva página
-                y = height - 50  # Reinicia y
+    # Agrega el título
+    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    story.append(title)
 
-            # Ajusta la posición y para que los datos aparezcan en la parte inferior del PDF
-            c.drawString(30, y, linea)
-            y -= 30  # Mueve y hacia abajo para la siguiente línea
-    c.save()
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    story.append(title2)
+
+    # Agrega otro salto de línea
+    story.append(Spacer(1, 12))
+
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    story.append(title3)
+
+    # Prepara los datos para la tabla
+    data = [["Nombre", "Telefono", "Direccion", "Coordenadas", "Cedula", "Referencia", "Comentario"]]  # Encabezados
+
+    for dato in datos:
+        row = [dato['nombre'], dato['telefono'], dato['direccion'], dato['coordenadas'], dato['cedula'], dato['referencia'], dato['comentario']]
+        data.append(row)
+
+    # Crea la tabla
+    table = Table(data)
+
+    # Formatea la tabla
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0,0), (-1,-1), 1, colors.black)
+    ]))
+
+    # Agrega la tabla al documento
+    story.append(table)
+
+    doc.build(story)
 
 #* Filtrar por nombre del cliente 
 @app.route('/admin/reporte/r_clientes_nombre', methods=['GET'])
 def r_cliente_nombre():
-    c = canvas.Canvas("clientes.pdf", pagesize=letter)
-    width, height = letter
-    
-    # Agrega la imagen al PDF
-    c.drawImage("static/img/fas.jpeg", x=width/3, y=height-200, width=200, height=200, anchor='c')
+    pagesize = (1000, 1000)
+    doc = SimpleDocTemplate("clientes.pdf", pagesize=pagesize)
+    story = []
 
-    nombre = request.args.get('nombre', default=None, type=str)
+    # Define un estilo con texto centrado
+    styles = getSampleStyleSheet()
+    centered_style = styles['Heading1']
+    centered_style.alignment = 1  # 1 = TA_CENTER
+
+    # Agrega el título
+    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    story.append(title)
+
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    story.append(title2)
+
+    # Agrega otro salto de línea
+    story.append(Spacer(1, 12))
+
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    story.append(title3)
     
+    nombre = request.args.get('nombre', default=None, type=str)
     
     if nombre:
         clie = db['clientes'].find({'nombre': nombre})
@@ -534,45 +582,90 @@ def editcarre(car_name):
 
 
 #* Reportes de Carreras
+# * Registra la fuente
 def generar_pdf_carreras(datos):
-    c = canvas.Canvas("carreras.pdf", pagesize=letter)
-    width, height = letter
-    y = height - 300  # Posición inicial de y
-    # Agrega la imagen al PDF
-    c.drawImage("static/img/fas.jpeg", x=width/3, y=height-200, width=200, height=200, anchor='c')
+    doc = SimpleDocTemplate("carreras.pdf", pagesize=letter)
+    story = []
 
-    for i, dato in enumerate(datos):
-        texto = f"""
-        Cliente: {dato['cliente']},
-        Unidad: {dato['unidad']},
-        Comentario: {dato['comentario']},
-        Fecha: {dato['fecha']},
-        Hora: {dato['hora']},
-        """
-        
-        lineas = texto.split('\n')
+    # Define un estilo con texto centrado
+    styles = getSampleStyleSheet()
+    centered_style = styles['Heading1']
+    centered_style.alignment = 1  # 1 = TA_CENTER
 
-        for j, linea in enumerate(lineas):
-            # Si y es demasiado pequeño, agrega una nueva página y reinicia y
-            if y < 50:
-                c.showPage()  # Agrega una nueva página
-                y = height - 50  # Reinicia y
+    # Agrega el título
+    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    story.append(title)
 
-            # Ajusta la posición y para que los datos aparezcan en la parte inferior del PDF
-            c.drawString(30, y, linea)
-            y -= 30  # Mueve y hacia abajo para la siguiente línea
-    
-    c.save()    
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    story.append(title2)
+
+    # Agrega otro salto de línea
+    story.append(Spacer(1, 12))
+
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    story.append(title3)
+
+    # Prepara los datos para la tabla
+    data = [["Cliente", "Unidad", "Comentario", "Fecha", "Hora"]]  # Encabezados
+
+    for dato in datos:
+        row = [dato['cliente'], dato['unidad'], dato['comentario'], dato['fecha'], dato['hora']]
+        data.append(row)
+
+    # Crea la tabla
+    table = Table(data)
+
+    # Formatea la tabla
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0,0), (-1,-1), 1, colors.black)
+    ]))
+
+    # Agrega la tabla al documento
+    story.append(table)
+
+    doc.build(story)
+
 
 #* Filtrar por unidad 
 @app.route('/admin/reporte/r_carreras_unidad', methods=['GET'])
 def r_carreras_unidad():
-    c = canvas.Canvas("carreras.pdf", pagesize=letter)
-    width, height = letter
-    
-    # Agrega la imagen al PDF
-    c.drawImage("static/img/fas.jpeg", x=width/3, y=height-200, width=200, height=200, anchor='c')
+    doc = SimpleDocTemplate("carreras.pdf", pagesize=letter)
+    story = []
 
+    # Define un estilo con texto centrado
+    styles = getSampleStyleSheet()
+    centered_style = styles['Heading1']
+    centered_style.alignment = 1  # 1 = TA_CENTER
+
+    # Agrega el título
+    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    story.append(title)
+
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    story.append(title2)
+
+    # Agrega otro salto de línea
+    story.append(Spacer(1, 12))
+
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    story.append(title3)
+
+    # Prepara los datos no como tabla
     client = request.args.get('cliente', default=None, type=str)
     
     
@@ -702,6 +795,106 @@ def comentario():
             return redirect(url_for('comentario'))
     else: 
         return render_template('/admin/comentario.html',unidades=uni())
+
+# * Comentarios
+
+#* Reportes de Comentarios
+# * Registra la fuente
+def generar_pdf_comentarios(datos):
+    doc = SimpleDocTemplate("comentarios.pdf", pagesize=letter)
+    story = []
+
+    # Define un estilo con texto centrado
+    styles = getSampleStyleSheet()
+    centered_style = styles['Heading1']
+    centered_style.alignment = 1  # 1 = TA_CENTER
+
+    # Agrega el título
+    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    story.append(title)
+
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    story.append(title2)
+
+    # Agrega otro salto de línea
+    story.append(Spacer(1, 12))
+
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    story.append(title3)
+
+    # Prepara los datos para la tabla
+    data = [["Unidad", "Comentario", "Fecha", "Hora"]]  # Encabezados
+
+    for dato in datos:
+        row = [dato['unidad'], dato['comentario'], dato['fecha'], dato['hora']]
+        data.append(row)
+
+    # Crea la tabla
+    table = Table(data)
+
+    # Formatea la tabla
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0,0), (-1,-1), 1, colors.black)
+    ]))
+
+    # Agrega la tabla al documento
+    story.append(table)
+
+    doc.build(story)
+
+# * Registro de comentario
+#* Filtrar por unidad 
+@app.route('/admin/reporte/r_comentarios_unidad', methods=['GET'])
+def r_comentarios_unidad():
+    doc = SimpleDocTemplate("comentarios.pdf", pagesize=letter)
+    story = []
+
+    # Define un estilo con texto centrado
+    styles = getSampleStyleSheet()
+    centered_style = styles['Heading1']
+    centered_style.alignment = 1  # 1 = TA_CENTER
+
+    # Agrega el título
+    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    story.append(title)
+
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    story.append(title2)
+
+    # Agrega otro salto de línea
+    story.append(Spacer(1, 12))
+
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    story.append(title3)
+
+    # Prepara los datos no como tabla
+    client = request.args.get('unidad', default=None, type=str)
+    
+    
+    if client is not None:
+        clie = db['comentario'].find({'unidad': client})
+    else:
+        clie = db['comentario'].find()
+
+    generar_pdf_comentarios(clie)
+    return send_file('comentarios.pdf', as_attachment=True)
+
+
 
 #* Vista comentarios
 @app.route('/admin/vi_comentario',methods=['GET','POST'])

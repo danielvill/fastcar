@@ -23,25 +23,47 @@
         font-size: 24px;
     }
 
+    .social-icon {
+        margin: 5px;
+        /* Adjust the margin value as needed */
+    }
+
     /* Enlaces */
     .enlaces {
         text-align: right;
         width: 30%;
     }
 </style>
-<div class="contenedor">
 
-    <div class="reloj">
-        <p id="hora"></p>
-        <p id="fecha"></p>
+<br>
+<div style="display: flex;">
+    <a href="https://www.ant.gob.ec/">
+        <img src="/static/img/ant.png" width="300" height="200" alt="Logo">
+    </a>
+    <br>
+    <a href="https://www.movilidadmachala.gob.ec/web/">
+        <img src="/static/img/movilidad.png" width="300" height="200" alt="Logo">
+    </a>
+    <div class="contenedor">
+
+        <div class="reloj">
+            <p id="hora"></p>
+            <p id="fecha"></p>
+        </div>
     </div>
 </div>
 <br>
-<div>
-        <p>Enlaces</p>
-        <ul><a href="">Ir a pagina </a></ul>
-        <ul><a href="">Pagina 2</a></ul>
-        <ul><a href=""> Pagina 3</a></ul>
+<br>
+<div style="display: flex;">
+    <a href="https://web.whatsapp.com/" class="social-icon">
+        <img src="/static/img/whassap.png" width="300" height="200" alt="Logo">
+    </a>
+    <a href="https://www.facebook.com/" class="social-icon">
+        <img src="/static/img/facebook.jpg" width="300" height="200" alt="Logo">
+    </a>
+    <a href="https://www.instagram.com/" class="social-icon">
+        <img src="/static/img/insta.png" width="300" height="200" alt="Logo">
+    </a>
 </div>
 <script>
     function actualizarReloj() {
