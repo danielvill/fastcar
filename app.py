@@ -82,9 +82,19 @@ def inadmin():
         clave = request.form['clave']
         
         if cedula and nombre and rol and email and clave:
-            regis = Admin(cedula, nombre, rol ,email, clave)
-            admin.insert_one(regis.AdmDBCollection())
-            return redirect(url_for('inadmin')) # Direccionamiento para la pagina que es /admin/in_admin
+            # Verifica si ya existe un administrador con los mismos datos
+            existing_admin = admin.find_one({'cedula': cedula, 'nombre': nombre}) # Direccionamiento para la pagina que es /admin/in_admin
+        
+        if existing_admin is None:
+                # Si no existe, inserta el nuevo administrador
+                regis = Admin(cedula, nombre, rol ,email, clave)
+                admin.insert_one(regis.AdmDBCollection())
+                return redirect(url_for('inadmin')) # Direccionamiento para la pagina que es /admin/in_admin
+        else:
+                # Si existe, muestra un mensaje de error
+                flash("Ya existe un administrador con estos datos.")
+                return render_template('admin/in_admin.html') #* Cargado de la pagina 
+
     else:
         return render_template('admin/in_admin.html') #* Cargado de la pagina 
 
@@ -95,7 +105,7 @@ def admin():
     if 'username' not in session:
         flash("Inicia sesion con tu usuario y contraseña")
         return redirect(url_for('index')) 
-     # Redirige al usuario al inicio si no está en la sesión
+    # Redirige al usuario al inicio si no está en la sesión
     admin =db ['admin'].find()
     return render_template('/admin/admin.html',admin=admin)#* Vista para los administradores
     
@@ -144,9 +154,16 @@ def incliente():
         comentario = request.form['comentario']
         
         if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario :
+            existing_cliente = cliente.find_one({'nombre': nombre, 'cedula': cedula,"telefono":telefono}) # Direccionamiento para la pagina que es /admin/in_admin
+            
+        if existing_cliente is None:
             regis = Clientes(nombre, telefono, direccion, coordenadas, cedula, referencia, comentario)
             cliente.insert_one(regis.CliDBCollection())
-            return redirect(url_for('incliente')) # Direccionamiento para la pagina que es /admin/in_cliente
+            return redirect(url_for('incliente'))
+        else:
+                # Si existe, muestra un mensaje de error
+                flash("Ya existe un cliente con ese nombre ,cedula y telefono ")
+                return render_template('admin/in_cliente.html') #* Cargado de la pagina     
     else: 
         return render_template('/admin/in_cliente.html') #* Cargado de la pagina 
     
@@ -154,6 +171,10 @@ def incliente():
 def generar_pdf_clientes(datos):
     c = canvas.Canvas("clientes.pdf", pagesize=letter)
     width, height = letter
+    y = height - 300 
+    # Agrega la imagen al PDF
+    c.drawImage("static/img/fas.jpeg", x=width/3, y=height-200, width=200, height=200, anchor='c')
+
 
     for i, dato in enumerate(datos):
         texto = f"""
@@ -169,9 +190,36 @@ def generar_pdf_clientes(datos):
         lineas = texto.split('\n')
 
         for j, linea in enumerate(lineas):
-            c.drawString(30, height - 30*(i*len(lineas) + j + 1), linea)  
+            # Si y es demasiado pequeño, agrega una nueva página y reinicia y
+            if y < 50:
+                c.showPage()  # Agrega una nueva página
+                y = height - 50  # Reinicia y
 
+            # Ajusta la posición y para que los datos aparezcan en la parte inferior del PDF
+            c.drawString(30, y, linea)
+            y -= 30  # Mueve y hacia abajo para la siguiente línea
     c.save()
+
+#* Filtrar por nombre del cliente 
+@app.route('/admin/reporte/r_clientes_nombre', methods=['GET'])
+def r_cliente_nombre():
+    c = canvas.Canvas("clientes.pdf", pagesize=letter)
+    width, height = letter
+    
+    # Agrega la imagen al PDF
+    c.drawImage("static/img/fas.jpeg", x=width/3, y=height-200, width=200, height=200, anchor='c')
+
+    nombre = request.args.get('nombre', default=None, type=str)
+    
+    
+    if nombre:
+        clie = db['clientes'].find({'nombre': nombre})
+    else:
+        clie = db['clientes'].find()
+
+    generar_pdf_clientes(clie)
+    return send_file('clientes.pdf', as_attachment=True)
+
 
 
 @app.route('/admin/cliente',methods=['GET','POST'])
@@ -241,9 +289,16 @@ def inusuario():
         clave = request.form['clave']
         
         if cedula and nombre and rol and email and clave:
+            existing_user = admin.find_one({'cedula': cedula, 'nombre': nombre})
+        
+        if existing_user is None:
             regis = Usuario(cedula, nombre, rol,email, clave)
             usuario.insert_one(regis.UsuDBCollection())
             return redirect(url_for('inusuario')) # Direccionamiento para la pagina que es /admin/in_usuario
+        else:
+            # Si existe, muestra un mensaje de error
+            flash("Ya existe un Operador con estos datos cedula y nombre ")
+            return render_template('admin/in_usuario.html')
     else:
         return render_template('/admin/in_usuario.html') #* Cargado de la pagina
     
@@ -482,6 +537,9 @@ def editcarre(car_name):
 def generar_pdf_carreras(datos):
     c = canvas.Canvas("carreras.pdf", pagesize=letter)
     width, height = letter
+    y = height - 300  # Posición inicial de y
+    # Agrega la imagen al PDF
+    c.drawImage("static/img/fas.jpeg", x=width/3, y=height-200, width=200, height=200, anchor='c')
 
     for i, dato in enumerate(datos):
         texto = f"""
@@ -495,9 +553,39 @@ def generar_pdf_carreras(datos):
         lineas = texto.split('\n')
 
         for j, linea in enumerate(lineas):
-            c.drawString(30, height - 30*(i*len(lineas) + j + 1), linea)  
+            # Si y es demasiado pequeño, agrega una nueva página y reinicia y
+            if y < 50:
+                c.showPage()  # Agrega una nueva página
+                y = height - 50  # Reinicia y
 
+            # Ajusta la posición y para que los datos aparezcan en la parte inferior del PDF
+            c.drawString(30, y, linea)
+            y -= 30  # Mueve y hacia abajo para la siguiente línea
+    
     c.save()    
+
+#* Filtrar por unidad 
+@app.route('/admin/reporte/r_carreras_unidad', methods=['GET'])
+def r_carreras_unidad():
+    c = canvas.Canvas("carreras.pdf", pagesize=letter)
+    width, height = letter
+    
+    # Agrega la imagen al PDF
+    c.drawImage("static/img/fas.jpeg", x=width/3, y=height-200, width=200, height=200, anchor='c')
+
+    client = request.args.get('cliente', default=None, type=str)
+    
+    
+    if client is not None:
+        clie = db['carreras'].find({'cliente': client})
+    else:
+        clie = db['carreras'].find()
+
+    generar_pdf_carreras(clie)
+    return send_file('carreras.pdf', as_attachment=True)
+
+
+
 
 @app.route('/admin/reporte/r_carreras', methods=['GET'])
 def r_carreras():

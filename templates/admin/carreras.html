@@ -2,9 +2,13 @@
 {% block content %}
 <h2>Vista de Carreras</h2>
 <br>
-<div>
+<form action="/admin/reporte/r_carreras_unidad" method="get">
+    <label for="nombre">Reporte Filtrado por cliente</label><br>
+    <input type="text" id="cliente" name="cliente"><br>
+    <br>
+    <input type="submit" value="Filtrar" class="btn btn-primary">
     <a href="{{ url_for('r_carreras') }}" class="btn btn-primary">Reporte Completo </a>
-</div>
+</form>
 <br>
 <table id="myTable" class="table">
     <thead>
