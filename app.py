@@ -18,6 +18,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, TableStyle, Spacer
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet ,ParagraphStyle
+#from tabulate import tabulate # pip install tabulate
 #* Este codigo lo reemplazas con la ip de la pc y el puerto que deseas que se abra pero en la linea de comando
 #* Correr el servidor flask run --host=0.0.0.0 --port=4848 
 
@@ -931,7 +932,7 @@ def editcome(come_name):
 
 
 
-#*********** Ingreso de Operadores ****************************
+#*************** Ingreso de Operadores ****************************
 
 
 #* Bienvenida
@@ -1063,7 +1064,7 @@ def editopcli(cli_name):
     else:
         return render_template("/operador/clientes.html")
 
-#* Guardias
+#* Guardias Operadores
 @app.route('/operador/in_guardias',methods=['GET','POST'])
 def opguardia():
     if request.method == 'POST':
@@ -1077,7 +1078,7 @@ def opguardia():
         return render_template('/operador/in_guardias.html',unidades=uni(),conductores=con()) #* Cargado de la pagina
 
 
-#*Vista de Guardias
+#*Vista de Guardias Operadores 
 @app.route('/operador/guardias',methods=['GET','POST'])
 def opeguardia():
     # Verifica si el usuario está en la sesión
@@ -1112,6 +1113,180 @@ def elitopguardia(gua_name):
     guardia.delete_one({'unidad':gua_name})
     return redirect(url_for('opeguardia'))
 
+
+
+#* Operadores Unidades
+@app.route('/operador/in_unidades',methods=['GET','POST'])
+def inopunidades():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
+    if request.method == 'POST':
+        uni = db['unidades']
+        unidad =request.form['unidad']
+        placa = request.form['placa']
+        modelo = request.form['modelo']
+        marca = request.form['marca']
+        color = request.form['color']
+        observacion = request.form['observacion']
+        orden = request.form['orden']
+        es_codigo = request.form['es_codigo']
+        es_tipo = request.form['es_tipo']
+        es_fecha = request.form['es_fecha']
+
+        if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
+            regis = Unidades( unidad,placa, modelo, marca, color, observacion, orden, es_codigo, es_tipo, es_fecha)
+            uni.insert_one(regis.UniDBCollection())
+            return redirect(url_for('inopunidades')) # Direccionamiento para la pagina que es /admin/in_unidades
+    else: #
+        return render_template('/operador/in_unidades.html') #* Cargado de la pagina
+
+#*Vista de unidades Operadores
+@app.route('/operador/unidades',methods=['GET','POST'])
+def op_unidades():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
+    uni = db['unidades'].find()
+    return render_template('/operador/unidades.html',unidades=uni)# Vista de unidades
+
+#*Editar y eliminar unidades Operadores
+@app.route('/delete_uniop/<string:uni_name>')
+def elituniop(uni_name):
+    uni = db['unidades']
+    uni.delete_one({'placa':uni_name})
+    return redirect(url_for('op_unidades'))
+
+@app.route('/edit_uniop/<string:uni_name>', methods=['GET', 'POST'])
+def edituniop(uni_name):
+    uni = db['unidades']
+    unidad = request.form['unidad']
+    placa = request.form['placa']
+    modelo = request.form['modelo']
+    marca = request.form['marca']
+    color = request.form['color']
+    observacion = request.form['observacion']
+    orden = request.form['orden']
+    es_codigo = request.form['es_codigo']
+    es_tipo = request.form['es_tipo']
+    es_fecha = request.form['es_fecha']
+    
+    if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
+        uni.update_one({'unidad':uni_name},{'$set':{'unidad':unidad,'placa':placa,'modelo':modelo,'marca':marca,'color':color,'observacion':observacion,'orden':orden,'es_codigo':es_codigo,'es_tipo':es_tipo,'es_fecha':es_fecha}})
+        return redirect(url_for('op_unidades'))
+    else:
+        return render_template("operador/unidades.html")
+
+
+#* Ingresar Comentario Operadores
+    
+@app.route('/operador/comentario',methods=['GET','POST'])
+def opcomentario():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
+    if request.method == 'POST':
+        guar= db['comentario']
+        unidad =request.form['unidad']
+        comentario = request.form['comentario']
+        fecha = request.form['fecha']
+        hora = request.form['hora']
+
+
+        if unidad and comentario and fecha and hora:
+            registro = Comentario( unidad , comentario , fecha , hora)
+            guar.insert_one(registro.ComeDBCollection())
+            return redirect(url_for('opcomentario'))
+    else: 
+        return render_template('/operador/comentario.html',unidades=uni())
+
+
+
+#* Vista comentarios
+@app.route('/operador/vi_comentario',methods=['GET','POST'])
+def op_comentario():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index'))
+    
+    come = db['comentario'].find()
+    return render_template('/operador/vi_comentario.html',comentario=come)# Vista de carreras
+
+
+# * Operadores Conductores
+
+@app.route('/operador/in_conductores',methods=['GET','POST'])
+def inopconductores():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
+    if request.method == 'POST':
+        conductor = db['conductores']
+        cedula = request.form['cedula']
+        nombre = request.form['nombre']
+        email = request.form['email']
+        telefono = request.form['telefono']
+        direccion = request.form['direccion']
+        em_nombre = request.form['em_nombre']
+        em_telefono = request.form['em_telefono']
+        em_relacion = request.form['em_relacion']
+        clave = request.form['clave']
+        licencia = request.form['licencia']
+
+        if cedula and nombre and email and telefono and direccion and em_nombre and em_relacion and clave and licencia:
+            regis = Conductores(cedula, nombre, email, telefono, direccion, em_nombre, em_telefono, em_relacion, clave, licencia)
+            conductor.insert_one(regis.CondDBCollection())
+            return redirect(url_for('inopconductores')) # Direccionamiento para la pagina que es /admin/in_conductores
+
+    else: 
+        return render_template('/operador/in_conductores.html') #* Cargado de la pagina
+
+#*Vista de Conductores
+@app.route('/operador/conductores',methods=['GET','POST'])
+def opconductores():
+    # Verifica si el usuario está en la sesión
+    if 'username' not in session:
+        flash("Inicia sesion con tu usuario y contraseña")
+        return redirect(url_for('index')) 
+    
+    condu = db['conductores'].find()
+    return render_template('/operador/conductores.html',conductores=condu)# Vista para conductores
+
+# * Editar y Eliminar Conductores
+@app.route('/delete_condop/<string:cond_name>')
+def elitconduop(cond_name):
+    cond = db['conductores']
+    cond.delete_one({'nombre':cond_name})
+    return redirect(url_for('opconductores'))
+
+@app.route('/edit_condop/<string:cond_name>', methods=['GET', 'POST'])
+def editconduop(cond_name):
+    cond = db['conductores']
+    cedula = request.form['cedula']
+    nombre = request.form['nombre']
+    email = request.form['email']
+    telefono = request.form['telefono']
+    direccion = request.form['direccion']
+    em_nombre = request.form['em_nombre']
+    em_telefono = request.form['em_telefono']
+    em_relacion = request.form['em_relacion']
+    clave = request.form['clave']
+    licencia = request.form['licencia']
+    
+    if cedula and nombre  and email and telefono and direccion and em_nombre and em_relacion and clave and licencia:
+        cond.update_one({'cedula':cond_name},{'$set':{'cedula':cedula,'nombre':nombre,'email':email,'telefono':telefono,'direccion':direccion,'em_nombre':em_nombre,'em_telefono':em_telefono,'em_relacion':em_relacion,'clave':clave,'licencia':licencia}})
+        return redirect(url_for('opconductores'))
+    else:
+        return render_template("operador/conductores.html")
 
 
 if __name__ == '__main__':

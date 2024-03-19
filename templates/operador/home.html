@@ -1,39 +1,87 @@
 {% extends "operador/layout.html" %}
 {% block content %}
 <style>
-    /* styles.css */
-.image-transition {
-    position: relative;
-    width: 100%;
-    height: 100vh; /* Ajusta la altura según tus necesidades */
-    overflow: hidden;
-}
-
-.image-transition img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    animation: fade 5s infinite alternate; /* Ajusta la duración y efecto de la transición */
-}
-
-@keyframes fade {
-    0% {
-        opacity: 0;
+    /* Imagen */
+    .imagen {
+        width: 10%;
+        height: auto;
     }
-    100% {
-        opacity: 1;
-    }
-}
 
+    /* Reloj */
+    .reloj {
+        text-align: center;
+        width: 150%;
+        margin: 0 20px;
+    }
+
+    #hora {
+        font-size: 48px;
+        font-weight: bold;
+    }
+
+    #fecha {
+        font-size: 24px;
+    }
+
+    .social-icon {
+        margin: 5px;
+        /* Adjust the margin value as needed */
+    }
+
+    /* Enlaces */
+    .enlaces {
+        text-align: right;
+        width: 30%;
+    }
 </style>
 
-<div class="image-transition">
-    <img src="/static/img/taxi.jpg" alt="Imagen 1">
-    <img src="/static/img/fas.jpeg" alt="Imagen 2">
-    <!-- Agrega más imágenes aquí -->
+<br>
+<div style="display: flex;">
+    <a href="https://www.ant.gob.ec/">
+        <img src="/static/img/ant.png" width="300" height="200" alt="Logo">
+    </a>
+    <br>
+    <a href="https://www.movilidadmachala.gob.ec/web/">
+        <img src="/static/img/movilidad.png" width="300" height="200" alt="Logo">
+    </a>
+    <div class="contenedor">
+
+        <div class="reloj">
+            <p id="hora"></p>
+            <p id="fecha"></p>
+        </div>
+    </div>
 </div>
+<br>
+<br>
+<div style="display: flex;">
+    <a href="https://web.whatsapp.com/" class="social-icon">
+        <img src="/static/img/whassap.png" width="300" height="200" alt="Logo">
+    </a>
+    <a href="https://www.facebook.com/" class="social-icon">
+        <img src="/static/img/facebook.jpg" width="300" height="200" alt="Logo">
+    </a>
+    <a href="https://www.instagram.com/" class="social-icon">
+        <img src="/static/img/insta.png" width="300" height="200" alt="Logo">
+    </a>
+</div>
+<script>
+    function actualizarReloj() {
+        const horaActual = new Date();
+        const hora = horaActual.getHours();
+        const minutos = horaActual.getMinutes();
+        const segundos = horaActual.getSeconds();
+        const fecha = horaActual.toLocaleDateString();
+
+        const horaFormato = `${hora < 10 ? '0' + hora : hora}:${minutos < 10 ? '0' + minutos : minutos}:${segundos < 10 ? '0' + segundos : segundos}`;
+
+        document.getElementById('hora').textContent = horaFormato;
+        document.getElementById('fecha').textContent = fecha;
+    }
+
+    setInterval(actualizarReloj, 1000);
+
+    actualizarReloj();
+</script>
 
 {% endblock %}

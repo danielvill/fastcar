@@ -1,51 +1,36 @@
 {% extends "operador/layout.html" %}
 {% block content %}
-<br>
-<br>
-<h2>
-   
-</h2>
-<br>
-<div class="row">
-    
-    <div class="form-group col-md-6">
-        <form action="/admin/reporte/r_clientes_nombre" method="get">
-            <label for="nombre">Reporte Filtrado por nombre</label><br>
-            <input type="text" id="nombre" name="nombre"><br>
-            <br>
-            <input type="submit" value="Filtrar" class="btn btn-primary">
-            <a href="{{ url_for('r_cliente') }}" class="btn btn-primary">Reporte Completo </a>
-        </form>
-    </div>
-</div>
-<br>
-
-<br>
 <table id="myTable" class="table">
     <thead>
         <tr>
-            <th scope="col">Nombre</th>
-            <th scope="col">Telefono</th>
-            <th scope="col">Direccion</th>
-            <th scope="col" >Coordenandas </th>
-            <th scope="col" >Cedula</th>
-            <th scope="col" >Referencia</th>
-            <th scope="col" >Comentario</th>
-            <th scope="col" >Acciones</th>
+            <th>Cedula</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Telefono</th>
+            <th>Direccion</th>
+            <th>Nombre de Emergencia</th>
+            <th>Telefono de Emergencia</th>
+            <th>Relacion de Emergencia</th>
+            <th>Clave</th>
+            <th>Licencia</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-            {% for cliente in clientes %}
+            {% for conductores in conductores %}
             <tr>
                 <td>
-                    {{cliente.nombre}}
+                    {{ conductores.cedula }}
                 </td>
-                <td>{{cliente.telefono}}</td>
-                <td>{{cliente.direccion}}</td>
-                <td>{{cliente.coordenadas}}</td>
-                <td>{{cliente.cedula}}</td>
-                <td>{{cliente.referencia}}</td>
-                <td>{{cliente.comentario}}</td>
+                <td>{{ conductores.nombre }}</td>
+                <td>{{ conductores.email }}</td>
+                <td>{{ conductores.telefono }}</td>
+                <td>{{ conductores.direccion }}</td>
+                <td>{{ conductores.em_nombre }}</td>
+                <td>{{ conductores.em_telefono }}</td>
+                <td>{{ conductores.em_relacion }}</td>
+                <td>{{ conductores.clave }}</td>
+                <td>{{ conductores.licencia }}</td>
                 <td>
                     <button type="submit" class="editar btn btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -53,7 +38,7 @@
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                         </svg>
                     </button>
-                    <a href="{{url_for('elitopcli',cli_name=cliente.nombre)}}" class="eliminar btn btn-danger">
+                    <a href="{{url_for('elitconduop',cond_name=conductores.nombre)}}" class="eliminar btn btn-danger">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
                             <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708"/>
                         </svg>
@@ -63,36 +48,48 @@
             {% endfor %}
     </tbody>
 </table>
-<div id="editModal" title="Editar Clientes">
+<div id="editModal" title="Editar Conductores">
     <form id="editForm" action="" method="post">
-        <div class="form-group">
+        <div class="container">
             <div class="col">
-                <label for="usuario">Nombre</label>
-                <input type="text" id="nombre" name="nombre" class="form-control">
-            </div>
-            <div class="col">
-                <label for="nombre">Telefono</label>
-                <input type="text" id="telefono" name="telefono" class="form-control">
-            </div>
-            <div class="col">
-                <label for="rol">Direccion</label>
-                <input type="text" id="direccion" name="direccion" class="form-control">
-            </div>
-            <div class="col">
-                <label for="">Coordenandas</label>
-                <input type="text" id="coordenadas" name="coordenadas" class="form-control">
-            </div>
-            <div class="col">
-                <label for="">Cedula</label>
+                <label for="usuario">Cedula</label>
                 <input type="text" id="cedula" name="cedula" class="form-control">
             </div>
             <div class="col">
-                <label for="">Referencia</label>
-                <input type="text" id="referencia" name="referencia" class="form-control">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre" class="form-control">
             </div>
             <div class="col">
-                <label for="">Comentario</label>
-                <input type="text" id="comentario" name="comentario" class="form-control">
+                <label for="rol">Email</label>
+                <input type="text" id="email" name="email" class="form-control">
+            </div>
+            <div class="col">
+                <label for="rol">Telefono</label>
+                <input type="text" id="telefono" name="telefono" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Direccion</label>
+                <input type="text" id="direccion" name="direccion" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Nombre de Emergencia</label>
+                <input type="text" id="em_nombre" name="em_nombre" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Telefono de Emergencia</label>
+                <input type="text" id="em_telefono" name="em_telefono" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Relacion de Emergencia</label>
+                <input type="text" id="em_relacion" name="em_relacion" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Clave</label>
+                <input type="text" id="clave" name="clave" class="form-control">
+            </div>
+            <div class="col">
+                <label for="">Licencia</label>
+                <input type="text" id="licencia" name="licencia" class="form-control">
             </div>
         </div>
     </form>
@@ -112,14 +109,17 @@
             var data = table.row(row).data();
             // Aquí puedes abrir el modal y llenar los campos del formulario con los datos del usuario
             // Por ejemplo:
-            $('#nombre').val(data[0]);
-            $('#telefono').val(data[1]);
-            $('#direccion').val(data[2]);
-            $('#coordenadas').val(data[3]);
-            $('#cedula').val(data[4]);
-            $('#referencia').val(data[5]);
-            $('#comentario').val(data[6]);
-            $('#editForm').attr('action','/edit_opcli/'+ data[4]);
+            $('#cedula').val(data[0]);
+            $('#nombre').val(data[1]);
+            $('#email').val(data[2]);
+            $('#telefono').val(data[3]);
+            $('#direccion').val(data[4]);
+            $('#em_nombre').val(data[5]);
+            $('#em_telefono').val(data[6]);
+            $('#em_relacion').val(data[7]);
+            $('#clave').val(data[8]);
+            $('#licencia').val(data[9]);
+            $('#editForm').attr('action','/edit_condop/'+ data[0]);
             $('#editModal').dialog('open');
         });
         // Inicializar el modal
@@ -146,6 +146,7 @@
             ]
         });
     });
+
 </script>
 <script src="/static/js/edi_eli.js"></script>
 {% endblock %}

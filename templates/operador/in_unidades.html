@@ -1,0 +1,72 @@
+{% extends "operador/layout.html" %}
+{% block content %}
+
+<div class="formbold-main-wrapper">
+    <!-- Author: FormBold Team -->
+    <!-- Learn More: https://formbold.com -->
+    <div class="formbold-form-wrapper">
+
+        <form action="/operador/in_unidades" method="POST">
+            <div class="formbold-form-title">
+                <h2 class="">Registro de Unidades</h2>
+                <p>
+                    Registrar todos los campos son obligatorios
+                </p>
+            </div>
+            <div class="formbold-input-flex">
+                <div>
+                    <label for="firstname" class="formbold-form-label">
+                        Unidad
+                    </label>
+                    <input type="text" class="form-control" name="unidad">
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Placa</label>
+                    <input type="text" class="form-control" name="placa">
+                </div>
+            </div>
+            <div class="formbold-input-flex">
+                <div>
+                    <label for="lastname" class="formbold-form-label">Modelo</label>
+                    <input type="text" class="form-control" name="modelo">
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Marca</label>
+                    <input type="text" class="form-control" name="marca">
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Color</label>
+                    <select name="color" class="form-control">
+                        <option value="Amarillo">Amarillo</option>
+                        <option value="Color">Color</option>
+                    </select>
+                </div>
+            </div>
+            <div class="formbold-input-flex">
+                <div>
+                    <label for="lastname" class="formbold-form-label">Observacion</label>
+                    <input type="text" class="form-control" name="observacion">
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Orden</label>
+                    <input type="text" class="form-control" name="orden">
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Estado de codigo</label>
+                    <input type="number" class="form-control" name="es_codigo">
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Estado de tipo</label>
+                    <input type="text" class="form-control" name="es_tipo">
+                </div>
+                <div>
+                    <label for="lastname" class="formbold-form-label">Estado de Fecha</label>
+                    <input type="date" class="form-control" name="es_fecha">
+                </div>
+            </div>
+            <button class="formbold-btn">Guardar</button>
+        </form>
+    </div>
+</div>
+<script src="/static/js/ingreso.js"></script>
+{% endblock %}

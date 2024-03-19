@@ -1,0 +1,52 @@
+{% extends "operador/layout.html" %}
+{% block content %}
+<h2>Vista de Comentarios</h2>
+<br>
+<form action="/admin/reporte/r_comentarios_unidad" method="get">
+    <label for="nombre">Reporte Filtrado por unidad</label><br>
+    <input type="text" id="unidad" name="unidad"><br>
+    <br>
+    <input type="submit" value="Filtrar" class="btn btn-primary">
+    <a href="{{ url_for('r_comentarios_unidad') }}" class="btn btn-primary">Reporte Completo </a>
+</form>
+<br>
+<table id="myTable" class="table">
+    <thead>
+        <tr>
+            <th scope="col">Unidad</th>
+            <th scope="col">Observacion</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Hora</th>
+        </tr>
+    </thead>
+    <tbody>
+            {% for comentario in comentario %}
+            <tr>
+                
+                <td>{{comentario.unidad}}</td>
+                <td>{{comentario.comentario}}</td>
+                <td>{{comentario.fecha}}</td>
+                <td>{{comentario.hora}}</td>
+            </tr>
+            {% endfor %}
+        </form>
+    </tbody>
+</table>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+            }
+        });
+        var table = $('#myTable').DataTable();
+        //Cambio de english a spanish
+        // Funcionalidad de edición
+        
+    });
+</script>
+<script src="/static/js/edi_eli.js"></script>
+{% endblock %}
