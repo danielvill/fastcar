@@ -1,9 +1,7 @@
 {% extends "admin/layout.html" %}
 {% block content %}
 <div class="formbold-main-wrapper">
-
     <div class="formbold-form-wrapper">
-
         <form action="/admin/in_cliente" method="POST">
             <div class="formbold-form-title">
                 <h2 class="">Registro de Clientes</h2>
@@ -16,7 +14,7 @@
                     <label for="firstname" class="formbold-form-label">
                         Nombre
                     </label>
-                    <input type="text" class="form-control" name="nombre" required>
+                    <input type="text" class="form-control" name="nombre"  required>
                 </div>
                 <div>
                     <label for="lastname" class="formbold-form-label">Telefono</label>
@@ -32,7 +30,6 @@
                     <label for="email" class="formbold-form-label">Cedula</label>
                     <input type="number" name="cedula" class="form-control">
                 </div>
-
             </div>
             <div class="formbold-mb-3">
                 <label for="lastname" class="formbold-form-label"> Direccion</label>

@@ -14,15 +14,15 @@
             <div class="formbold-input-flex">
                 <div>
                     <label for="lastname" class="formbold-form-label">Ingreso de Unidad</label>
-                    <select name="unidad" class="form-control" id="" >
+                    <select name="unidad" class="form-control" id="">
                         {% for uni in unidades %}
-                        <option  value="{{ uni }}">{{ uni }}</option>
+                        <option value="{{ uni }}">{{ uni }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div>
                     <label for="lastname" class="formbold-form-label">Observacion</label>
-                    <input type="text" name="comentario" class="form-control">
+                    <input type="text" name="comentario" class="form-control" >
                 </div>
                 <div>
                     <label for="lastname" class="formbold-form-label">Fecha</label>
@@ -44,7 +44,30 @@
         document.querySelector('input[name="hora"]').value = fecha.getHours() + ":" + fecha.getMinutes();
     });
 </script>
-<script src="/static/js/ingreso.js"></script>
+<script>
+    // Validacion si los campos estan vacios
+    document.querySelector('form').onsubmit = function (e) {
+        var inputs = this.querySelectorAll('input');
+        var todosLlenos = true; // Asume que todos los campos están llenos
+
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].value === '') {
+                todosLlenos = false; // Si un campo está vacío, establece todosLlenos en falso
+                break; // No necesitas verificar el resto de los campos, así que puedes salir del bucle
+            }
+        }
+
+        if (!todosLlenos) {
+            e.preventDefault(); // Previene el envío del formulario
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Los campos estan vacios '
+            });
+        }
+    };
+
+</script>
 <script>
     $(document).ready(function () {
         $('select').select2();

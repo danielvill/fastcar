@@ -1,22 +1,24 @@
 // Validacion si los campos estan vacios
-//document.querySelector('form').onsubmit = function (e) {
-//    var inputs = this.querySelectorAll('input');
-//    var todosLlenos = true; // Asume que todos los campos están llenos
-//
-//    for (var i = 0; i < inputs.length; i++) {
-//        if (inputs[i].value === '') {
-//            todosLlenos = false; // Si un campo está vacío, establece todosLlenos en falso
-//            break; // No necesitas verificar el resto de los campos, así que puedes salir del bucle
-//        }
-//    }
-//
-//    if (!todosLlenos) {
-//        e.preventDefault(); // Previene el envío del formulario
-//        alert('Los campos estan vacios');
-//    } else {
-//        alert('Guardado exitosamente');
-//    }
-//};
+document.querySelector('form').onsubmit = function (e) {
+    var inputs = this.querySelectorAll('input');
+    var todosLlenos = true; // Asume que todos los campos están llenos
+
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].value === '') {
+            todosLlenos = false; // Si un campo está vacío, establece todosLlenos en falso
+            break; // No necesitas verificar el resto de los campos, así que puedes salir del bucle
+        }
+    }
+
+    if (!todosLlenos) {
+        e.preventDefault(); // Previene el envío del formulario
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Los campos estan vacios'
+        });
+    } 
+};
 
 
 // Validadr lo que es la cedula no tiene para ver si esta en el gobierno
@@ -41,7 +43,11 @@ function validarCedula(cedula) {
 document.querySelector('form').addEventListener('submit', function (e) {
     var cedula = document.querySelector('input[name="cedula"]').value;
     if (!validarCedula(cedula)) {
-        alert('La cédula ingresada no es válida');
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'La cedula no es valida'
+        });
         e.preventDefault(); // Previene el envío del formulario
     }
 });
@@ -52,7 +58,11 @@ function validarcorreo() {
     let correo = document.getElementById('correo').value;
     let regex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
     if (!regex.test(correo)) {
-        alert('Por favor, ingresa un correo válido');
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ingresa un correo valido'
+        });
         return false;
     }
 }
@@ -83,20 +93,26 @@ document.querySelector('form').addEventListener('submit', function(event) {
     var regex = /^09\d{8}$/; // Expresión regular para validar números de celular ecuatorianos
 
     if (!regex.test(telefono)) {
-        alert('Por favor, ingresa un número de celular ecuatoriano válido.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Ingresa un numero de celular valido'
+        });
         event.preventDefault(); // Evita que el formulario se envíe
-    }else{
-        alert('Guardado exitos');
     }
 });
 
 // Validacion de numero telefonico
-//document.querySelector('form').addEventListener('submit', function(event) {
-//    var telefono = document.querySelector('input[name="em_telefono"]').value;
-//    var regex = /^09\d{8}$/; // Expresión regular para validar números de celular ecuatorianos
-//
-//    if (!regex.test(telefono)) {
-//        alert('Por favor, ingresa un número de celular de emergencia valido.');
-//        event.preventDefault(); // Evita que el formulario se envíe
-//    }
-//});
+document.querySelector('form').addEventListener('submit', function(event) {
+    var telefono = document.querySelector('input[name="em_telefono"]').value;
+    var regex = /^09\d{8}$/; // Expresión regular para validar números de celular ecuatorianos
+
+    if (!regex.test(telefono)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'El campo de telefono de emergenicia ese numero no es valido'
+        });
+        event.preventDefault(); // Evita que el formulario se envíe
+    }
+});

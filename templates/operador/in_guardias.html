@@ -43,12 +43,23 @@
         var table = $('#myTable').DataTable();
     });
     $(document).ready(function () {
-    $(".editar").click(function (event) {
-        if (!confirm("¿Estás seguro de enviarlo?")) {
-            event.preventDefault();
-        }
+    $("form").submit(function (event) {
+        event.preventDefault();
+        var form = this;
+        Swal.fire({
+            title: '¿Estás seguro de enviarlo?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, enviar!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
     });
-})
+});
 
 </script>
 
