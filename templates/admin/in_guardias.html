@@ -10,6 +10,7 @@
             <tr>
                 <th>Unidad</th>
                 <th>Acciones</th>
+                <th>Activar</th>
             </tr>
         </thead>
         <tbody>
@@ -21,7 +22,10 @@
                         {{ unidad }}
                     </td>
                     <td>
-                        <button class="editar btn btn-primary">Activar</button>
+                        <button class="editar btn btn-primary">Enviar</button>
+                    </td>
+                    <td>
+                        <button type="button" id="miBoton{{ loop.index }}" class="btn btn-secondary">Activado</button>
                     </td>
                 </form>
             </tr>
@@ -57,6 +61,35 @@
             }
         });
     });
+});
+
+// Lista de todos los ids de tus botones
+var idsBotones = Array.from({length: {{ unidades|length }}}, (_, i) => 'miBoton' + (i + 1));
+
+// Función para el evento de clic del botón
+function eventoBoton() {
+    var colorActual = this.style.backgroundColor;
+    if (colorActual === 'rgb(255, 255, 0)') { // rgb(255, 255, 0) es el código RGB para amarillo
+        // Si el color actual es amarillo, cambia a blanco
+        this.style.backgroundColor = '#FFFFFF';
+        localStorage.setItem(this.id, '#FFFFFF');
+    } else {
+        // Si el color actual no es amarillo, cambia a amarillo
+        this.style.backgroundColor = '#FFFF00';
+        localStorage.setItem(this.id, '#FFFF00');
+    }
+}
+
+// Evento click para cada botón
+idsBotones.forEach(function(id) {
+    var boton = document.querySelector('#' + id);
+    boton.addEventListener('click', eventoBoton);
+
+    // Al cargar la página, establece el color del botón al último color guardado
+    var colorGuardado = localStorage.getItem(id);
+    if (colorGuardado) {
+        boton.style.backgroundColor = colorGuardado;
+    }
 });
 
 </script>

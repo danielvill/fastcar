@@ -15,14 +15,12 @@ from modules.comentario import Comentario
 from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, TableStyle, Spacer
+from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, TableStyle, Spacer ,Image
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet ,ParagraphStyle
 #from tabulate import tabulate # pip install tabulate
 #* Este codigo lo reemplazas con la ip de la pc y el puerto que deseas que se abra pero en la linea de comando
 #* Correr el servidor flask run --host=0.0.0.0 --port=4848 
-
-
 
 db = dbase()
 
@@ -160,17 +158,23 @@ def incliente():
         referencia = request.form['referencia']
         comentario = request.form['comentario']
         
-        if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario :
-            existing_cliente = cliente.find_one({'nombre': nombre, 'cedula': cedula,"telefono":telefono}) # Direccionamiento para la pagina que es /admin/in_admin
-            
-        if existing_cliente is None:
+        exist_nombre = cliente.find_one({'nombre':nombre})
+        exist_cedula = cliente.find_one({'cedula':cedula })
+        
+        if exist_nombre:
+            flash("Ya existe un cliente con ese nombre ")
+            return redirect(url_for('incliente'))
+        
+        elif exist_cedula:
+            flash("Ya existe un cliente con ese cedula ")
+            return redirect(url_for('incliente'))
+        
+        else:
             regis = Clientes(nombre, telefono, direccion, coordenadas, cedula, referencia, comentario)
             cliente.insert_one(regis.CliDBCollection())
+            flash("Enviado a la base de datos ")
             return redirect(url_for('incliente'))
-        else:
-                # Si existe, muestra un mensaje de error
-                flash("Ya existe un cliente con ese nombre ,cedula y telefono ")
-                return render_template('admin/in_cliente.html') #* Cargado de la pagina     
+        
     else: 
         return render_template('/admin/in_cliente.html') #* Cargado de la pagina 
     
@@ -185,6 +189,19 @@ def generar_pdf_clientes(datos):
     styles = getSampleStyleSheet()
     centered_style = styles['Heading1']
     centered_style.alignment = 1  # 1 = TA_CENTER
+
+    # Agrega la imagen
+    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    story.append(imagen)
+    story.append(Spacer(1, 12))
+
+    from datetime import datetime
+    fecha_hora = datetime.now().strftime("Documento generado %H:%M")
+    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
+    story.append(fecha_hora_parrafo)
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
 
     # Agrega el título
     title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
@@ -243,6 +260,19 @@ def r_cliente_nombre():
     centered_style = styles['Heading1']
     centered_style.alignment = 1  # 1 = TA_CENTER
 
+    # Agrega la imagen
+    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    story.append(imagen)
+    story.append(Spacer(1, 12))
+
+    from datetime import datetime
+    fecha_hora = datetime.now().strftime("Documento generado %H:%M")
+    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
+    story.append(fecha_hora_parrafo)
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+
     # Agrega el título
     title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
     story.append(title)
@@ -259,10 +289,10 @@ def r_cliente_nombre():
     title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
     story.append(title3)
     
-    nombre = request.args.get('nombre', default=None, type=str)
+    nombre = request.args.get('cedula', default=None, type=str)
     
     if nombre:
-        clie = db['clientes'].find({'nombre': nombre})
+        clie = db['clientes'].find({'cedula': nombre})
     else:
         clie = db['clientes'].find()
 
@@ -593,12 +623,27 @@ def generar_pdf_carreras(datos):
     centered_style = styles['Heading1']
     centered_style.alignment = 1  # 1 = TA_CENTER
 
+    # Agrega la imagen
+    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    story.append(imagen)
+    story.append(Spacer(1, 12))
+
+    from datetime import datetime
+    fecha_hora = datetime.now().strftime("Documento generado %H:%M")
+    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
+    story.append(fecha_hora_parrafo)
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+   
     # Agrega el título
     title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
     story.append(title)
 
     # Agrega un salto de línea
     story.append(Spacer(1, 12))
+
+   
 
     title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
     story.append(title2)
@@ -608,6 +653,7 @@ def generar_pdf_carreras(datos):
 
     title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
     story.append(title3)
+    
 
     # Prepara los datos para la tabla
     data = [["Cliente", "Unidad", "Comentario", "Fecha", "Hora"]]  # Encabezados
@@ -650,6 +696,21 @@ def r_carreras_unidad():
     centered_style = styles['Heading1']
     centered_style.alignment = 1  # 1 = TA_CENTER
 
+
+    # Agrega la imagen
+    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    story.append(imagen)
+    story.append(Spacer(1, 12))
+
+    from datetime import datetime
+    fecha_hora = datetime.now().strftime("Documento generado %H:%M")
+    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
+    story.append(fecha_hora_parrafo)
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+
+
     # Agrega el título
     title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
     story.append(title)
@@ -667,11 +728,11 @@ def r_carreras_unidad():
     story.append(title3)
 
     # Prepara los datos no como tabla
-    client = request.args.get('cliente', default=None, type=str)
+    client = request.args.get('hora', default=None, type=str)
     
     
     if client is not None:
-        clie = db['carreras'].find({'cliente': client})
+        clie = db['carreras'].find({'hora': client})
     else:
         clie = db['carreras'].find()
 
@@ -810,6 +871,20 @@ def generar_pdf_comentarios(datos):
     centered_style = styles['Heading1']
     centered_style.alignment = 1  # 1 = TA_CENTER
 
+    
+    # Agrega la imagen
+    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    story.append(imagen)
+    story.append(Spacer(1, 12))
+
+    from datetime import datetime
+    fecha_hora = datetime.now().strftime("Documento generado %H:%M")
+    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
+    story.append(fecha_hora_parrafo)
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+    
     # Agrega el título
     title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
     story.append(title)
@@ -867,6 +942,20 @@ def r_comentarios_unidad():
     centered_style = styles['Heading1']
     centered_style.alignment = 1  # 1 = TA_CENTER
 
+    # Agrega la imagen
+    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    story.append(imagen)
+    story.append(Spacer(1, 12))
+
+    from datetime import datetime
+    fecha_hora = datetime.now().strftime("Documento generado %H:%M")
+    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
+    story.append(fecha_hora_parrafo)
+    # Agrega un salto de línea
+    story.append(Spacer(1, 12))
+    
+    
     # Agrega el título
     title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
     story.append(title)
@@ -884,11 +973,11 @@ def r_comentarios_unidad():
     story.append(title3)
 
     # Prepara los datos no como tabla
-    client = request.args.get('unidad', default=None, type=str)
+    client = request.args.get('hora', default=None, type=str)
     
     
     if client is not None:
-        clie = db['comentario'].find({'unidad': client})
+        clie = db['comentario'].find({'hora': client})
     else:
         clie = db['comentario'].find()
 

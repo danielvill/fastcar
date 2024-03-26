@@ -41,7 +41,7 @@
     document.querySelector('input[name="comentario"]').addEventListener('change', function () {
         var fecha = new Date();
         document.querySelector('input[name="fecha"]').value = fecha.toISOString().substring(0, 10);
-        document.querySelector('input[name="hora"]').value = fecha.getHours() + ":" + fecha.getMinutes();
+        document.querySelector('input[name="hora"]').value = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
     });
 </script>
 <script>

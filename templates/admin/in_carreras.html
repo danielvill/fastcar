@@ -25,9 +25,9 @@
                 </div>
                 <div>
                     <label for="lastname" class="formbold-form-label">Ingreso de Unidad</label>
-                    <select name="unidad" class="form-control" id="" >
+                    <select name="unidad" class="form-control" id="">
                         {% for medias in media %}
-                        <option  value="{{ medias }}">{{ medias }}</option>
+                        <option value="{{ medias }}">{{ medias }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -52,32 +52,32 @@
     document.querySelector('input[name="comentario"]').addEventListener('change', function () {
         var fecha = new Date();
         document.querySelector('input[name="fecha"]').value = fecha.toISOString().substring(0, 10);
-        document.querySelector('input[name="hora"]').value = fecha.getHours() + ":" + fecha.getMinutes();
+        document.querySelector('input[name="hora"]').value = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
     });
 
 </script>
-<script >
+<script>
     // Validacion si los campos estan vacios
-document.querySelector('form').onsubmit = function (e) {
-    var inputs = this.querySelectorAll('input');
-    var todosLlenos = true; // Asume que todos los campos están llenos
+    document.querySelector('form').onsubmit = function (e) {
+        var inputs = this.querySelectorAll('input');
+        var todosLlenos = true; // Asume que todos los campos están llenos
 
-    for (var i = 0; i < inputs.length; i++) {
-        if (inputs[i].value === '') {
-            todosLlenos = false; // Si un campo está vacío, establece todosLlenos en falso
-            break; // No necesitas verificar el resto de los campos, así que puedes salir del bucle
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].value === '') {
+                todosLlenos = false; // Si un campo está vacío, establece todosLlenos en falso
+                break; // No necesitas verificar el resto de los campos, así que puedes salir del bucle
+            }
         }
-    }
 
-    if (!todosLlenos) {
-        e.preventDefault(); // Previene el envío del formulario
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Los campos estan vacios '
-        });
-    } 
-};
+        if (!todosLlenos) {
+            e.preventDefault(); // Previene el envío del formulario
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Los campos estan vacios '
+            });
+        }
+    };
 
 </script>
 <script>
