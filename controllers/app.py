@@ -86,20 +86,24 @@ def inadmin():
         email = request.form['email']
         clave = request.form['clave']
         
-        if cedula and nombre and rol and email and clave:
-            # Verifica si ya existe un administrador con los mismos datos
-            existing_admin = admin.find_one({'cedula': cedula, 'nombre': nombre}) # Direccionamiento para la pagina que es /admin/in_admin
         
-        if existing_admin is None:
+        exist_nombre = admin.find_one({'nombre':nombre})
+        exist_cedula = admin.find_one({'cedula':cedula })
+
+        if exist_nombre:
+            flash("Ya existe un Administrador con ese nombre ")
+            return redirect(url_for('inadmin'))
+        
+        elif exist_cedula:
+            flash("Ya existe un Administrador con ese cedula ")
+            return redirect(url_for('inadmin'))
+        
+        else:
                 # Si no existe, inserta el nuevo administrador
                 regis = Admin(cedula, nombre, rol ,email, clave)
                 admin.insert_one(regis.AdmDBCollection())
+                flash("Enviado a la base de datos ")
                 return redirect(url_for('inadmin')) # Direccionamiento para la pagina que es /admin/in_admin
-        else:
-                # Si existe, muestra un mensaje de error
-                flash("Ya existe un administrador con estos datos.")
-                return render_template('admin/in_admin.html') #* Cargado de la pagina 
-
     else:
         return render_template('admin/in_admin.html') #* Cargado de la pagina 
 
@@ -367,17 +371,22 @@ def inusuario():
         email = request.form['email']
         clave = request.form['clave']
         
-        if cedula and nombre and rol and email and clave:
-            existing_user = admin.find_one({'cedula': cedula, 'nombre': nombre})
+        exist_nombre = usuario.find_one({'nombre':nombre})
+        exist_cedula = usuario.find_one({'cedula':cedula })
         
-        if existing_user is None:
+        if exist_nombre:
+            flash("Ya existe un usuario con ese nombre ")
+            return redirect(url_for('inusuario'))
+        
+        elif exist_cedula:
+            flash("Ya existe un usuario con ese cedula ")
+            return redirect(url_for('inusuario'))
+
+        else:
             regis = Usuario(cedula, nombre, rol,email, clave)
             usuario.insert_one(regis.UsuDBCollection())
             return redirect(url_for('inusuario')) # Direccionamiento para la pagina que es /admin/in_usuario
-        else:
-            # Si existe, muestra un mensaje de error
-            flash("Ya existe un Operador con estos datos cedula y nombre ")
-            return render_template('admin/in_usuario.html')
+        
     else:
         return render_template('/admin/in_usuario.html') #* Cargado de la pagina
     
@@ -438,11 +447,22 @@ def inconductores():
         clave = request.form['clave']
         licencia = request.form['licencia']
 
+        exist_nombre = conductor.find_one({'nombre':nombre})
+        exist_cedula = conductor.find_one({'cedula':cedula })
+        
+        if exist_nombre:
+            flash("Ya existe un conductor con ese nombre ")
+            return redirect(url_for('inconductores'))
+        
+        elif exist_cedula:
+            flash("Ya existe un conductor con esa cedula ")
+            return redirect(url_for('inconductores'))
+        
         if cedula and nombre and email and telefono and direccion and em_nombre and em_relacion and clave and licencia:
             regis = Conductores(cedula, nombre, email, telefono, direccion, em_nombre, em_telefono, em_relacion, clave, licencia)
             conductor.insert_one(regis.CondDBCollection())
+            flash("Enviado a la base de datos ")
             return redirect(url_for('inconductores')) # Direccionamiento para la pagina que es /admin/in_conductores
-
     else: 
         return render_template('/admin/in_conductores.html') #* Cargado de la pagina
 

@@ -64,7 +64,7 @@
             </div>
             <div class="col">
                 <label for="">Hora</label>
-                <input type="text" id="hora" name="hora" class="form-control">
+                <input type="text" id="time" name="hora" class="form-control">
             </div>
         </div>
     </form>
@@ -88,7 +88,7 @@
             $('#unidad').val(data[0]);
             $('#comentario').val(data[1]);
             $('#fecha').val(data[2]);
-            $('#hora').val(data[3]);
+            $('#time').val(data[3]);
             $('#editForm').attr('action','/edit_come/'+ data[0]);
             $('#editModal').dialog('open');
         });
