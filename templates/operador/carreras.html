@@ -3,8 +3,8 @@
 <h2>Vista de Carreras</h2>
 <br>
 <form action="/admin/reporte/r_carreras_unidad" method="get">
-    <label for="nombre">Reporte Filtrado por cliente</label><br>
-    <input type="text" id="muestra" name="cliente"><br>
+    <label for="nombre">Reporte Filtrado por hora</label><br>
+    <input type="text" id="hora" name="hora"><br>
     <br>
     <input type="submit" value="Filtrar" class="btn btn-primary">
     <a href="{{ url_for('r_carreras') }}" class="btn btn-primary">Reporte Completo </a>
@@ -69,11 +69,14 @@
             </div>
             <div class="col">
                 <label for="">Hora</label>
-                <input type="text" id="hora" name="hora" class="form-control">
+                <input type="text" id="tiempo" name="hora" class="form-control">
             </div>
         </div>
     </form>
 </div>
+
+<!-- Crea un elemento canvas para el gráfico -->
+<canvas id="myChart"></canvas>
 <script>
     $(document).ready(function () {
         $('#myTable').DataTable({
@@ -93,7 +96,7 @@
             $('#unidad').val(data[1]);
             $('#comentario').val(data[2]);
             $('#fecha').val(data[3]);
-            $('#hora').val(data[4]);
+            $('#tiempo').val(data[4]);
             $('#editForm').attr('action','/edit_opcar/'+ data[0]);
             $('#editModal').dialog('open');
         });
@@ -121,6 +124,44 @@
             ]
         });
     });
+
+
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ labels|tojson }},
+        datasets: [{
+            label: '# Carreras',
+            data: {{ data|tojson }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',  // color para la primera barra
+                'rgba(54, 162, 235, 0.2)',  // color para la segunda barra
+                'rgba(230,222,199)',
+                'rgba(146,85,41)',
+                'rgba(13,116,120)'
+                // añade más colores si tienes más barras
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',  // color para la primera barra
+                'rgba(54, 162, 235, 1)',  // color para la segunda barra
+                'rgba(230,222,199)',
+                'rgba(146,85,41)',
+                'rgba(13,116,120)'
+                // añade más colores si tienes más barras
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
 </script>
 <script src="/static/js/edi_eli.js"></script>
 {% endblock %}

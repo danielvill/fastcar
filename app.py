@@ -526,9 +526,18 @@ def inunidades():
         es_tipo = request.form['es_tipo']
         es_fecha = request.form['es_fecha']
 
+        exist_unidad = uni.find_one({'unidad':unidad})
+        exist_placa = uni.find_one({'placa':placa })
+        if exist_unidad:
+            flash("Ya existe esa unidad ")
+            return redirect(url_for('inunidades'))
+        elif exist_placa:
+            flash("Ya existe esa placa ")
+            return redirect(url_for('inunidades'))
         if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
             regis = Unidades( unidad,placa, modelo, marca, color, observacion, orden, es_codigo, es_tipo, es_fecha)
             uni.insert_one(regis.UniDBCollection())
+            flash("Enviado a la base de datos ")
             return redirect(url_for('inunidades')) # Direccionamiento para la pagina que es /admin/in_unidades
     else: #
         return render_template('/admin/in_unidades.html') #* Cargado de la pagina
@@ -597,8 +606,21 @@ def incarreras():
     else: #
         return render_template('/admin/in_carreras.html',clientes=cliu(),unidades=uni(),media=med()) #* Cargado de la pagina
         
+# *Estadistica
+def preparar_datos(results):
+    labels = []
+    data = []
+    for result in results:
+        labels.append(result['_id'])
+        data.append(result['count'])
+    return labels, data
 
-#*Vista de carreras
+db, results = dbase() 
+labels, data = preparar_datos(results)
+
+
+
+
 @app.route('/admin/carreras',methods=['GET','POST'])
 def carreras():
     # Verifica si el usuario está en la sesión
@@ -606,8 +628,12 @@ def carreras():
         flash("Inicia sesion con tu usuario y contraseña")
         return redirect(url_for('index'))
     
+    # Obtén los resultados de la agregación y prepara los datos para Chart.js
+    db, results = dbase()
+    labels, data = preparar_datos(results)
+
     carre = db['carreras'].find()
-    return render_template('/admin/carreras.html',carreras=carre)# Vista de carreras
+    return render_template('/admin/carreras.html',carreras=carre, labels=labels, data=data)
 
 #* Editar y Eliminar Carreras
 @app.route('/delete_car/<string:car_name>')
@@ -1110,8 +1136,12 @@ def operacarrera():
         flash("Inicia sesion con tu usuario y contraseña")
         return redirect(url_for('index'))
     
+    # Obtén los resultados de la agregación y prepara los datos para Chart.js
+    db, results = dbase()
+    labels, data = preparar_datos(results)
+
     carre = db['carreras'].find()
-    return render_template('/operador/carreras.html',carreras=carre)# Vista de carreras    
+    return render_template('/operador/carreras.html',carreras=carre, labels=labels, data=data)# Vista de carreras    
 
 
 #* Clientes
@@ -1132,9 +1162,19 @@ def opcliente():
         referencia = request.form['referencia']
         comentario = request.form['comentario']
         
-        if nombre and telefono and direccion and coordenadas and cedula and referencia and comentario :
+        exist_nombre = cliente.find_one({'nombre':nombre})
+        exist_cedula = cliente.find_one({'cedula':cedula })
+
+        if exist_nombre:
+            flash("Ya existe un cliente con ese nombre ")
+            return redirect(url_for('opcliente'))
+        elif exist_cedula:
+            flash("Ya existe un cliente con ese cedula ")
+            return redirect(url_for('opcliente'))
+        else:
             regis = Clientes(nombre, telefono, direccion, coordenadas, cedula, referencia, comentario)
             cliente.insert_one(regis.CliDBCollection())
+            flash("Enviado a la base de datos ")
             return redirect(url_for('opcliente')) 
     else: 
         return render_template('/operador/in_clientes.html') #* Cargado de la pagina    
@@ -1244,10 +1284,20 @@ def inopunidades():
         es_codigo = request.form['es_codigo']
         es_tipo = request.form['es_tipo']
         es_fecha = request.form['es_fecha']
+        
+        exist_unidad = uni.find_one({'unidad':unidad})
+        exist_placa = uni.find_one({'placa':placa })
+        if exist_unidad:
+            flash("Ya existe esa unidad")
+            return redirect(url_for('inopunidades'))
+        elif exist_placa:
+            flash("Ya existe esa placa")
+            return redirect(url_for('inopunidades'))
 
         if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
             regis = Unidades( unidad,placa, modelo, marca, color, observacion, orden, es_codigo, es_tipo, es_fecha)
             uni.insert_one(regis.UniDBCollection())
+            flash("Enviado a la base de datos ")
             return redirect(url_for('inopunidades')) # Direccionamiento para la pagina que es /admin/in_unidades
     else: #
         return render_template('/operador/in_unidades.html') #* Cargado de la pagina
@@ -1351,9 +1401,21 @@ def inopconductores():
         clave = request.form['clave']
         licencia = request.form['licencia']
 
+        exist_nombre = conductor.find_one({'nombre':nombre})
+        exist_cedula = conductor.find_one({'cedula':cedula })
+        
+        if exist_nombre:
+            flash("Ya existe un conductor con ese nombre ")
+            return redirect(url_for('inopconductores'))
+        
+        elif exist_cedula:
+            flash("Ya existe un conductor con esa cedula ")
+            return redirect(url_for('inopconductores'))
+        
         if cedula and nombre and email and telefono and direccion and em_nombre and em_relacion and clave and licencia:
             regis = Conductores(cedula, nombre, email, telefono, direccion, em_nombre, em_telefono, em_relacion, clave, licencia)
             conductor.insert_one(regis.CondDBCollection())
+            flash("Enviado a la base de datos ")
             return redirect(url_for('inopconductores')) # Direccionamiento para la pagina que es /admin/in_conductores
 
     else: 

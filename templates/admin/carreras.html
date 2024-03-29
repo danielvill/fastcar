@@ -3,7 +3,7 @@
 <h2>Vista de Carreras</h2>
 <br>
 <form action="/admin/reporte/r_carreras_unidad" method="get">
-    <label for="nombre">Reporte Filtrado por cliente</label><br>
+    <label for="nombre">Reporte Filtrado por hora</label><br>
     <input type="text" id="hora" name="hora"><br>
     <br>
     <input type="submit" value="Filtrar" class="btn btn-primary">
@@ -131,6 +131,43 @@
             ]
         });
     });
+
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ labels|tojson }},
+        datasets: [{
+            label: '# Carreras',
+            data: {{ data|tojson }},
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',  // color para la primera barra
+                'rgba(54, 162, 235, 0.2)',  // color para la segunda barra
+                'rgba(230,222,199)',
+                'rgba(146,85,41)',
+                'rgba(13,116,120)'
+                // añade más colores si tienes más barras
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',  // color para la primera barra
+                'rgba(54, 162, 235, 1)',  // color para la segunda barra
+                'rgba(230,222,199)',
+                'rgba(146,85,41)',
+                'rgba(13,116,120)'
+                // añade más colores si tienes más barras
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
 
 
 </script>

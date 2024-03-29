@@ -3,15 +3,13 @@
 <br>
 <br>
 <h2>
-   
 </h2>
 <br>
 <div class="row">
-    
     <div class="form-group col-md-6">
         <form action="/admin/reporte/r_clientes_nombre" method="get">
-            <label for="nombre">Reporte Filtrado por nombre</label><br>
-            <input type="text" id="nombre" name="nombre"><br>
+            <label for="nombre">Reporte Filtrado por cedula</label><br>
+            <input type="text" id="cedula" name="cedula"><br>
             <br>
             <input type="submit" value="Filtrar" class="btn btn-primary">
             <a href="{{ url_for('r_cliente') }}" class="btn btn-primary">Reporte Completo </a>
@@ -19,7 +17,6 @@
     </div>
 </div>
 <br>
-
 <br>
 <table id="myTable" class="table">
     <thead>
@@ -84,7 +81,7 @@
             </div>
             <div class="col">
                 <label for="">Cedula</label>
-                <input type="text" id="cedula" name="cedula" class="form-control">
+                <input type="text" id="cuenta" name="cedula" class="form-control">
             </div>
             <div class="col">
                 <label for="">Referencia</label>
@@ -116,7 +113,7 @@
             $('#telefono').val(data[1]);
             $('#direccion').val(data[2]);
             $('#coordenadas').val(data[3]);
-            $('#cedula').val(data[4]);
+            $('#cuenta').val(data[4]);
             $('#referencia').val(data[5]);
             $('#comentario').val(data[6]);
             $('#editForm').attr('action','/edit_opcli/'+ data[4]);

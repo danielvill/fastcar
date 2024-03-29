@@ -30,21 +30,20 @@ document.querySelector('form').addEventListener('submit', function (e) {
 });
 
 
-// Validacion de numero telefonico
 document.querySelector('form').addEventListener('submit', function(event) {
     var telefono = document.querySelector('input[name="telefono"]').value;
-    var regex = /^07\d{7}$/; // Expresión regular para validar números de celular ecuatorianos
+    var regex = /^(?:\+593|0)[1-9]\d{8}$|^07\d{7}$/; // Expresión regular para validar números de teléfono en Ecuador
 
     if (!regex.test(telefono)) {
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Ingresa un numero de telefono valido'
+            text: 'Ingresa un número convencional o celular valido'
         });
         event.preventDefault(); // Evita que el formulario se envíe
     }
-
 });
+
 
 // Validacion si los campos estan vacios
 document.querySelector('form').onsubmit = function (e) {
