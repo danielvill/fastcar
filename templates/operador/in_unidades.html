@@ -1,11 +1,9 @@
 {% extends "operador/layout.html" %}
 {% block content %}
-
 <div class="formbold-main-wrapper">
     <!-- Author: FormBold Team -->
     <!-- Learn More: https://formbold.com -->
     <div class="formbold-form-wrapper">
-
         <form action="/operador/in_unidades" method="POST">
             <div class="formbold-form-title">
                 <h2 class="">Registro de Unidades</h2>
@@ -44,7 +42,7 @@
             </div>
             <div class="formbold-input-flex">
                 <div>
-                    <label for="lastname" class="formbold-form-label">Observacion</label>
+                    <label for="lastname" class="formbold-form-label">Observación</label>
                     <input type="text" class="form-control" name="observacion">
                 </div>
                 <div>
@@ -69,18 +67,16 @@
     </div>
 </div>
 <script >
-      // Validacion si los campos estan vacios
+    // Validacion si los campos estan vacios
 document.querySelector('form').onsubmit = function (e) {
     var inputs = this.querySelectorAll('input');
     var todosLlenos = true; // Asume que todos los campos están llenos
-
     for (var i = 0; i < inputs.length; i++) {
         if (inputs[i].value === '') {
             todosLlenos = false; // Si un campo está vacío, establece todosLlenos en falso
             break; // No necesitas verificar el resto de los campos, así que puedes salir del bucle
         }
     }
-
     if (!todosLlenos) {
         e.preventDefault(); // Previene el envío del formulario
         Swal.fire({

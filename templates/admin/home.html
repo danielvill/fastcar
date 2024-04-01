@@ -3,37 +3,47 @@
 <style>
     /* Estilos personalizados */
     .mapa {
-        width: 100%;
-        text-align: center;
+        width: 90%;
+        text-align: right;
         padding: 20px;
         color: black;
         font-weight: bolder;
     }
-   
     .iconos {
         width: 100%;
-        text-align: center;
-        padding: 20px;
+        text-align: right;
+        padding: 10px;
     }
+
     .icono {
-        width: 150px;
+        width: 100px;
         height: 100px;
     }
 </style>
+<div>
+    
+</div>
 <div class="d-flex flex-row">
+    
     <div class="mapa">
-        
-        <p id="hora"></p>
-        <p id="fecha"></p>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.814463379449!2d-79.9636466852452!3d-3.2581117976636635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cb4fe7a3f31721%3A0x939c6b65e83f2ddf!2sMachala!5e0!3m2!1ses!2sec!4v1554131958382" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+        <h1 style="text-align: left;">Sistema de Gestión de Taxis</h1>
+        <p id="hora" style="font-size: 30px;" ></p>
+        <p id="fecha" style="font-size: 30px;"></p>
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.814463379449!2d-79.9636466852452!3d-3.2581117976636635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cb4fe7a3f31721%3A0x939c6b65e83f2ddf!2sMachala!5e0!3m2!1ses!2sec!4v1554131958382"
+            width="200%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
     </div>
 </div>
 <div class="iconos">
     <a href="https://www.ant.gob.ec/"><img src="/static/img/ant.png" class="icono" alt="Logo"></a>
-    <a href="https://www.movilidadmachala.gob.ec/web/"><img src="/static/img/movilidad.png" class="icono" alt="Logo"></a>
-    <a href="https://web.whatsapp.com/"><img src="https://img.icons8.com/color/48/000000/whatsapp.png" class="icono" alt="WhatsApp"></a>
-    <a href="https://www.facebook.com/"><img src="https://img.icons8.com/color/48/000000/facebook.png" class="icono" alt="Facebook"></a>
-    <a href="https://www.instagram.com/"><img src="https://img.icons8.com/color/48/000000/instagram-new.png" class="icono" alt="Instagram"></a>
+    <a href="https://www.movilidadmachala.gob.ec/web/"><img src="/static/img/movilidad.png" class="icono"
+            alt="Logo"></a>
+    <a href="https://web.whatsapp.com/"><img src="https://img.icons8.com/color/48/000000/whatsapp.png" class="icono"
+            alt="WhatsApp"></a>
+    <a href="https://www.facebook.com/"><img src="https://img.icons8.com/color/48/000000/facebook.png" class="icono"
+            alt="Facebook"></a>
+    <a href="https://www.instagram.com/"><img src="https://img.icons8.com/color/48/000000/instagram-new.png"
+            class="icono" alt="Instagram"></a>
 </div>
 <script>
     function actualizarReloj() {

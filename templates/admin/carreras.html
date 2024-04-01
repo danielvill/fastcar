@@ -15,7 +15,7 @@
         <tr>
             <th scope="col">Cliente</th>
             <th scope="col">Unidad</th>
-            <th scope="col">Observacion</th>
+            <th scope="col">Observación</th>
             <th scope="col">Fecha</th>
             <th scope="col">Hora</th>
             <th>Acciones</th>
@@ -53,11 +53,8 @@
         {% endfor %}
     </tbody>
 </table>
-
 <!-- Crea un elemento canvas para el gráfico -->
 <canvas id="myChart"></canvas>
-
-
 <div id="editModal" title="Editar Admin">
     <form id="editForm" action="" method="post">
         <div class="container">
@@ -70,7 +67,7 @@
                 <input type="text" id="unidad" name="unidad" class="form-control">
             </div>
             <div class="col">
-                <label for="rol">Observacion</label>
+                <label for="rol">Observación</label>
                 <input type="text" id="comentario" name="comentario" class="form-control">
             </div>
             <div class="col">
@@ -131,33 +128,31 @@
             ]
         });
     });
-
-
     var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: {{ labels|tojson }},
-        datasets: [{
-            label: '# Carreras',
-            data: {{ data|tojson }},
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',  // color para la primera barra
-                'rgba(54, 162, 235, 0.2)',  // color para la segunda barra
-                'rgba(230,222,199)',
-                'rgba(146,85,41)',
-                'rgba(13,116,120)'
-                // añade más colores si tienes más barras
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',  // color para la primera barra
-                'rgba(54, 162, 235, 1)',  // color para la segunda barra
-                'rgba(230,222,199)',
-                'rgba(146,85,41)',
-                'rgba(13,116,120)'
-                // añade más colores si tienes más barras
-            ],
-            borderWidth: 1
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ labels| tojson }},
+    datasets: [{
+        label: '# Carreras',
+        data: {{ data| tojson }},
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',  // color para la primera barra
+        'rgba(54, 162, 235, 0.2)',  // color para la segunda barra
+        'rgba(230,222,199)',
+        'rgba(146,85,41)',
+        'rgba(13,116,120)'
+        // añade más colores si tienes más barras
+    ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)',  // color para la primera barra
+        'rgba(54, 162, 235, 1)',  // color para la segunda barra
+        'rgba(230,222,199)',
+        'rgba(146,85,41)',
+        'rgba(13,116,120)'
+        // añade más colores si tienes más barras
+    ],
+        borderWidth: 1
         }]
     },
     options: {
@@ -168,8 +163,6 @@ var myChart = new Chart(ctx, {
         }
     }
 });
-
-
 </script>
 <script src="/static/js/edi_eli.js"></script>
 {% endblock %}
