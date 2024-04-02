@@ -2,13 +2,32 @@
 {% block content %}
 <style>
     /* Estilos personalizados */
-    .mapa {
-        width: 90%;
-        text-align: right;
-        padding: 20px;
-        color: black;
-        font-weight: bolder;
+    #header-row {
+        display: flex;
+        align-items: center;
     }
+
+    #title-col {
+        flex: 1;
+    }
+
+    #info-col {
+        text-align: right;
+    }
+
+    /* Media Query para ajustar el diseño en pantallas pequeñas */
+    @media (max-width: 768px) {
+        #header-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        #info-col {
+            text-align: left;
+            margin-top: 10px;
+        }
+    }
+
     .iconos {
         width: 100%;
         text-align: right;
@@ -21,18 +40,21 @@
     }
 </style>
 <div>
-    
-</div>
-<div class="d-flex flex-row">
-    
-    <div class="mapa">
-        <h1 style="text-align: left;">Sistema de Gestión de Taxis</h1>
-        <p id="hora" style="font-size: 30px;" ></p>
-        <p id="fecha" style="font-size: 30px;"></p>
-        <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.814463379449!2d-79.9636466852452!3d-3.2581117976636635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cb4fe7a3f31721%3A0x939c6b65e83f2ddf!2sMachala!5e0!3m2!1ses!2sec!4v1554131958382"
-            width="200%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+    <div class="container">
+        <div class="row" id="header-row">
+            <div class="col" id="title-col">
+                <h1>Sistema de Gestión de Taxis</h1>
+            </div>
+            <div class="col" id="info-col">
+                <p id="hora" style="font-size: 30px;"></p>
+                <p id="fecha" style="font-size: 30px;"></p>
+            </div>
+        </div>
     </div>
+    <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3982.814463379449!2d-79.9636466852452!3d-3.2581117976636635!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91cb4fe7a3f31721%3A0x939c6b65e83f2ddf!2sMachala!5e0!3m2!1ses!2sec!4v1554131958382"
+        width="100%" height="350px" frameborder="0" style="border:0" allowfullscreen>
+    </iframe>
 </div>
 <div class="iconos">
     <a href="https://www.ant.gob.ec/"><img src="/static/img/ant.png" class="icono" alt="Logo"></a>
@@ -52,15 +74,11 @@
         const minutos = horaActual.getMinutes();
         const segundos = horaActual.getSeconds();
         const fecha = horaActual.toLocaleDateString();
-
         const horaFormato = `${hora < 10 ? '0' + hora : hora}:${minutos < 10 ? '0' + minutos : minutos}:${segundos < 10 ? '0' + segundos : segundos}`;
-
         document.getElementById('hora').textContent = horaFormato;
         document.getElementById('fecha').textContent = fecha;
     }
-
     setInterval(actualizarReloj, 1000);
-
     actualizarReloj();
 </script>
 {% endblock %}
