@@ -184,45 +184,43 @@ def incliente():
     
 
 def generar_pdf_clientes(datos):
-    pagesize = (1000, 1000)  # Ancho y alto en puntos
-
+    pagesize = (1000, 1000)
     doc = SimpleDocTemplate("clientes.pdf", pagesize=pagesize)
     story = []
 
     # Define un estilo con texto centrado
     styles = getSampleStyleSheet()
-    centered_style = styles['Heading1']
-    centered_style.alignment = 1  # 1 = TA_CENTER
+    left_aligned_style = styles['Heading3']
+    left_aligned_style.alignment = 0  # 1 = TA_CENTER
 
     # Agrega la imagen
-    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    imagen = Image('static/img/fas.jpeg', width=100, height=50)
+    imagen.hAlign = 'LEFT'
     story.append(imagen)
-    story.append(Spacer(1, 12))
+    
 
     from datetime import datetime
     fecha_hora = datetime.now().strftime("Documento generado %H:%M")
-    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo = Paragraph(fecha_hora , left_aligned_style)
     fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
     story.append(fecha_hora_parrafo)
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
+    
 
     # Agrega el título
-    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    title = Paragraph("<h3>Compañia de Taxi</h3>", left_aligned_style)
     story.append(title)
 
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
-
-    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", left_aligned_style)
     story.append(title2)
 
     # Agrega otro salto de línea
-    story.append(Spacer(1, 12))
-
-    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", left_aligned_style)
     story.append(title3)
-
+    story.append(Spacer(1, 12))
     # Prepara los datos para la tabla
     data = [["Nombre", "Telefono", "Direccion", "Coordenadas", "Cedula", "Referencia", "Comentario"]]  # Encabezados
 
@@ -231,19 +229,19 @@ def generar_pdf_clientes(datos):
         data.append(row)
 
     # Crea la tabla
-    table = Table(data)
+    table = Table(data, colWidths=[150, 100, 100, 150]) 
 
     # Formatea la tabla
     table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.black),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
 
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
         ('FONTSIZE', (0, 0), (-1, 0), 14),
 
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
         ('GRID', (0,0), (-1,-1), 1, colors.black)
     ]))
 
@@ -261,38 +259,39 @@ def r_cliente_nombre():
 
     # Define un estilo con texto centrado
     styles = getSampleStyleSheet()
-    centered_style = styles['Heading1']
-    centered_style.alignment = 1  # 1 = TA_CENTER
+    left_aligned_style = styles['Heading3']
+    left_aligned_style.alignment = 0  # 1 = TA_CENTER
 
     # Agrega la imagen
-    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    imagen = Image('static/img/fas.jpeg', width=100, height=50)
+    imagen.hAlign = 'LEFT'
     story.append(imagen)
-    story.append(Spacer(1, 12))
+    
 
     from datetime import datetime
     fecha_hora = datetime.now().strftime("Documento generado %H:%M")
-    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo = Paragraph(fecha_hora , left_aligned_style)
     fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
     story.append(fecha_hora_parrafo)
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
+    
 
     # Agrega el título
-    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    title = Paragraph("<h3>Compañia de Taxi</h3>", left_aligned_style)
     story.append(title)
 
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
+    
 
-    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", left_aligned_style)
     story.append(title2)
 
     # Agrega otro salto de línea
+    
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", left_aligned_style)
+    story.append(title3)
     story.append(Spacer(1, 12))
 
-    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
-    story.append(title3)
-    
     nombre = request.args.get('cedula', default=None, type=str)
     
     if nombre:
@@ -307,27 +306,20 @@ def r_cliente_nombre():
 
 @app.route('/admin/cliente',methods=['GET','POST'])
 def cliente():
-
-     # Verifica si el usuario está en la sesión
+    # Verifica si el usuario está en la sesión
     if 'username' not in session:
         flash("Inicia sesion con tu usuario y contraseña")
         return redirect(url_for('index')) 
-    
     clie = db['clientes'].find()
     return render_template('/admin/cliente.html', clientes=clie)
 
 
-
-
 @app.route('/admin/reporte/r_clientes', methods=['GET'])
 def r_cliente():
-
     clie = db['clientes'].find()
     generar_pdf_clientes(clie)
     return send_file('clientes.pdf', as_attachment=True)
     
-
-
 #*Editar y eliminar cliente
 @app.route('/delete_cli/<string:cli_name>')
 def elitcli(cli_name):
@@ -352,8 +344,6 @@ def editcli(cli_name):
         return redirect(url_for('cliente'))
     else:
         return render_template("admin/cliente.html")
-
-
 
 #*Ingreso de usuarios
 @app.route('/admin/in_usuario',methods=['GET','POST'])
@@ -390,7 +380,6 @@ def inusuario():
     else:
         return render_template('/admin/in_usuario.html') #* Cargado de la pagina
     
-
 #*Vista de usuarios
 @app.route('/admin/usuarios',methods=['GET','POST'])
 def usuario():
@@ -400,7 +389,6 @@ def usuario():
         return redirect(url_for('index')) 
     usua = db['usuarios'].find()
     return render_template('/admin/usuarios.html',usuarios=usua)# Vista para usuarios
-
 
 #*Editar y eliminar usuarios
 @app.route('/delete_usu/<string:usu_name>')
@@ -424,7 +412,6 @@ def editusu(usu_name):
     else:
         return render_template("admin/usuarios.html")
     
-
 
 #*Ingreso de conductores
 @app.route('/admin/in_conductores',methods=['GET','POST'])
@@ -504,7 +491,6 @@ def editcondu(cond_name):
     else:
         return render_template("admin/conductores.html")
 
-
 #*Ingreso de unidades
 @app.route('/admin/in_unidades',methods=['GET','POST'])
 def inunidades():
@@ -521,9 +507,7 @@ def inunidades():
         marca = request.form['marca']
         color = request.form['color']
         observacion = request.form['observacion']
-        orden = request.form['orden']
-        es_codigo = request.form['es_codigo']
-        es_tipo = request.form['es_tipo']
+        
         es_fecha = request.form['es_fecha']
 
         exist_unidad = uni.find_one({'unidad':unidad})
@@ -534,8 +518,8 @@ def inunidades():
         elif exist_placa:
             flash("Ya existe esa placa ")
             return redirect(url_for('inunidades'))
-        if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
-            regis = Unidades( unidad,placa, modelo, marca, color, observacion, orden, es_codigo, es_tipo, es_fecha)
+        if unidad and placa and modelo and marca and color  and observacion  and es_fecha:
+            regis = Unidades( unidad,placa, modelo, marca, color, observacion, es_fecha)
             uni.insert_one(regis.UniDBCollection())
             flash("Enviado a la base de datos ")
             return redirect(url_for('inunidades')) # Direccionamiento para la pagina que es /admin/in_unidades
@@ -569,13 +553,10 @@ def edituni(uni_name):
     marca = request.form['marca']
     color = request.form['color']
     observacion = request.form['observacion']
-    orden = request.form['orden']
-    es_codigo = request.form['es_codigo']
-    es_tipo = request.form['es_tipo']
     es_fecha = request.form['es_fecha']
     
-    if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
-        uni.update_one({'unidad':uni_name},{'$set':{'unidad':unidad,'placa':placa,'modelo':modelo,'marca':marca,'color':color,'observacion':observacion,'orden':orden,'es_codigo':es_codigo,'es_tipo':es_tipo,'es_fecha':es_fecha}})
+    if unidad and placa and modelo and marca and color  and observacion  and es_fecha:
+        uni.update_one({'unidad':uni_name},{'$set':{'unidad':unidad,'placa':placa,'modelo':modelo,'marca':marca,'color':color,'observacion':observacion,'es_fecha':es_fecha}})
         return redirect(url_for('unidades'))
     else:
         return render_template("admin/unidades.html")
@@ -666,40 +647,36 @@ def generar_pdf_carreras(datos):
 
     # Define un estilo con texto centrado
     styles = getSampleStyleSheet()
-    centered_style = styles['Heading1']
-    centered_style.alignment = 1  # 1 = TA_CENTER
+    left_aligned_style = styles['Heading3']
+    left_aligned_style.alignment = 0  # 1 = TA_CENTER
 
     # Agrega la imagen
-    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    imagen = Image('static/img/fas.jpeg', width=100, height=50)
+    imagen.hAlign = 'LEFT'
     story.append(imagen)
-    story.append(Spacer(1, 12))
+    
 
     from datetime import datetime
     fecha_hora = datetime.now().strftime("Documento generado %H:%M")
-    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo = Paragraph(fecha_hora , left_aligned_style)
     fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
     story.append(fecha_hora_parrafo)
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
-   
+    
     # Agrega el título
-    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    title = Paragraph("<h3>Compañia de Taxi</h3>", left_aligned_style)
     story.append(title)
 
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
-
-   
-
-    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", left_aligned_style)
     story.append(title2)
 
     # Agrega otro salto de línea
-    story.append(Spacer(1, 12))
 
-    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", left_aligned_style)
     story.append(title3)
-    
+    story.append(Spacer(1, 12))
 
     # Prepara los datos para la tabla
     data = [["Cliente", "Unidad", "Comentario", "Fecha", "Hora"]]  # Encabezados
@@ -709,19 +686,19 @@ def generar_pdf_carreras(datos):
         data.append(row)
 
     # Crea la tabla
-    table = Table(data)
+    table = Table(data, colWidths=[100, 150, 100, 100]) 
 
     # Formatea la tabla
     table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.black),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
 
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
         ('FONTSIZE', (0, 0), (-1, 0), 14),
 
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
         ('GRID', (0,0), (-1,-1), 1, colors.black)
     ]))
 
@@ -739,39 +716,41 @@ def r_carreras_unidad():
 
     # Define un estilo con texto centrado
     styles = getSampleStyleSheet()
-    centered_style = styles['Heading1']
-    centered_style.alignment = 1  # 1 = TA_CENTER
+    left_aligned_style = styles['Heading1']
+    left_aligned_style.alignment = 0  # 1 = TA_CENTER
 
 
     # Agrega la imagen
-    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    imagen = Image('static/img/fas.jpeg', width=100, height=50)
+    imagen.hAlign = 'LEFT'
     story.append(imagen)
     story.append(Spacer(1, 12))
 
     from datetime import datetime
     fecha_hora = datetime.now().strftime("Documento generado %H:%M")
-    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo = Paragraph(fecha_hora , left_aligned_style)
     fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
     story.append(fecha_hora_parrafo)
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
+    
 
 
     # Agrega el título
-    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    title = Paragraph("<h3>Compañia de Taxi</h3>", left_aligned_style)
     story.append(title)
 
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
+    
 
-    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", left_aligned_style)
     story.append(title2)
 
     # Agrega otro salto de línea
-    story.append(Spacer(1, 12))
+    
 
-    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", left_aligned_style)
     story.append(title3)
+    story.append(Spacer(1, 12))
 
     # Prepara los datos no como tabla
     client = request.args.get('hora', default=None, type=str)
@@ -914,39 +893,42 @@ def generar_pdf_comentarios(datos):
 
     # Define un estilo con texto centrado
     styles = getSampleStyleSheet()
-    centered_style = styles['Heading1']
-    centered_style.alignment = 1  # 1 = TA_CENTER
+    left_aligned_style = styles['Heading3']
+    left_aligned_style.alignment = 0  # 0 = TA_LEFT
+
 
     
     # Agrega la imagen
-    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    imagen = Image('static/img/fas.jpeg', width=100, height=50)
+    imagen.hAlign = 'LEFT'
     story.append(imagen)
-    story.append(Spacer(1, 12))
+    #story.append(Spacer(1, 12))
 
     from datetime import datetime
     fecha_hora = datetime.now().strftime("Documento generado %H:%M")
-    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo = Paragraph(fecha_hora , left_aligned_style)
     fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
     story.append(fecha_hora_parrafo)
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
+    #story.append(Spacer(1, 12))
     
     # Agrega el título
-    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    title = Paragraph("<h3>Compañia de Taxi</h3>", left_aligned_style)
     story.append(title)
 
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
+    #story.append(Spacer(1, 12))
 
-    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", left_aligned_style)
     story.append(title2)
 
     # Agrega otro salto de línea
-    story.append(Spacer(1, 12))
+    #story.append(Spacer(1, 12))
 
-    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", left_aligned_style)
     story.append(title3)
-
+    story.append(Spacer(1, 12))
+    
     # Prepara los datos para la tabla
     data = [["Unidad", "Comentario", "Fecha", "Hora"]]  # Encabezados
 
@@ -955,19 +937,19 @@ def generar_pdf_comentarios(datos):
         data.append(row)
 
     # Crea la tabla
-    table = Table(data)
+    table = Table(data, colWidths=[100, 150, 100, 100]) 
 
     # Formatea la tabla
     table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.black),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
 
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
         ('FONTSIZE', (0, 0), (-1, 0), 14),
 
         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
         ('GRID', (0,0), (-1,-1), 1, colors.black)
     ]))
 
@@ -985,38 +967,40 @@ def r_comentarios_unidad():
 
     # Define un estilo con texto centrado
     styles = getSampleStyleSheet()
-    centered_style = styles['Heading1']
-    centered_style.alignment = 1  # 1 = TA_CENTER
+    left_aligned_style = styles['Heading3']
+    left_aligned_style.alignment = 0  # 1 = TA_CENTER
 
     # Agrega la imagen
-    imagen = Image('static/img/fas.jpeg', width=200, height=200)
+    imagen = Image('static/img/fas.jpeg', width=100, height=50)
+    imagen.hAlign = 'LEFT'
     story.append(imagen)
     story.append(Spacer(1, 12))
 
     from datetime import datetime
     fecha_hora = datetime.now().strftime("Documento generado %H:%M")
-    fecha_hora_parrafo = Paragraph(fecha_hora , centered_style)
+    fecha_hora_parrafo = Paragraph(fecha_hora , left_aligned_style)
     fecha_hora_parrafo.alignment = 1  # 2 = TA_RIGHT
     story.append(fecha_hora_parrafo)
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
+    
     
     
     # Agrega el título
-    title = Paragraph("<h2>Compañia de Taxi</h2>", centered_style)
+    title = Paragraph("<h3>Compañia de Taxi</h3>", left_aligned_style)
     story.append(title)
 
     # Agrega un salto de línea
-    story.append(Spacer(1, 12))
+    
 
-    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", centered_style)
-    story.append(title2)
+    title2 = Paragraph("<h1>TRANSNEWFASTCAR S.A.</h1>", left_aligned_style)
+    #story.append(title2)
 
     # Agrega otro salto de línea
-    story.append(Spacer(1, 12))
+    
 
-    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", centered_style)
+    title3 = Paragraph("<h3>Machala - EL ORO -  Ecuador</h3>", left_aligned_style)
     story.append(title3)
+    story.append(Spacer(1, 12))
 
     # Prepara los datos no como tabla
     client = request.args.get('hora', default=None, type=str)
@@ -1280,9 +1264,6 @@ def inopunidades():
         marca = request.form['marca']
         color = request.form['color']
         observacion = request.form['observacion']
-        orden = request.form['orden']
-        es_codigo = request.form['es_codigo']
-        es_tipo = request.form['es_tipo']
         es_fecha = request.form['es_fecha']
         
         exist_unidad = uni.find_one({'unidad':unidad})
@@ -1294,8 +1275,8 @@ def inopunidades():
             flash("Ya existe esa placa")
             return redirect(url_for('inopunidades'))
 
-        if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
-            regis = Unidades( unidad,placa, modelo, marca, color, observacion, orden, es_codigo, es_tipo, es_fecha)
+        if unidad and placa and modelo and marca and color  and observacion  and es_fecha:
+            regis = Unidades( unidad,placa, modelo, marca, color, observacion, es_fecha)
             uni.insert_one(regis.UniDBCollection())
             flash("Enviado a la base de datos ")
             return redirect(url_for('inopunidades')) # Direccionamiento para la pagina que es /admin/in_unidades
@@ -1329,13 +1310,10 @@ def edituniop(uni_name):
     marca = request.form['marca']
     color = request.form['color']
     observacion = request.form['observacion']
-    orden = request.form['orden']
-    es_codigo = request.form['es_codigo']
-    es_tipo = request.form['es_tipo']
     es_fecha = request.form['es_fecha']
     
-    if unidad and placa and modelo and marca and color  and observacion and orden and es_codigo and es_tipo and es_fecha:
-        uni.update_one({'unidad':uni_name},{'$set':{'unidad':unidad,'placa':placa,'modelo':modelo,'marca':marca,'color':color,'observacion':observacion,'orden':orden,'es_codigo':es_codigo,'es_tipo':es_tipo,'es_fecha':es_fecha}})
+    if unidad and placa and modelo and marca and color  and observacion and  es_fecha:
+        uni.update_one({'unidad':uni_name},{'$set':{'unidad':unidad,'placa':placa,'modelo':modelo,'marca':marca,'color':color,'observacion':observacion,'es_fecha':es_fecha}})
         return redirect(url_for('op_unidades'))
     else:
         return render_template("operador/unidades.html")
