@@ -66,34 +66,51 @@
 
 
 
-// Lista de todos los ids de tus botones
-var idsBotones = Array.from({length: {{ unidades|length }}}, (_, i) => 'miBoton' + (i + 1));
+// Espera a que el documento esté listo
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Obtiene todos los botones con la clase 'editar'
+    let botonesEditar = document.querySelectorAll('.editar');
 
-// Función para el evento de clic del botón
-function eventoBoton() {
-    var colorActual = this.style.backgroundColor;
-    if (colorActual === 'rgb(255, 255, 0)') { // rgb(255, 255, 0) es el código RGB para amarillo
-        // Si el color actual es amarillo, cambia a blanco
-        this.style.backgroundColor = '#FFFFFF';
-        localStorage.setItem(this.id, '#FFFFFF');
-    } else {
-        // Si el color actual no es amarillo, cambia a amarillo
-        this.style.backgroundColor = '#FFFF00';
-        localStorage.setItem(this.id, '#FFFF00');
-    }
-}
+    // Añade un evento de clic a cada botón 'editar'
+    botonesEditar.forEach((boton, index) => {
+        boton.addEventListener('click', () => {
+            // Obtiene el botón correspondiente con id 'miBoton'
+            let botonActivado = document.getElementById('miBoton' + (index + 1));
 
-// Evento click para cada botón
-idsBotones.forEach(function(id) {
-    var boton = document.querySelector('#' + id);
-    boton.addEventListener('click', eventoBoton);
+            // Cambia el color del botón a amarillo
+            botonActivado.style.backgroundColor = 'yellow';
 
-    // Al cargar la página, establece el color del botón al último color guardado
-    var colorGuardado = localStorage.getItem(id);
-    if (colorGuardado) {
-        boton.style.backgroundColor = colorGuardado;
-    }
+            // Guarda el estado en localStorage
+            localStorage.setItem('miBoton' + (index + 1), 'yellow');
+        });
+    });
+
+    // Obtiene todos los botones con id que comienza con 'miBoton'
+    let botonesActivados = document.querySelectorAll('[id^="miBoton"]');
+
+    // Añade un evento de clic a cada botón 'miBoton'
+    botonesActivados.forEach((boton, index) => {
+        boton.addEventListener('click', () => {
+            // Cambia el color del botón a su color original
+            boton.style.backgroundColor = '';
+
+            // Guarda el estado en localStorage
+            localStorage.setItem('miBoton' + (index + 1), '');
+        });
+    });
 });
+
+// Recupera el estado de los botones del localStorage al cargar la página
+window.onload = function() {
+    let botonesActivados = document.querySelectorAll('[id^="miBoton"]');
+
+    botonesActivados.forEach((boton, index) => {
+        let color = localStorage.getItem('miBoton' + (index + 1));
+        if (color) {
+            boton.style.backgroundColor = color;
+        }
+    });
+};
 
 </script>
 
