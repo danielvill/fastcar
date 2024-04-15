@@ -18,7 +18,6 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import SimpleDocTemplate, Table, Paragraph, TableStyle, Spacer ,Image
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet ,ParagraphStyle
-#from tabulate import tabulate # pip install tabulate
 #* Este codigo lo reemplazas con la ip de la pc y el puerto que deseas que se abra pero en la linea de comando
 #* Correr el servidor flask run --host=0.0.0.0 --port=4848 
 
@@ -528,7 +527,7 @@ def inunidades():
 
 #*Vista de unidades
 @app.route('/admin/unidades',methods=['GET','POST'])
-def unidades():
+def unidades(): 
     # Verifica si el usuario está en la sesión
     if 'username' not in session:
         flash("Inicia sesion con tu usuario y contraseña")
@@ -583,6 +582,7 @@ def incarreras():
             regis = Carreras(cliente, unidad ,comentario,fecha, hora) 
             carrera.insert_one(regis.CareDBCollection())
             media.delete_one({'unidad':unidad})
+            flash("Guardado exitosamente")
             return redirect(url_for('incarreras')) # Direccionamiento para la pagina que es /admin/in_carreras
     else: #
         return render_template('/admin/in_carreras.html',clientes=cliu(),unidades=uni(),media=med()) #* Cargado de la pagina
@@ -884,7 +884,6 @@ def comentario():
         return render_template('/admin/comentario.html',unidades=uni())
 
 # * Comentarios
-
 #* Reportes de Comentarios
 # * Registra la fuente
 def generar_pdf_comentarios(datos):
@@ -1085,6 +1084,7 @@ def opercarrera():
             regis = Carreras(cliente, unidad ,comentario,fecha, hora) 
             carrera.insert_one(regis.CareDBCollection())
             media.delete_one({'unidad':unidad})
+            flash("Guardado exitosamente")
             return redirect(url_for('operacarrera')) # Direccionamiento para la pagina que es /admin/in_carreras
     else: #
         return render_template('/operador/in_carreras.html',clientes=cliu(),unidades=uni(),media=med()) #* Cargado de la pagina
@@ -1339,6 +1339,7 @@ def opcomentario():
         if unidad and comentario and fecha and hora:
             registro = Comentario( unidad , comentario , fecha , hora)
             guar.insert_one(registro.ComeDBCollection())
+            flash("Guardado exitosamente")
             return redirect(url_for('opcomentario'))
     else: 
         return render_template('/operador/comentario.html',unidades=uni())
