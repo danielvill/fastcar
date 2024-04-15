@@ -10,9 +10,6 @@
             <th scope="col">Marca</th>
             <th scope="col">Color</th>
             <th scope="col" >Observación</th>
-            <th scope="col" >Orden</th>
-            <th scope="col" >Estado de código</th>
-            <th scope="col" >Estado de Tipo</th>
             <th scope="col" >Estado de Fecha</th>
             <th scope="col" >Acciones</th>
         </tr>
@@ -32,9 +29,6 @@
                 <td>{{ unidades.marca }}</td>
                 <td>{{ unidades.color }}</td>
                 <td>{{ unidades.observacion }}</td>
-                <td>{{ unidades.orden }}</td>
-                <td>{{ unidades.es_codigo }}</td>
-                <td>{{ unidades.es_tipo }}</td>
                 <td>{{ unidades.es_fecha }}</td>
                 <td>
                     <button type="submit" class="editar btn btn-primary">
@@ -79,18 +73,6 @@
                 <input type="text" id="observacion" name="observacion" class="form-control">
             </div>
             <div class="col">
-                <label for="">Orden</label>
-                <input type="text" id="orden" name="orden" class="form-control">
-            </div>
-            <div class="col">
-                <label for="">Estado de Codigo</label>
-                <input type="text" id="es_codigo" name="es_codigo" class="form-control">
-            </div>
-            <div class="col">
-                <label for="">Estado de Tipo</label>
-                <input type="text" id="es_tipo" name="es_tipo" class="form-control">
-            </div>
-            <div class="col">
                 <label for="">Estado de Fecha</label>
                 <input type="text" id="es_fecha" name="es_fecha" class="form-control">
             </div>
@@ -118,10 +100,7 @@
             $('#marca').val(data[3]);
             $('#color').val(data[4]);
             $('#observacion').val(data[5]);
-            $('#orden').val(data[6]);
-            $('#es_codigo').val(data[7]);
-            $('#es_tipo').val(data[8]);
-            $('#es_fecha').val(data[9]);
+            $('#es_fecha').val(data[6]);
             $('#editForm').attr('action','/edit_uniop/'+ data[0]);
             $('#editModal').dialog('open');
         });
