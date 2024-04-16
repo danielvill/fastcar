@@ -183,7 +183,7 @@ def incliente():
     
 
 def generar_pdf_clientes(datos):
-    pagesize = (1000, 1000)
+    pagesize = (2000, 2000)
     doc = SimpleDocTemplate("clientes.pdf", pagesize=pagesize)
     story = []
 
@@ -228,7 +228,7 @@ def generar_pdf_clientes(datos):
         data.append(row)
 
     # Crea la tabla
-    table = Table(data, colWidths=[150, 100, 100, 150]) 
+    table = Table(data, colWidths=[300, 200, 200, 300]) 
 
     # Formatea la tabla
     table.setStyle(TableStyle([
